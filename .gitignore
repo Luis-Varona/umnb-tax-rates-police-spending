@@ -1,0 +1,11 @@
+.dist
+.idea
+.mypy_cache
+.trunk
+.vscode
+
+*.sh
+**.DS_Store
+
+# Original GNB zip files (extracted Excel files are in the `data_raw` folder)
+GNB_zip_files

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "umnb-tax-rates-police-spending"
+description = "An FE regression of New Brunswick tax rates on police spending"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Luis M. B. Varona", email = "lbvarona@mta.ca" },
+    { name = "Otoha Hanatani", email = "ohanatani@mta.ca" },
+]
+maintainers = [
+    { name = "Luis M. B. Varona", email = "lbvarona@mta.ca" },
+]
+keywords = [
+    "fixed-effects regression",
+    "econometrics",
+    "economic policy",
+    "police expenditures",
+    "tax rates",
+]
+dependencies = [
+    "fastexcel", # Used by polars' `read_excel` function
+    "matplotlib",
+    "numpy",
+    "polars",
+    "seaborn",
+    "statsmodels",
+    "xlsxwriter",
+]
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/Luis-Varona/umnb-tax-rates-police-spending"
+
+[project.optional-dependencies]
+static_typing = ["mypy"]
+xlsx_conversion = ["pandas", "xlrd"] # If running `data_raw/convert_to_xlsx.py`
+
+[tool.mypy]
+disable_error_code = ["import-untyped"]
