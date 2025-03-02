@@ -31,7 +31,9 @@ def main():
                 .join(dfs[categories[3]], join_cols)
                 .with_columns(pl.col("Municipality")
                               .replace(provider_map)
-                              .alias("Policing Provider")))
+                              .alias("Provider"))
+                .to_dummies("Provider")
+                .drop("Provider_PPSA"))
     
     with Workbook(dest) as workbook:
         df_final.write_excel(workbook,
