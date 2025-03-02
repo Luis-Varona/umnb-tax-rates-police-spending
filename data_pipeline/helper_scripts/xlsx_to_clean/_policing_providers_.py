@@ -9,7 +9,7 @@ from xlsxwriter import Workbook
 def main():
     source = os.path.join('data_xlsx', 'GNB2024_pol_prov.xlsx')
     dest = os.path.join('data_clean', 'GNB2024_pol_prov_clean.xlsx')
-    os.makedirs('/'.join(dest.split('/')[:-1]), exist_ok=True)
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
     
     logger = logging.getLogger('fastexcel.types.dtype')
     default_level = logger.getEffectiveLevel()

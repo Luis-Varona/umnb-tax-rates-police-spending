@@ -10,10 +10,10 @@ from xlsxwriter import Workbook
 def main():
     source_dir = 'data_clean'
     dest = os.path.join('data_final', 'data_master.xlsx')
-    os.makedirs('/'.join(dest.split('/')[:-1]), exist_ok=True)
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
     
     categories = ['bgt_revs', 'bgt_exps', 'cmp_data', 'tax_base']
-    years = list(range(2000, 2004)) + list(range(2006, 2019))
+    years = list(range(2000, 2005)) + list(range(2006, 2019))
     source_maps = {cat: {year: os.path.join(source_dir,
                                             str(year),
                                             f'GNB{year}_{cat}_clean.xlsx')

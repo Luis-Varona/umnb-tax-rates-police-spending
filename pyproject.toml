@@ -1,6 +1,6 @@
 [project]
 name = "umnb-tax-rates-police-spending"
-description = "An FE regression of New Brunswick tax rates on police spending"
+description = "A CRE regression of New Brunswick tax rates on police spending"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 authors = [
@@ -11,7 +11,8 @@ maintainers = [
     { name = "Luis M. B. Varona", email = "lbvarona@mta.ca" },
 ]
 keywords = [
-    "fixed-effects regression",
+    "correlated random-effects",
+    "regression analysis",
     "econometrics",
     "economic policy",
     "police expenditures",

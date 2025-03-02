@@ -17,7 +17,7 @@ def main():
         dest = os.path.join('data_clean',
                             str(year),
                             f'GNB{year}_bgt_exps_clean.xlsx')
-        os.makedirs('/'.join(dest.split('/')[:-1]), exist_ok=True)
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
         
         logger = logging.getLogger('fastexcel.types.dtype')
         default_level = logger.getEffectiveLevel()

@@ -14,5 +14,4 @@ as follows:
 4. [**data_final**](data_final): The final data used for analysis, produced by
    [clean_to_final.py](clean_to_final.py) (and additional helper scripts in
    [helper_scripts/clean_to_final](helper_scripts/clean_to_final)).
-5. [**data_summary**](data_summary): [Add description later]
-6. [**data_analysis**](data_analysis): [Add description later]
+5. [**data_analysis**](data_analysis): [Add description later]
