@@ -1,11 +1,7 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "umnb-tax-rates-police-spending"
 description = "An FE regression of New Brunswick tax rates on police spending"
-readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 authors = [
     { name = "Luis M. B. Varona", email = "lbvarona@mta.ca" },
@@ -36,8 +32,8 @@ dynamic = ["version"]
 Repository = "https://github.com/Luis-Varona/umnb-tax-rates-police-spending"
 
 [project.optional-dependencies]
-static_typing = ["mypy"]
-xlsx_conversion = ["pandas", "xlrd"] # If running `data_raw/convert_to_xlsx.py`
+linting = ["black", "mypy", "ruff"] # For linting and type checking
+xlsx_conversion = ["pandas", "xlrd"] # For `data_pipeline/raw_to_xlsx.py`
 
 [tool.mypy]
-disable_error_code = ["import-untyped"]
+disable_error_code = ["import-untyped"] # Ignore errors for untyped imports
