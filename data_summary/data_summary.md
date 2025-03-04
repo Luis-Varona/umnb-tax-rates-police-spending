@@ -41,7 +41,7 @@ random-effects:
   - *Conditional Transfers*, or *CTR*
   - *Other Transfers*, or *OTR*
   - *Biennial Surplus*, or *BIS*
-- **Population**, or **POP** &#x2013; persons; (from the latest census data)
+- **Population**, or **POP** &#x2013; persons (from the latest census data)
 - **Policing Provider** &#x2013; boolean, three categories:
   - *Provincial Police Service Agreement*, or *PPSA* (control, excluded to avoid collinearity)
   - *Municipal Police Service Agreement*, or *MPSA* (included indicator)

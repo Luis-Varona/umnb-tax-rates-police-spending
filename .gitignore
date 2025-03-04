@@ -2,6 +2,3 @@
 .mypy_cache
 .vscode
 **.DS_Store
-# Original GNB zip files, stored locally on Luis' computer.
-# (Extracted Excel files are available in the `data_raw` directory.)
-GNB_zip_files
