@@ -38,4 +38,4 @@ pdf_conversion = ["pandoc"] # For Markdown files (e.g., in `data_summary/`)
 xlsx_conversion = ["pandas", "xlrd"] # For `data_pipeline/raw_to_xlsx.py`
 
 [tool.mypy]
-disable_error_code = ["import-untyped"] # Ignore errors for untyped imports
+disable_error_code = ["import-not-found", "import-untyped"]
