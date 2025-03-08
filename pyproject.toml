@@ -1,6 +1,6 @@
 [project]
 name = "umnb-tax-rates-police-spending"
-description = "A CRE regression of New Brunswick tax rates on police spending"
+description = "A CRE regression of New Brunswick tax rates on police spending."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 authors = [
@@ -21,7 +21,6 @@ keywords = [
 dependencies = [
     "fastexcel", # Used by polars' `read_excel` function
     "matplotlib",
-    "numpy",
     "polars",
     "seaborn",
     "statsmodels",
@@ -38,4 +37,4 @@ pdf_conversion = ["pandoc"] # For Markdown files (e.g., in `data_summary/`)
 xlsx_conversion = ["pandas", "xlrd"] # For `data_pipeline/raw_to_xlsx.py`
 
 [tool.mypy]
-disable_error_code = ["import-not-found", "import-untyped"]
+disable_error_code = ["import-untyped"]

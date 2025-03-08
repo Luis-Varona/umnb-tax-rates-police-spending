@@ -1,0 +1,49 @@
+                                 OLS Regression Results                                
+=======================================================================================
+Dep. Variable:                log_ATR   R-squared (uncentered):                   0.712
+Model:                            OLS   Adj. R-squared (uncentered):              0.708
+Method:                 Least Squares   F-statistic:                              192.7
+Date:                Wed, 12 Mar 2025   Prob (F-statistic):                        0.00
+Time:                        15:26:06   Log-Likelihood:                          16604.
+No. Observations:                1818   AIC:                                 -3.316e+04
+Df Residuals:                    1795   BIC:                                 -3.304e+04
+Df Model:                          23                                                  
+Covariance Type:            nonrobust                                                  
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+PSC            0.0008   2.68e-05     28.231      0.000       0.001       0.001
+TBC        -8.269e-06   2.18e-07    -37.903      0.000    -8.7e-06   -7.84e-06
+GGS            0.0008   2.58e-05     30.016      0.000       0.001       0.001
+FPS            0.0006   3.94e-05     15.128      0.000       0.001       0.001
+WCT            0.0006   5.79e-05     10.323      0.000       0.000       0.001
+EMS            0.0005   3.37e-05     15.223      0.000       0.000       0.001
+OPS            0.0004   9.65e-05      4.651      0.000       0.000       0.001
+TRS            0.0005   2.43e-05     22.591      0.000       0.001       0.001
+EHS            0.0012   7.65e-05     16.121      0.000       0.001       0.001
+PHS            0.0007      0.000      5.435      0.000       0.000       0.001
+EDS            0.0006      4e-05     14.534      0.000       0.001       0.001
+RCS            0.0007    2.7e-05     26.958      0.000       0.001       0.001
+DBC            0.0007    2.4e-05     27.249      0.000       0.001       0.001
+TRN            0.0006   2.37e-05     24.718      0.000       0.001       0.001
+DFC            0.0009   3.96e-05     22.041      0.000       0.001       0.001
+UGR           -0.0006   2.45e-05    -24.109      0.000      -0.001      -0.001
+OGS           -0.0005   2.96e-05    -18.220      0.000      -0.001      -0.000
+SOS           -0.0008   3.93e-05    -21.018      0.000      -0.001      -0.001
+OSR           -0.0007   3.88e-05    -18.399      0.000      -0.001      -0.001
+CTR           -0.0005   3.77e-05    -12.863      0.000      -0.001      -0.000
+OTR           -0.0006   3.82e-05    -16.597      0.000      -0.001      -0.001
+BIS           -0.0006   3.38e-05    -17.500      0.000      -0.001      -0.001
+POP        -2.733e-06   8.33e-07     -3.283      0.001   -4.37e-06    -1.1e-06
+==============================================================================
+Omnibus:                      109.339   Durbin-Watson:                   1.571
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              257.948
+Skew:                          -0.357   Prob(JB):                     9.71e-57
+Kurtosis:                       4.702   Cond. No.                     3.56e+03
+==============================================================================
+
+Notes:
+[1] R² is computed without centering (uncentered) since the model does not contain a constant.
+[2] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[3] The condition number is large, 3.56e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
