@@ -40,7 +40,7 @@ def main():
                "Biennial Surplus/Capita (REV)",
                "Total Non-Warrant Rev./Capita (REV)",
                "Latest Census Pop. (CMP)",
-               "Provider_PPSA",
+               "Provider_MPSA",
                "Provider_Municipal"]
     column_maps = get_column_maps()
     dfs = {cat: pl.read_excel(source,

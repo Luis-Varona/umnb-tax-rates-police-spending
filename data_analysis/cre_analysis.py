@@ -54,7 +54,9 @@ def read_data(source: str) -> pl.DataFrame:
     
     df_all = pl.read_excel(source)
     return (df_all.rename(dict(zip(df_all.columns, columns)))
-            .with_columns(~cs.by_name(columns[:3] + columns[-2:]) / 1000))
+            .drop(pl.col("POP"))
+            .with_columns(pl.col("ATR") / 100)
+            .with_columns(~cs.by_name(columns[:3] + columns[-2:]) / 1e5))
 
 
 # %%
@@ -77,25 +79,26 @@ def mean_and_sep_dataframes(df_all: pl.DataFrame) -> dict[str, pl.DataFrame]:
     vars_dict = {
         'base': ["year", "municipality",
                  "ATR", "PSC", "TBC",
-                 "NEC", "NRC", "POP",
+                 "NEC", "NRC",
                  "MPSA", "MUNI"],
         'disagg_nec': ["year", "municipality",
                        "ATR", "PSC", "TBC",
                        "GGS", "FPS", "WCT", "EMS", "OPS",
                        "TRS", "EHS", "PHS", "EDS",
                        "RCS", "DBC", "TRN", "DFC",
-                       "NRC", "POP", "MPSA", "MUNI"],
+                       "NRC", "MPSA", "MUNI"],
         'disagg_nrc': ["year", "municipality",
                        "ATR", "PSC", "TBC", "NEC",
                        "UGR", "OGS", "SOS", "OSR", "CTR",
                        "OTR", "BIS",
-                       "POP", "MPSA", "MUNI"],
+                       "MPSA", "MUNI"],
         'unrestricted': [col for col in df_all.columns if col not in
                          {"NEC", "NRC"}],
     }
     
     return {model_id: (add_mundlak_means(df_all.select(columns))
-                       .with_columns(pl.col("ATR").log().alias("log_ATR")))
+                       .with_columns(pl.col("ATR").log().alias("log_ATR"))
+                       .with_columns(pl.col("TBC").log().alias("log_TBC")))
             for model_id, columns in vars_dict.items()}
 
 
@@ -108,9 +111,11 @@ def fit_model(df_dict: dict[str, pl.DataFrame],
               *, left_log: bool = False,
               ) -> tuple[MixedLM, MixedLMResultsWrapper]:
     df = df_dict[model_id]
-    indep_vars = [var for var in df.columns if var not in
-                  {"year", "municipality", "ATR", "log_ATR"}]
+    
     dep_var = "log_ATR" if left_log else "ATR"
+    exclude_var = "TBC" if left_log else "log_TBC"
+    indep_vars = [var for var in df.columns if var not in
+                  {"year", "municipality", "ATR", "log_ATR", exclude_var}]
     
     formula = f"{dep_var} ~ {' + '.join(indep_vars)}"
     group = df.select("municipality").to_series()
@@ -183,9 +188,10 @@ f_test_4_log = results_ur_log.f_test(hypothesis4)
 
 # %%
 df = df_dict['unrestricted'].drop("MPSA", "MUNI")
-indep_vars = [var for var in df.columns if var not in
-              {"year", "municipality", "ATR", "log_ATR"}]
+
 dep_var = "log_ATR"
+indep_vars = [var for var in df.columns if var not in
+              {"year", "municipality", "ATR", "log_ATR", "TBC"}]
 
 formula = f"{dep_var} ~ {' + '.join(indep_vars)}"
 group = df.select("municipality").to_series()

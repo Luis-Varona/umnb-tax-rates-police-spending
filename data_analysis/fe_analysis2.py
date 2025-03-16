@@ -27,12 +27,10 @@ def read_data(source: str) -> pl.DataFrame:
     
     df_orig = pl.read_excel(source)
     return (df_orig.rename(dict(zip(df_orig.columns, columns)))
-            .drop(pl.col("NEC"), pl.col("NRC"), pl.col("POP"))
+            .drop(pl.col("TBC"), pl.col("NEC"), pl.col("NRC"), pl.col("POP"))
             .with_columns(pl.col("ATR") / 100)
             .with_columns(~cs.by_name(columns[:3] + columns[-2:]) / 1e5)
-            .with_columns(pl.col("ATR").log().alias("log_ATR"))
-            .with_columns(pl.col("TBC").log().alias("log_TBC")))
-
+            .with_columns(pl.col("ATR").log().alias("log_ATR")))
 
 # %%
 def demean_data(df: pl.DataFrame) -> pl.DataFrame:
@@ -42,7 +40,7 @@ def demean_data(df: pl.DataFrame) -> pl.DataFrame:
     
     for var in transform_vars:
         df_demean = (df_demean.with_columns(pl.col(var) - pl.col(var).mean()
-                                                .over("municipality")))
+                                            .over("municipality")))
     
     return df_demean
 
@@ -59,14 +57,13 @@ def write_model_summary(summary: Summary, dest: str) -> None:
 # %%
 os.chdir('data_analysis')
 source = os.path.join('..', 'data_pipeline', 'data_final', 'data_final.xlsx')
-dest_dir = 'fe_results'
+dest_dir = 'fe_results2'
 os.makedirs(dest_dir, exist_ok=True)
 
 
 # %%
 df_orig = read_data(source)
 df_demean = demean_data(df_orig)
-
 indep_vars = [var for var in df_demean.columns
               if var not in {"year", "municipality", "ATR", "log_ATR"}]
 indep_vars = [re.sub(r"^(MPSA|MUNI)$", r"PSC:\1", var)
@@ -74,8 +71,8 @@ indep_vars = [re.sub(r"^(MPSA|MUNI)$", r"PSC:\1", var)
 
 
 # %%
-formula = f"ATR ~ {' + '.join(indep_vars)} -1".replace("+ log_TBC", "")
-formula_log = f"log_ATR ~ {' + '.join(indep_vars)} -1".replace("+ TBC", "")
+formula = f"ATR ~ {' + '.join(indep_vars)} -1"
+formula_log = f"log_ATR ~ {' + '.join(indep_vars)} -1"
 
 
 # %%
