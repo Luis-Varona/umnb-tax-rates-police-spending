@@ -1,0 +1,145 @@
+# %%
+import os
+import pickle
+
+import numpy as np
+import polars as pl
+
+from linearmodels.compat.statsmodels import Summary
+from linearmodels.panel.model import PanelOLS
+from linearmodels.panel.results import PanelResults
+from statsmodels.regression.linear_model import OLS
+
+
+# %%
+SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
+DEST_DIR = 'fe_iv2sls_results'
+INSTRUMENT_DIR = os.path.join('fe_iv2sls_results', 'instrument_data')
+
+
+# %%
+DEP_VAR = "AvgTaxRate"
+EXOG = ["PolExpCapita", "OtherExpCapita", "OtherRevCapita",
+        "PolExpCapita:Provider_MPSA", "PolExpCapita:Provider_Muni"]
+ENDOG = "TaxBaseCapita"
+INSTRUMENT = "MedHouseInc"
+
+INSTRUMENT_YEARS = list(range(2000, 2021))
+
+
+# %%
+GROUP_COL = "Municipality"
+TIME_COL = "Year"
+
+FORMULA = f"{DEP_VAR} ~ {' + '.join(EXOG)} + {ENDOG} + EntityEffects"
+FORMULA_LOG = (FORMULA.replace(DEP_VAR, f"log_{DEP_VAR}")
+               .replace(ENDOG, f"log_{ENDOG}"))
+
+# %%
+def main():
+    source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
+    source_instr = os.path.join(INSTRUMENT_DIR, 'muni_map.pkl')
+    dest = os.path.join(DEST_DIR, 'model_summary.txt')
+    dest_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
+    os.makedirs(DEST_DIR, exist_ok=True)
+    
+    df = first_stage_regress(source, source_instr)
+    model, result = fit_model(df)
+    model_log, result_log = fit_model(df, left_log=True)
+    
+    write_model_summary(result.summary, dest)
+    write_model_summary(result_log.summary, dest_log)
+
+
+# %%
+def process_muni_map(muni_map: dict[int, dict]) -> tuple[list, dict]:
+    munis = list(muni_map[INSTRUMENT_YEARS[0] + 1].keys())
+    incomes = {}
+    
+    for muni in munis:
+        incomes[muni] = np.empty(len(INSTRUMENT_YEARS), np.float64)
+        
+        for i, year in enumerate(INSTRUMENT_YEARS):
+            sub_map = muni_map.get(year + 1)
+            incomes[muni][i] = sub_map[muni] if sub_map else np.nan
+    
+    return munis, incomes
+
+def get_interp_args(incomes: dict[str, np.ndarray]) -> tuple[dict, dict, dict]:
+    nans = {muni: np.isnan(income) for muni, income in incomes.items()}
+    xs = {muni: np.where(nan)[0] for muni, nan in nans.items()}
+    xps = {muni: np.where(~nan)[0] for muni, nan in nans.items()}
+    fps = {muni: income[xps[muni]] for muni, income in incomes.items()}
+    return xs, xps, fps
+
+def interpolate_instrument_data(
+    munis: list, incomes: dict[str, np.ndarray]
+) -> pl.DataFrame:
+    xs, xps, fps = get_interp_args(incomes)
+    
+    for muni, income in incomes.items():
+        income[xs[muni]] = np.interp(xs[muni], xps[muni], fps[muni])
+    
+    muni_series = munis * len(INSTRUMENT_YEARS)
+    year_series = [year for year in INSTRUMENT_YEARS for _ in munis]
+    income_series = [income[t] / 1e5 for t in range(len(INSTRUMENT_YEARS))
+                     for income in incomes.values()]
+    
+    return (pl.DataFrame({
+        GROUP_COL: muni_series,
+        TIME_COL: year_series,
+        INSTRUMENT: income_series
+    })
+            .with_columns(pl.col(INSTRUMENT).log().alias(f"log_{INSTRUMENT}")))
+
+def get_instrument_data(source_instr: str) -> pl.DataFrame:
+    with open(source_instr, 'rb') as f:
+        muni_map = pickle.load(f)
+    
+    return interpolate_instrument_data(*process_muni_map(muni_map))
+
+
+# %%
+def first_stage_regress(source: str, source_instr: str) -> pl.DataFrame:
+    df_instr = get_instrument_data(source_instr)
+    df = (pl.read_excel(source)
+          .join(df_instr, on=[GROUP_COL, "Year"], how="left"))
+    
+    iv_model = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df)
+    iv_model_log = OLS.from_formula(f"log_{ENDOG} ~ log_{INSTRUMENT}", df)
+    
+    new_endog = iv_model.fit().predict()
+    new_endog_log = iv_model_log.fit().predict()
+    
+    return (df.with_columns(pl.Series(new_endog).alias(ENDOG),
+                            pl.Series(new_endog_log).alias(f"log_{ENDOG}")))
+
+def fit_model(
+    df: pl.DataFrame, *, left_log: bool = False
+) -> tuple[PanelOLS, PanelResults]:
+    df_pandas = df.to_pandas()
+    df_pandas.set_index([GROUP_COL, TIME_COL], inplace=True)
+    
+    formula = FORMULA_LOG if left_log else FORMULA
+    model = PanelOLS.from_formula(formula, df_pandas)
+    result = model.fit(cov_type='clustered', cluster_entity=True)
+    
+    return model, result
+
+def write_model_summary(summary: Summary, dest: str) -> None:
+    if os.path.exists(dest):
+        os.remove(dest)
+    
+    with open(dest, 'x') as file:
+        file.write(summary.as_text())
+
+
+# %%
+if __name__ == "__main__":
+    wd = os.getcwd()
+    os.chdir(os.path.dirname(__file__))
+    
+    try:
+        main()
+    finally:
+        os.chdir(wd)

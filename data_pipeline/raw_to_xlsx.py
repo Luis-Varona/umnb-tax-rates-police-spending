@@ -1,35 +1,40 @@
 # %%
-import logging
 import os
-import shutil
+import sys
 from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
 import polars as pl
 
+sys.path.append(os.path.join(os.path.dirname(__file__), 'helper_scripts'))
+from _fastexcel_logging_ import suppress_fastexcel_logging
+
+
+# %%
+SOURCE_DIR = 'data_raw'
+DEST_DIR = 'data_xlsx'
+
 
 # %%
 def main():
-    source_dir = 'data_raw'
-    dest_dir = os.path.join(os.getcwd(), 'data_xlsx')
-    os.makedirs(dest_dir, exist_ok=True)
+    os.makedirs(DEST_DIR, exist_ok=True)
     
-    for x in os.listdir(source_dir):
-        source = os.path.join(source_dir, x)
+    for x in os.listdir(SOURCE_DIR):
+        source = os.path.join(SOURCE_DIR, x)
         
         if x.endswith(('.xlsx', '.xls', '.xlw')):
-            dest = os.path.join(dest_dir, f'{get_file_name(x)}.xlsx')
+            dest = os.path.join(DEST_DIR, f'{get_file_name(x)}.xlsx')
             copy_to_dest_as_xlsx(x, source, dest)
-        elif is_subdir(x):
-            dest_parent_path = os.path.join(dest_dir, x)
+        elif is_subdir(x, SOURCE_DIR):
+            dest_parent_path = os.path.join(DEST_DIR, x)
             os.makedirs(dest_parent_path, exist_ok=True)
             
-            for file in os.listdir(os.path.join(source_dir, x)):
+            for file in os.listdir(os.path.join(SOURCE_DIR, x)):
                 if is_excel_file(file):
-                    source = os.path.join(source, file)
+                    source_temp = os.path.join(source, file)
                     dest = f'{dest_parent_path}/{get_file_name(file)}.xlsx'
-                    copy_to_dest_as_xlsx(file, source, dest)
+                    copy_to_dest_as_xlsx(file, source_temp, dest)
 
 
 # %%
@@ -38,13 +43,9 @@ def copy_to_dest_as_xlsx(file: str, source: str, dest: str) -> None:
         raise RuntimeError(f"File `{file}` is not an Excel file.")
     
     if file.endswith('.xlsx'):
-        shutil.copy(source, dest)
+        os.system(f'cp {source} {dest}')
     else:
-        logger = logging.getLogger('fastexcel.types.dtype')
-        default_level = logger.getEffectiveLevel()
-        logger.setLevel(logging.ERROR)
-        
-        try:
+        with suppress_fastexcel_logging():
             if file.endswith('.xls'):
                 (pl.read_excel(source, has_header=False)
                  .write_excel(dest, include_header=False, autofit=True))
@@ -54,16 +55,14 @@ def copy_to_dest_as_xlsx(file: str, source: str, dest: str) -> None:
                      .to_excel(buffer, header=False, index=False))
                     (pl.read_excel(buffer, has_header=False)
                      .write_excel(dest, include_header=False, autofit=True))
-        finally:
-            logger.setLevel(default_level)
 
 
 # %%
 def is_excel_file(file: str) -> bool:
     return file.endswith(('.xlsx', '.xls', '.xlw'))
 
-def is_subdir(file: str) -> bool:
-    return os.path.isdir(os.path.join(os.getcwd(), file))
+def is_subdir(file: str, dir: str) -> bool:
+    return os.path.isdir(os.path.join(os.path.dirname(__file__), dir, file))
 
 def get_file_name(file: str) -> str:
     return Path(file).stem
@@ -71,8 +70,8 @@ def get_file_name(file: str) -> str:
 
 # %%
 if __name__ == '__main__':
-    if not (wd := os.getcwd()).endswith('data_pipeline'):
-        os.chdir('data_pipeline')
+    wd = os.getcwd()
+    os.chdir(os.path.dirname(__file__))
     
     try:
         main()

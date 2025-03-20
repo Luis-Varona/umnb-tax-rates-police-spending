@@ -1,50 +1,36 @@
-                                 OLS Regression Results                                
-=======================================================================================
-Dep. Variable:                    ATR   R-squared (uncentered):                   0.759
-Model:                            OLS   Adj. R-squared (uncentered):              0.755
-Method:                 Least Squares   F-statistic:                              234.9
-Date:                Tue, 18 Mar 2025   Prob (F-statistic):                        0.00
-Time:                        16:02:22   Log-Likelihood:                          12092.
-No. Observations:                1818   AIC:                                 -2.414e+04
-Df Residuals:                    1794   BIC:                                 -2.400e+04
-Df Model:                          24                                                  
-Covariance Type:            nonrobust                                                  
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-PSC            1.2185      0.038     31.945      0.000       1.144       1.293
-TBC           -0.0120      0.000    -44.051      0.000      -0.013      -0.011
-GGS            1.0224      0.031     32.822      0.000       0.961       1.083
-FPS            0.8375      0.047     17.710      0.000       0.745       0.930
-WCT            0.9960      0.071     14.019      0.000       0.857       1.135
-EMS            0.8121      0.041     19.653      0.000       0.731       0.893
-OPS            0.8919      0.117      7.601      0.000       0.662       1.122
-TRS            0.8564      0.030     28.653      0.000       0.798       0.915
-EHS            1.7345      0.092     18.874      0.000       1.554       1.915
-PHS            1.1150      0.165      6.773      0.000       0.792       1.438
-EDS            0.8311      0.048     17.340      0.000       0.737       0.925
-RCS            1.0533      0.033     32.091      0.000       0.989       1.118
-DBC            0.9226      0.029     32.020      0.000       0.866       0.979
-TRN            0.8541      0.029     29.504      0.000       0.797       0.911
-DFC            1.1701      0.047     24.644      0.000       1.077       1.263
-UGR           -0.8425      0.030    -28.008      0.000      -0.901      -0.784
-OGS           -0.8236      0.036    -22.632      0.000      -0.895      -0.752
-SOS           -1.1193      0.047    -23.793      0.000      -1.212      -1.027
-OSR           -0.9401      0.046    -20.321      0.000      -1.031      -0.849
-CTR           -0.7812      0.046    -17.121      0.000      -0.871      -0.692
-OTR           -0.8881      0.046    -19.266      0.000      -0.979      -0.798
-BIS           -0.8846      0.041    -21.423      0.000      -0.966      -0.804
-PSC:MPSA      -0.3677      0.062     -5.904      0.000      -0.490      -0.246
-PSC:MUNI      -0.4479      0.047     -9.446      0.000      -0.541      -0.355
-==============================================================================
-Omnibus:                       62.760   Durbin-Watson:                   1.694
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              105.720
-Skew:                          -0.288   Prob(JB):                     1.10e-23
-Kurtosis:                       4.032   Cond. No.                     3.60e+03
-==============================================================================
+                          PanelOLS Estimation Summary                           
+================================================================================
+Dep. Variable:             AvgTaxRate   R-squared:                        0.7216
+Estimator:                   PanelOLS   R-squared (Between):              0.1325
+No. Observations:                1818   R-squared (Within):               0.7216
+Date:                Sat, Mar 29 2025   R-squared (Overall):              0.1356
+Time:                        21:08:30   Log-likelihood                 1.196e+04
+Cov. Estimator:             Clustered                                           
+                                        F-statistic:                      738.02
+Entities:                         104   P-value                           0.0000
+Avg Obs:                       17.481   Distribution:                  F(6,1708)
+Min Obs:                       6.0000                                           
+Max Obs:                       18.000   F-statistic (robust):             66.473
+                                        P-value                           0.0000
+Time periods:                      18   Distribution:                  F(6,1708)
+Avg Obs:                       101.00                                           
+Min Obs:                       95.000                                           
+Max Obs:                       103.00                                           
+                                                                                
+                                     Parameter Estimates                                      
+==============================================================================================
+                            Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
+----------------------------------------------------------------------------------------------
+PolExpCapita                   1.3092     0.0990     13.222     0.0000      1.1150      1.5034
+OtherExpCapita                 0.9665     0.0914     10.575     0.0000      0.7872      1.1458
+OtherRevCapita                -0.8964     0.0991    -9.0486     0.0000     -1.0907     -0.7021
+TaxBaseCapita                 -0.0122     0.0012    -10.440     0.0000     -0.0145     -0.0099
+PolExpCapita:Provider_MPSA    -0.5551     0.1951    -2.8459     0.0045     -0.9377     -0.1725
+PolExpCapita:Provider_Muni    -0.6083     0.1377    -4.4162     0.0000     -0.8784     -0.3381
+==============================================================================================
 
-Notes:
-[1] R² is computed without centering (uncentered) since the model does not contain a constant.
-[2] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[3] The condition number is large, 3.6e+03. This might indicate that there are
-strong multicollinearity or other numerical problems.
+F-test for Poolability: 51.098
+P-value: 0.0000
+Distribution: F(103,1708)
+
+Included effects: Entity

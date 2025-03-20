@@ -1,4 +1,6 @@
-.dist
-.mypy_cache
-.vscode
-**.DS_Store
+**/.DS_Store
+**/.dist
+**/__pycache__
+**/.mypy_cache
+**/.vscode
+**/.idea

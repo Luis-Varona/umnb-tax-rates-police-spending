@@ -1,0 +1,14 @@
+---
+author:
+  - "Luis M. B. Varona\\textsuperscript{1,2}"
+  - " Otoha Hanatani\\textsuperscript{3}"
+lang: en
+documentclass: article
+papersize: letter
+geometry: margin=1in
+header-includes: |
+  \renewcommand{\thefootnote}{\arabic{footnote}}
+  \setcounter{footnote}{0}
+include-before: \input{affiliations.tex}
+output: pdf_document
+---

@@ -1,8 +1,11 @@
 # %%
-import logging
 import os
+import sys
+
 import polars as pl
-from xlsxwriter import Workbook
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from _fastexcel_logging_ import suppress_fastexcel_logging
 
 
 # %%
@@ -11,17 +14,9 @@ def main():
     dest = os.path.join('data_clean', 'GNB2024_pol_prov_clean.xlsx')
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     
-    logger = logging.getLogger('fastexcel.types.dtype')
-    default_level = logger.getEffectiveLevel()
-    logger.setLevel(logging.ERROR)
-    
-    try:
-        with Workbook(dest) as workbook:
-            (clean_pol_prov_data(get_muni_map(read_provider_data(source)))
-             .write_excel(workbook,
-                          header_format={'bold': True}, autofit=True))
-    finally:
-        logger.setLevel(default_level)
+    with suppress_fastexcel_logging():
+        (clean_pol_prov_data(get_muni_map(read_provider_data(source)))
+         .write_excel(dest, header_format={'bold': True}, autofit=True))
 
 
 # %%

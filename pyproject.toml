@@ -1,6 +1,6 @@
 [project]
 name = "umnb-tax-rates-police-spending"
-description = "A CRE regression of New Brunswick tax rates on police spending."
+description = "An FE-2SLS regression model of New Brunswick tax rates on police spending."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
 authors = [
@@ -11,19 +11,20 @@ maintainers = [
     { name = "Luis M. B. Varona", email = "lbvarona@mta.ca" },
 ]
 keywords = [
-    "correlated random-effects",
-    "regression analysis",
     "econometrics",
     "economic policy",
-    "police expenditures",
     "tax rates",
+    "fixed-effects",
+    "two-stage-least-squares-regression",
 ]
 dependencies = [
     "fastexcel", # Used by polars' `read_excel` function
+    "linearmodels",
     "matplotlib",
     "polars",
     "seaborn",
     "statsmodels",
+    "unidecode",
     "xlsxwriter",
 ]
 dynamic = ["version"]
@@ -32,8 +33,8 @@ dynamic = ["version"]
 Repository = "https://github.com/Luis-Varona/umnb-tax-rates-police-spending"
 
 [project.optional-dependencies]
-linting = ["black", "mypy", "ruff"] # For linting and type checking
-pdf_conversion = ["pandoc"] # For Markdown files (e.g., in `data_summary/`)
+linting = ["mypy", "ruff"] # For linting and type checking
+pdf_conversion = ["pandoc"] # For Markdown files
 xlsx_conversion = ["pandas", "xlrd"] # For `data_pipeline/raw_to_xlsx.py`
 
 [tool.mypy]

@@ -1,0 +1,24 @@
+                Mixed Linear Model Regression Results
+======================================================================
+Model:                  MixedLM     Dependent Variable:     AvgTaxRate
+No. Observations:       1818        Method:                 REML      
+No. Groups:             104         Scale:                  0.0000    
+Min. group size:        6           Log-Likelihood:         11654.5135
+Max. group size:        18          Converged:              Yes       
+Mean group size:        17.5                                          
+----------------------------------------------------------------------
+                           Coef.  Std.Err.    z    P>|z| [0.025 0.975]
+----------------------------------------------------------------------
+Intercept                   0.012    0.000  47.692 0.000  0.012  0.013
+PolExpCapita                1.274    0.038  33.770 0.000  1.200  1.347
+OtherExpCapita              0.956    0.022  44.331 0.000  0.914  0.998
+OtherRevCapita             -0.885    0.026 -34.333 0.000 -0.935 -0.834
+TaxBaseCapita              -0.012    0.000 -43.361 0.000 -0.013 -0.011
+PolExpCapita_mean           0.846    0.157   5.375 0.000  0.538  1.155
+OtherExpCapita_mean         0.349    0.086   4.052 0.000  0.180  0.517
+OtherRevCapita_mean        -0.429    0.109  -3.926 0.000 -0.643 -0.215
+TaxBaseCapita_mean         -0.005    0.001  -5.435 0.000 -0.007 -0.003
+PolExpCapita:Provider_MPSA -0.466    0.057  -8.146 0.000 -0.578 -0.354
+PolExpCapita:Provider_Muni -0.530    0.045 -11.781 0.000 -0.618 -0.442
+Group Var                   0.000    0.000                            
+======================================================================

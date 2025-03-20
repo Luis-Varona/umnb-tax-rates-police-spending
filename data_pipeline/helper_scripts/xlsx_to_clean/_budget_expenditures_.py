@@ -1,11 +1,13 @@
 # %%
-import logging
 import os
+import sys
 from io import BytesIO
 
 import polars as pl
 import polars.selectors as cs
-from xlsxwriter import Workbook
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from _fastexcel_logging_ import suppress_fastexcel_logging
 
 
 # %%
@@ -19,17 +21,9 @@ def main():
                             f'GNB{year}_bgt_exps_clean.xlsx')
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         
-        logger = logging.getLogger('fastexcel.types.dtype')
-        default_level = logger.getEffectiveLevel()
-        logger.setLevel(logging.ERROR)
-        
-        try:
-            with Workbook(dest) as workbook:
-                (clean_bgt_exps_data(source)
-                 .write_excel(workbook,
-                              header_format={'bold': True}, autofit=True))
-        finally:
-            logger.setLevel(default_level)
+        with suppress_fastexcel_logging():
+            (clean_bgt_exps_data(source)
+             .write_excel(dest, header_format={'bold': True}, autofit=True))
 
 
 # %%

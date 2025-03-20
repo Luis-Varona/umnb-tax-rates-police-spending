@@ -1,53 +1,68 @@
 # %%
 import os
-import re
 
-import matplotlib.pyplot as plt
 import polars as pl
-import polars.selectors as cs
-import seaborn as sns
 
-from statsmodels.iolib.summary2 import Summary
-from statsmodels.regression.linear_model import OLS, RegressionResultsWrapper
-
-
-# %%
-def read_data(source: str) -> pl.DataFrame:
-    columns = ["year", "municipality",
-               "ATR", "PSC", "TBC",
-               "GGS", "FPS", "WCT", "EMS", "OPS",
-               "TRS", "EHS", "PHS", "EDS",
-               "RCS", "DBC", "TRN", "DFC",
-               "NEC",
-               "UGR", "OGS", "SOS", "OSR", "CTR",
-               "OTR", "BIS",
-               "NRC",
-               "POP",
-               "MPSA", "MUNI"]
-    
-    df_orig = pl.read_excel(source)
-    return (df_orig.rename(dict(zip(df_orig.columns, columns)))
-            .drop(pl.col("NEC"), pl.col("NRC"), pl.col("POP"))
-            .with_columns(pl.col("ATR") / 100)
-            .with_columns(~cs.by_name(columns[:3] + columns[-2:]) / 1e5)
-            .with_columns(pl.col("ATR").log().alias("log_ATR"))
-            .with_columns(pl.col("TBC").log().alias("log_TBC")))
+from linearmodels.compat.statsmodels import Summary
+from linearmodels.panel.model import PanelOLS
+from linearmodels.panel.results import PanelResults
 
 
 # %%
-def demean_data(df: pl.DataFrame) -> pl.DataFrame:
-    df_demean = df.clone()
-    transform_vars = [var for var in df.columns
-                      if var not in {"year", "municipality", "MPSA", "MUNI"}]
-    
-    for var in transform_vars:
-        df_demean = (df_demean.with_columns(pl.col(var) - pl.col(var).mean()
-                                                .over("municipality")))
-    
-    return df_demean
+SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
+DEST_DIR = 'fe_results'
 
 
 # %%
+DEP_VAR = "AvgTaxRate"
+INDEP_VARS = ["PolExpCapita",
+              "OtherExpCapita",
+              "OtherRevCapita",
+              "PolExpCapita:Provider_MPSA",
+              "PolExpCapita:Provider_Muni",
+              "TaxBaseCapita"]
+LOG_VARS = ["AvgTaxRate", "TaxBaseCapita"]
+
+
+# %%
+GROUP_COL = "Municipality"
+TIME_COL = "Year"
+
+FORMULA = f"{DEP_VAR} ~ {' + '.join(INDEP_VARS)} + EntityEffects"
+FORMULA_LOG = FORMULA
+
+for var in LOG_VARS:
+    FORMULA_LOG = FORMULA_LOG.replace(var, f"log_{var}")
+
+
+# %%
+def main():
+    source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
+    dest = os.path.join(DEST_DIR, 'model_summary.txt')
+    dest_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
+    os.makedirs(DEST_DIR, exist_ok=True)
+    
+    df = pl.read_excel(source)
+    model, result = fit_model(df)
+    model_log, result_log = fit_model(df, left_log=True)
+    
+    write_model_summary(result.summary, dest)
+    write_model_summary(result_log.summary, dest_log)
+
+
+# %%
+def fit_model(
+    df: pl.DataFrame, *, left_log: bool = False
+) -> tuple[PanelOLS, PanelResults]:
+    df_pandas = df.to_pandas()
+    df_pandas.set_index([GROUP_COL, TIME_COL], inplace=True)
+    
+    formula = FORMULA_LOG if left_log else FORMULA
+    model = PanelOLS.from_formula(formula, df_pandas)
+    result = model.fit(cov_type='clustered', cluster_entity=True)
+    
+    return model, result
+
 def write_model_summary(summary: Summary, dest: str) -> None:
     if os.path.exists(dest):
         os.remove(dest)
@@ -57,44 +72,11 @@ def write_model_summary(summary: Summary, dest: str) -> None:
 
 
 # %%
-os.chdir('data_analysis')
-source = os.path.join('..', 'data_pipeline', 'data_final', 'data_final.xlsx')
-dest_dir = 'fe_results'
-os.makedirs(dest_dir, exist_ok=True)
-
-
-# %%
-df_orig = read_data(source)
-df_demean = demean_data(df_orig)
-
-indep_vars = [var for var in df_demean.columns
-              if var not in {"year", "municipality", "ATR", "log_ATR"}]
-indep_vars = [re.sub(r"^(MPSA|MUNI)$", r"PSC:\1", var)
-              for var in indep_vars]
-
-
-# %%
-formula = f"ATR ~ {' + '.join(indep_vars)} -1".replace("+ log_TBC", "")
-formula_log = f"log_ATR ~ {' + '.join(indep_vars)} -1".replace("+ TBC", "")
-
-
-# %%
-model = OLS.from_formula(formula, df_demean)
-model_log = OLS.from_formula(formula_log, df_demean)
-
-results = model.fit(reml=True)
-results_log = model_log.fit(reml=True)
-
-summary = results.summary()
-summary_log = results_log.summary()
-
-
-# %%
-dest = os.path.join(dest_dir, 'model_summary.txt')
-dest_log = os.path.join(dest_dir, 'model_summary_log.txt')
-write_model_summary(summary, dest)
-write_model_summary(summary_log, dest_log)
-
-
-# %%
-os.chdir('..')
+if __name__ == "__main__":
+    wd = os.getcwd()
+    os.chdir(os.path.dirname(__file__))
+    
+    try:
+        main()
+    finally:
+        os.chdir(wd)

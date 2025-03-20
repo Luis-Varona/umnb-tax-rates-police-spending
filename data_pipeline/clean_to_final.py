@@ -14,8 +14,8 @@ def main():
 
 # %%
 if __name__ == '__main__':
-    if not (wd := os.getcwd()).endswith('data_pipeline'):
-        os.chdir('data_pipeline')
+    wd = os.getcwd()
+    os.chdir(os.path.dirname(__file__))
     
     try:
         main()
