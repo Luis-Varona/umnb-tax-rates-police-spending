@@ -10,9 +10,10 @@ bibliography: references.bib
 # Introduction
 
 In collaboration with the Union of Municipalities of New Brunswick, we conduct
-a fixed-effects two-stage least squares regression analysis of municipal police
-spending on tax rates, using median household income as an instrument variable
-to reduce simultaneity bias. [Add later]
+a fixed-effects two-stage least squares (or FE-2SLS) regression analysis of
+police spending on tax rates in New Brunswick municipalities, using median
+household income as an instrument variable to reduce simultaneity bias. [Add
+later]
 
 # Literature Review
 
@@ -52,21 +53,21 @@ rate) is then used to reduce simultaneity bias in our fixed-effects model.
 ### Primary Data
 
 The original Excel files extracted from `.zip` archives provided by the GNB and
-the UMNB are contained in the [`data_raw`](../data_pipeline/data_raw)
+the UMNB are contained in the [`data_raw/`](../data_pipeline/data_raw/)
 directory. These contain annual data from 2000&#x2013;2022 on New Brunswick
 municipalities, as well as 2024 data on municipal policing providers. Given
 that some of these files are `.xls` and `.xlw` workbooks, we copy and convert
-them all to `.xlsx` format in the [`data_xlsx`](../data_pipeline/data_xlsx)
+them all to `.xlsx` format in the [`data_xlsx/`](../data_pipeline/data_xlsx/)
 directory. The [`raw_to_xlsx.py`](../data_pipeline/raw_to_xlsx.py) script is
 used for this purpose.
 
-Files in [`data_xlsx`](../data_pipeline/data_xlsx) are then cleaned and
+Files in [`data_xlsx/`](../data_pipeline/data_xlsx/) are then cleaned and
 organized by [`xlsx_to_clean.py`](../data_pipeline/xlsx_to_clean.py) (and its
 helper scripts in
-[`helper_scripts/xlsx_to_clean`](../data_pipeline/helper_scripts/xlsx_to_clean)).
+[`helper_scripts/xlsx_to_clean/`](../data_pipeline/helper_scripts/xlsx_to_clean/)).
 Finding that data from 2005 and 2019&#x2013;2022 is unusable due to
 missing/improperly formatted tokens, our output (placed in the
-[`data_clean`](../data_pipeline/data_clean) directory) excludes these time
+[`data_clean/`](../data_pipeline/data_clean/) directory) excludes these time
 periods. No data from the original files is discarded during this process (save
 for metadata and notes)&#x2014;simply reorganized into parseable form.
 
@@ -76,14 +77,14 @@ budget revenues, comparative demographics, and tax bases), the
 [`clean_to_final.py`](../data_pipeline/clean_to_final.py) script then writes
 all four resulting worksheets&#x2014;plus a fifth for provider data&#x2014;to a
 single [`data_master.xlsx`](../data_pipeline/data_final/data_master.xlsx)
-workbook in [`data_final`](../data_pipeline/data_final). (The new municipal
+workbook in [`data_final/`](../data_pipeline/data_final/). (The new municipal
 naming convention is also used to map provider data on newer, reformed 2024
 municipalities and districts to past jurisdictions.)
 
 ### Instrumental Variable Data
 
 Data on the instrumental income data is stored and processed in the
-[`data_iv`](../data_iv) directory. There is one folder each for 2001, 2006,
+[`data_iv/`](../data_iv/) directory. There is one folder each for 2001, 2006,
 2016, and 2021 (the years in which the census data were released) containing
 the original files downloaded from the Statistics Canada website. For 2016 and
 2021, the downloads are straightforward, nicely formatted `.csv` files
@@ -94,12 +95,24 @@ and download the data in `.csv` format. (Unfortunately, this process is not
 easily documentable, as the browser requires manual processing.)
 
 With CSV files for all four years, the
-[`process_instrument.py`](../data_iv/process_instrument.py) script is used to
-clean and combine the relevant columns and rows into a single DataFrame. This
-is then saved as an `.xlsx` file in the [`data_analysis/elasticity_results`]
+[`process_instrument.py`](../data_iv/process_instrument.py) script is finally
+used to clean and combine the relevant columns and rows into a single polars
+DataFrame. This is then saved as an `.xlsx` file in the
+[`data_analysis/elasticity_results/`](../data_analysis/elasticity_results/)
 directory for immediate usage in the data analysis stage. (The aforementioned
-data interpolation does not occur until said stage and is not considered to be
-part of the data pipeline.)
+data interpolation&#x2014;performed using Python's numpy library&#x2014;is not
+applied until this stage and is thus not considered part of the data cleaning
+and organization pipeline.)
+
+It is worth noting that although household income data from Canada censuses is
+publicly accessible for municipal-level geographic localities in 2000, 2005,
+2015, and 2020, the only available source for 2010 is aggregated data from the
+2011 National Household Survey. This survey refrained from providing
+disaggregated data at lower levels of geography, so we are unable to map it to
+most of the 104 municipalities in our dataset. Hence, linear interpolation is
+used to estimate the missing data for 2010, just as for all the other missing
+years. In the future, we may collaborate further with Statistics Canada to
+obtain the geographically disaggregated data, if it remains in their records.
 
 ## Data Analysis and Modelling
 
@@ -120,8 +133,8 @@ Our dependent variable is **AvgTaxRate**, which is calculated as a weighted
 average of the residential and non-residential tax rates in a municipal
 jurisdiction. [TODO: Elaborate] Our exogenous explanatory variables are
 **PolExpCapita**, **OtherExpCapita**, **OtherRevCapita**,
-**PolExpCapita** &#xD7; *Provider_MPSA**, and
-**PolExpCapita** &#xD7; *Provider_Muni**. Our endogenous explanatory variable
+**PolExpCapita**&#x2217;*Provider_MPSA*, and
+**PolExpCapita**&#x2217;*Provider_Muni*. Our endogenous explanatory variable
 is **TaxBaseCapita**, for which we control simultaneity bias using the
 instrumental variable **MedHouseInc**.
 
