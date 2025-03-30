@@ -1,76 +1,30 @@
 ---
-title: "Findings and Results"
+title: "Data Report"
 author:
   - "Luis M. B. Varona[^1][^2]"
   - "Otoha Hanatani[^3]"
-date: March 29, 2025
+date: March 31, 2025
 output: github_document
 bibliography: references.bib
 ---
-This report provides a summary of the Government of New Brunswick [GNB] panel
-data used in our correlated random-effects [CRE] regression analysis of
-municipal tax rates on police spending. We present below our included
-variables, preliminary summary statistics, and our data cleaning process.
+# Introduction
 
-## Variables of Interest
+In collaboration with the Union of Municipalities of New Brunswick, we conduct
+a fixed-effects two-stage least squares regression analysis of municipal police
+spending on tax rates, using median household income as an instrument variable
+to reduce simultaneity bias. [Add later]
 
-The response variable we aim to model is the **Average Tax Rate**, or **ATR**
-(given in %), regressed on the following explanatory variables using correlated
-random-effects:
+# Literature Review
 
-- **Police Spending/Capita**, or **PSC** &#x2013; CAD/person
-- **Tax Base for Rate/Capita**, or **TBC** &#x2013; CAD/person
-- **Non-Police Expenditure/Capita**, or **NEC** &#x2013; CAD/person, disaggregated:
-  - *General Government*, or *GGS*
-  - *Fire Protection*, or *FPS*
-  - *Water Cost Transfer*, or *WCT*
-  - *Emergency Measures*, or *EMS*
-  - *Other Protection*, or *OPS*
-  - *Transportation*, or *TRS*
-  - *Environmental Health*, or *EHS*
-  - *Public Health*, or *PHS*
-  - *Environmental Development*, or *EDS*
-  - *Recreation & Cultural*, or *RCS*
-  - *Debt Costs*, or *DBC*
-  - *Transfers*, or *TRN*
-  - *Deficits*, or *DFC*
-- **Non-Warrant Revenue/Capita**, or **NRC** &#x2013; CAD/person, disaggregated:
-  - *Unconditional Grant*, or *UGR*
-  - *Services to Other Governments*, or *OGS*
-  - *Sale of Services*, or *SOS*
-  - *Own-Source Revenue*, or *OSR*
-  - *Conditional Transfers*, or *CTR*
-  - *Other Transfers*, or *OTR*
-  - *Biennial Surplus*, or *BIS*
-- **Population**, or **POP** &#x2013; persons (from the latest census data)
-- **Policing Provider** &#x2013; boolean, three categories:
-  - *Provincial Police Service Agreement*, or *PPSA* (control, excluded to avoid collinearity)
-  - *Municipal Police Service Agreement*, or *MPSA* (included indicator)
-  - *Municipal Police*, or *MPSA* (included indicator)
+<!-- TODO -->
 
-### Summary Statistics
+# Methodology
 
-Summary statistics of our panel data are included in the current directory at
-[`data_summary_by_stat.xlsx`](data_summary_by_stat.xlsx) and
-[`data_summary_by_year.xlsx`](data_summary_by_year.xlsx). The former workbook
-contains one worksheet with all years for each summary statistic, whereas the
-latter contains one worksheet with all summary statistics for each year. The
-years covered are 2000&#x2013;2004 and 2006&#x2013;2018, and the summary
-statistics provided are
+## Overview of the Model
 
-- **Count** &#x2013; number of non-null observations in a column (by year)
-- **Null Count** &#x2013; number of null observations in a column (by year)
-- **Mean** &#x2013; mean of a column (by year)
-- **Std. Dev.** &#x2013; standard deviation of a column (by year)
-- **Minimum** &#x2013; minimum value of a column (by year)
-- **25%** &#x2013; 1$^\text{st}$ quartile of a column (by year)
-- **Median** &#x2013; median of a column (by year)
-- **75%** &#x2013; 3$^\text{rd}$ quartile of a column (by year)
-- **Maximum** &#x2013; maximum value of a column (by year)
+<!-- TODO -->
 
-## Data Pipeline
-
-### Data Collection and Sources
+## Data Collection and Sources
 
 We use an unbalanced panel of annual data from 2000&#x2013;2018 on New
 Brunswick municipalities, received via personal correspondence with the GNB
@@ -83,10 +37,19 @@ unique municipalities across all years.
 
 This is supplemented by 2024 data on municipal policing provider agreements
 [@And25]. We map this data backwards to municipal jurisdictions and boundaries
-from previous years and integrate indicators as time-constant variables into
-our panel as described below.
+from previous years and integrate indicators into interaction terms in our
+panel as described below.
 
-### Data Cleaning and Organization
+Finally, the instrument variable in the first stage of our 2SLS regression is
+median household income, given in census data from Statistics Canada. Data is
+only available from 2000 [@SC01], 2005 [@SC06], 2015 [@SC16], and 2020 [@SC21];
+hence, linear interpolation is applied for the intervening years. The resulting
+income data (typically correlated with tax base per capita but not with tax
+rate) is then used to reduce simultaneity bias in our fixed-effects model.
+
+## Data Cleaning and Organization
+
+### Primary Data
 
 The original Excel files extracted from `.zip` archives provided by the GNB and
 the UMNB are contained in the [`data_raw`](../data_pipeline/data_raw)
@@ -117,20 +80,95 @@ workbook in [`data_final`](../data_pipeline/data_final). (The new municipal
 naming convention is also used to map provider data on newer, reformed 2024
 municipalities and districts to past jurisdictions.)
 
-The [`clean_to_final.py`](../data_pipeline/clean_to_final.py) script in
-question (and its helpers in
-[`helper_scripts/clean_to_final`](../data_pipeline/helper_scripts/clean_to_final))
-also joins the five worksheets from
-[`data_master.xlsx`](../data_pipeline/data_final/data_master.xlsx) into a
-single worksheet in the
-[`data_final.xlsx`](../data_pipeline/data_final/data_final.xlsx) workbook (in
-the same directory). This process also involves computing new variables from
-existing columns as needed (e.g., **Police Spending/Capita** from
-**Police Spending** and **Population**). This final dataset is then used for
-our CRE regression analysis, delineated in the following section. (It is also
-used to obtain the summary statistics mentioned above.)
+### Instrumental Variable Data
 
-## CRE Model Specifications
+Data on the instrumental income data is stored and processed in the
+[`data_iv`](../data_iv) directory. There is one folder each for 2001, 2006,
+2016, and 2021 (the years in which the census data were released) containing
+the original files downloaded from the Statistics Canada website. For 2016 and
+2021, the downloads are straightforward, nicely formatted `.csv` files
+requiring no further processing. For 2001 and 2006, however, full data is only
+available in `.ivt` and `.xml` format; no schemas are available to parse the
+XML data, so we use the Government of Canada's Beyond 20/20 Browser to extract
+and download the data in `.csv` format. (Unfortunately, this process is not
+easily documentable, as the browser requires manual processing.)
+
+With CSV files for all four years, the
+[`process_instrument.py`](../data_iv/process_instrument.py) script is used to
+clean and combine the relevant columns and rows into a single DataFrame. This
+is then saved as an `.xlsx` file in the [`data_analysis/elasticity_results`]
+directory for immediate usage in the data analysis stage. (The aforementioned
+data interpolation does not occur until said stage and is not considered to be
+part of the data pipeline.)
+
+## Data Analysis and Modelling
+
+Our included variables are
+
+- **Average Tax Rate**, or **AvgTaxRate** &#x2013; unitless
+- **Police Spending per Capita**, or **PolExpCapita** &#x2013; $10^5$ CAD / person
+- **Non-Police Spending per Capita**, or **OtherExpCapita** &#x2013; $10^5$ CAD / person
+- **Non-Warrant Revenue per Capita**, or **OtherRevCapita** &#x2013; $10^5$ CAD / person
+- **Tax Base for Rate per Capita**, or **TaxBaseCapita** &#x2013; $10^5$ CAD / person
+- **Policing Provider** &#x2013; boolean, three categories:
+  - *Provincial Police Service Agreement* (excluded control variable)
+  - *Municipal Police Service Agreement*, or *Provider_MPSA* (included)
+  - *Municipal Police*, or *Provider_MPSA* (included)
+- **Median Household Income**, or **MedHouseInc** &#x2013; $10^5$ CAD / person
+
+Our dependent variable is **AvgTaxRate**, which is calculated as a weighted
+average of the residential and non-residential tax rates in a municipal
+jurisdiction. [TODO: Elaborate] Our exogenous explanatory variables are
+**PolExpCapita**, **OtherExpCapita**, **OtherRevCapita**,
+**PolExpCapita** &#xD7; *Provider_MPSA**, and
+**PolExpCapita** &#xD7; *Provider_Muni**. Our endogenous explanatory variable
+is **TaxBaseCapita**, for which we control simultaneity bias using the
+instrumental variable **MedHouseInc**.
+
+Each of these variables is used throughout our two-stage least-squares
+regression model.
+
+### Stage 1
+
+We begin by estimating **MedHouseInc** data for the years missing from the
+Statistics Canada census data, which we do using simple linear interpolation.
+(As this project continues to develop, we may investigate more sophisticated
+approximation approaches, but this shall do for now.) After this is done, we
+perform an ordinary least squares regression of **TaxBaseCapita** on
+**MedHouseInc** to obtain
+
+$$\begin{aligned}
+\hat{TaxBaseCapita}_{it} = \beta_0 + \beta_1MedHouseInc_{it} + v_{it}.
+\end{aligned}$$
+
+By performing this regression before proceeding to a fixed-effects model, we
+manage to reduce simultaneity bias, as **MedHouseInc** is correlated with
+**TaxBaseCapita** but not with **AvgTaxRate**. We use these predicted values of
+**TaxBaseCapita** in the second stage, where we demean all variables involved
+in the regression over municipalities.
+
+### Stage 2
+
+Our primary fixed-effects regression model is now given by
+$$\begin{aligned}
+\ddot{AvgTaxRate}_{it} ={} & \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} +{} \\
+& \beta_4\ddot{\hat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \cdot Provider\_MPSA_{it} +{} \\
+& \beta_6\ddot{PolExpCapita}_{it} \cdot Provider\_Muni_{it} + \ddot{u}_{it},
+\end{aligned}$$
+
+where we use the notation $\ddot{X}_{it} = X_{it} - \bar{X}_i$ to denote the
+difference between the value of $X$ for municipality $i$ in year $t$ from the
+mean value of $X$ for municipality $i$ over all years. [Add]
+
+# Results
+
+<!-- TODO -->
+
+# Discussion
+
+<!-- TODO -->
+
+# CRE Model Specifications
 
 We shall use a series of $F$-tests to compare a base (restricted) model with
 aggregated *NEC* and *NRC* data to two partially restricted models and one

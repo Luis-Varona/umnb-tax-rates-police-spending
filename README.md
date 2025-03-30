@@ -10,7 +10,7 @@ Brunswick (UMNB). Annual Government of New Brunswick (GNB) data from
 comparative demographics, and tax bases is integrated into the model. (2024
 policing provider data is mapped backwards to municipal jurisdictions from
 previous years.) The instrument variable used in the 2SLS regression is
-obtained from occassional Government of Canada census data on median household
+obtained from occassional Statistics Canada census data on median household
 income and interpolated to the years of interest.
 
 The final data used for analysis is in the
@@ -21,6 +21,6 @@ details regarding the data pipeline process can be found at
 [data_pipeline/README.md](data_pipeline/README.md), and a data summary can be
 found at [data_summary/data_summary.pdf](data_summary/data_summary.pdf). The
 official data report is at
-[findings_results/findings_results.pdf](findings_results/findings_results.pdf).
+[data_report/data_report.pdf](data_report/findidata_reportngs_results.pdf).
 
 (The final report in collaboration with the UMNB yet to be completed.)

@@ -1,6 +1,6 @@
 #!/bin/bash
 wd="$(pwd)"
-name="data_summary"
+name="data_report"
 
 if [[ "$wd" != *"$name" ]]; then
     if [[ "$(pwd)" != *"$name" ]]; then
