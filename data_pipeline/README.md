@@ -7,10 +7,10 @@ as follows:
 1. [**data_raw**](data_raw): The raw data, provided directly by the Government
    of New Brunswick.
 2. [**data_xlsx**](data_xlsx): The data in `.xlsx` format, converted by
-   [raw_to_xlsx.py](raw_to_xlsx.py).
+   [_raw_to_xlsx_.py](helper_scripts/_raw_to_xlsx_.py).
 3. [**data_clean**](data_clean): The cleaned data, processed by
-   [xlsx_to_clean.py](xlsx_to_clean.py) (and additional helper scripts in
-   [helper_scripts/xlsx_to_clean](helper_scripts/xlsx_to_clean)).
+   [_xlsx_to_clean_.py](helper_scripts/_xlsx_to_clean_.py).
 4. [**data_final**](data_final): The final data used for analysis, produced by
-   [clean_to_final.py](clean_to_final.py) (and additional helper scripts in
-   [helper_scripts/clean_to_final](helper_scripts/clean_to_final)).
+   [_clean_to_final_.py](helper_scripts/_clean_to_final_.py).
+
+The entire data pipeline is run by the main executable, [main.py](main.py).

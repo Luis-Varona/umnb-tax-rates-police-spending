@@ -10,10 +10,7 @@ from unidecode import unidecode
 
 # %%
 SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join('..',
-                        'data_analysis',
-                        'fe_iv2sls_results',
-                        'instrument_data')
+DEST_DIR = 'results'
 
 
 # %%

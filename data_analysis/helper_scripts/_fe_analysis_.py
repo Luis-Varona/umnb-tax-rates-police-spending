@@ -9,8 +9,8 @@ from linearmodels.panel.results import PanelResults
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
-DEST_DIR = 'fe_results'
+SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join('..', 'fe_results')
 
 
 # %%

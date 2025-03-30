@@ -5,16 +5,15 @@ import pickle
 import numpy as np
 import polars as pl
 
-from linearmodels.compat.statsmodels import Summary
 from linearmodels.panel.model import PanelOLS
 from linearmodels.panel.results import PanelResults
 from statsmodels.regression.linear_model import OLS
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
-DEST_DIR = 'fe_iv2sls_results'
-INSTRUMENT_DIR = os.path.join('fe_iv2sls_results', 'instrument_data')
+SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join('..', 'fe_2sls_results')
+INSTRUMENT_DIR = os.path.join('..', '..', 'data_iv', 'results')
 
 
 # %%
@@ -39,16 +38,21 @@ FORMULA_LOG = (FORMULA.replace(DEP_VAR, f"log_{DEP_VAR}")
 def main():
     source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     source_instr = os.path.join(INSTRUMENT_DIR, 'muni_map.pkl')
-    dest = os.path.join(DEST_DIR, 'model_summary.txt')
-    dest_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
+    
+    dest_df = os.path.join(DEST_DIR, 'data_2sls.xlsx')
+    dest_result = os.path.join(DEST_DIR, 'model_result.pkl')
+    dest_summary = os.path.join(DEST_DIR, 'model_summary.txt')
+    dest_result_log = os.path.join(DEST_DIR, 'model_result_log.pkl')
+    dest_summary_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
     os.makedirs(DEST_DIR, exist_ok=True)
     
     df = first_stage_regress(source, source_instr)
     model, result = fit_model(df)
     model_log, result_log = fit_model(df, left_log=True)
     
-    write_model_summary(result.summary, dest)
-    write_model_summary(result_log.summary, dest_log)
+    df.write_excel(dest_df)
+    write_model_result(result, dest_result, dest_summary)
+    write_model_result(result_log, dest_result_log, dest_summary_log)
 
 
 # %%
@@ -126,12 +130,18 @@ def fit_model(
     
     return model, result
 
-def write_model_summary(summary: Summary, dest: str) -> None:
-    if os.path.exists(dest):
-        os.remove(dest)
+def write_model_result(
+    result: PanelResults, dest_result: str, dest_summary: str
+) -> None:
+    for dest in {dest_result, dest_summary}:
+        if os.path.exists(dest):
+            os.remove(dest)
     
-    with open(dest, 'x') as file:
-        file.write(summary.as_text())
+    with open(dest_result, 'xb') as file:
+        pickle.dump(result, file)
+    
+    with open(dest_summary, 'x') as file:
+        file.write(result.summary.as_text())
 
 
 # %%

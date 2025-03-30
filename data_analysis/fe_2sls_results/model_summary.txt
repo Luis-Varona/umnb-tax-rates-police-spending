@@ -1,16 +1,16 @@
                           PanelOLS Estimation Summary                           
 ================================================================================
-Dep. Variable:         log_AvgTaxRate   R-squared:                        0.4082
-Estimator:                   PanelOLS   R-squared (Between):              0.0050
-No. Observations:                1818   R-squared (Within):               0.4082
-Date:                Sat, Mar 29 2025   R-squared (Overall):              0.0046
-Time:                        21:08:29   Log-likelihood                    3392.0
+Dep. Variable:             AvgTaxRate   R-squared:                        0.4290
+Estimator:                   PanelOLS   R-squared (Between):              0.9794
+No. Observations:                1818   R-squared (Within):               0.4290
+Date:                Sun, Mar 30 2025   R-squared (Overall):              0.9783
+Time:                        14:41:41   Log-likelihood                 1.131e+04
 Cov. Estimator:             Clustered                                           
-                                        F-statistic:                      196.34
+                                        F-statistic:                      213.84
 Entities:                         104   P-value                           0.0000
 Avg Obs:                       17.481   Distribution:                  F(6,1708)
 Min Obs:                       6.0000                                           
-Max Obs:                       18.000   F-statistic (robust):             25.705
+Max Obs:                       18.000   F-statistic (robust):             27.629
                                         P-value                           0.0000
 Time periods:                      18   Distribution:                  F(6,1708)
 Avg Obs:                       101.00                                           
@@ -21,15 +21,15 @@ Max Obs:                       103.00
 ==============================================================================================
                             Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
 ----------------------------------------------------------------------------------------------
-PolExpCapita                   45.183     11.323     3.9903     0.0001      22.974      67.392
-OtherExpCapita                 3.3517     2.1803     1.5373     0.1244     -0.9246      7.6280
-OtherRevCapita                 6.9649     5.2326     1.3311     0.1833     -3.2981      17.228
-log_TaxBaseCapita              0.1897     0.1179     1.6090     0.1078     -0.0415      0.4208
-PolExpCapita:Provider_MPSA    -0.4628     16.578    -0.0279     0.9777     -32.978      32.052
-PolExpCapita:Provider_Muni    -26.363     12.537    -2.1028     0.0356     -50.953     -1.7735
+PolExpCapita                   0.5188     0.1371     3.7845     0.0002      0.2499      0.7877
+OtherExpCapita                 0.0301     0.0255     1.1801     0.2381     -0.0199      0.0802
+OtherRevCapita                 0.1025     0.0644     1.5912     0.1117     -0.0238      0.2288
+TaxBaseCapita                  0.0225     0.0068     3.2987     0.0010      0.0091      0.0359
+PolExpCapita:Provider_MPSA     0.0955     0.1941     0.4923     0.6226     -0.2851      0.4762
+PolExpCapita:Provider_Muni    -0.2542     0.1821    -1.3962     0.1628     -0.6113      0.1029
 ==============================================================================================
 
-F-test for Poolability: 110.51
+F-test for Poolability: 115.50
 P-value: 0.0000
 Distribution: F(103,1708)
 

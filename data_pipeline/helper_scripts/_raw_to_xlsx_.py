@@ -1,19 +1,16 @@
 # %%
 import os
-import sys
 from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
 import polars as pl
-
-sys.path.append(os.path.join(os.path.dirname(__file__), 'helper_scripts'))
-from _fastexcel_logging_ import suppress_fastexcel_logging
+from fastexcel_logging import suppress_fastexcel_logging
 
 
 # %%
-SOURCE_DIR = 'data_raw'
-DEST_DIR = 'data_xlsx'
+SOURCE_DIR = os.path.join('..', 'data_raw')
+DEST_DIR = os.path.join('..', 'data_xlsx')
 
 
 # %%

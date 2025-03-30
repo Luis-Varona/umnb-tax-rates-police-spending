@@ -4,12 +4,14 @@ import subprocess
 
 
 # %%
-def main():
-    script_dir = os.path.join('helper_scripts', 'xlsx_to_clean')
-    
-    for script in os.listdir(script_dir):
+SCRIPT_DIR = 'xlsx_to_clean'
+
+
+# %%
+def main():    
+    for script in os.listdir(SCRIPT_DIR):
         if script.startswith('_') and script.endswith('.py'):
-            subprocess.run(['python', os.path.join(script_dir, script)])
+            subprocess.run(['python', os.path.join(SCRIPT_DIR, script)])
 
 
 # %%

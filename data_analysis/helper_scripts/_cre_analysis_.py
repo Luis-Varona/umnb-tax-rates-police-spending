@@ -8,8 +8,8 @@ from statsmodels.regression.mixed_linear_model \
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
-DEST_DIR = 'cre_results'
+SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join('..', 'cre_results')
 
 
 # %%

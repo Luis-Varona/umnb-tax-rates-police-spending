@@ -4,12 +4,14 @@ import subprocess
 
 
 # %%
+SCRIPT_DIR = 'helper_scripts'
+
+
+# %%
 def main():
-    script_dir = os.path.join('helper_scripts', 'clean_to_final')
-    
-    for script in sorted(os.listdir(script_dir)):
+    for script in sorted(os.listdir(SCRIPT_DIR)):
         if script.startswith('_') and script.endswith('.py'):
-            subprocess.run(['python', os.path.join(script_dir, script)])
+            subprocess.run(['python', os.path.join(SCRIPT_DIR, script)])
 
 
 # %%

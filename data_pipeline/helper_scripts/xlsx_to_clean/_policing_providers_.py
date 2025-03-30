@@ -5,7 +5,7 @@ import sys
 import polars as pl
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from _fastexcel_logging_ import suppress_fastexcel_logging
+from fastexcel_logging import suppress_fastexcel_logging
 
 
 # %%

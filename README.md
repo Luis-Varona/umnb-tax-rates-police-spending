@@ -3,8 +3,8 @@
 [![Build Status](https://github.com/Luis-Varona/umnb-tax-rates-police-spending/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/Luis-Varona/umnb-tax-rates-police-spending/actions/workflows/pylint.yml?query=branch%3Amain)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-A fixed-effects two-stage least squares regression analysis of municipal police
-spending on tax rates, conducted for the Union of Municipalities of New
+A fixed-effects two-stage least squares regression analysis of municipal tax
+rates on police spending, conducted for the Union of Municipalities of New
 Brunswick (UMNB). Annual Government of New Brunswick (GNB) data from
 2000&#x2013;2004 and 2006&#x2013;2018 on budget expenditures & revenue,
 comparative demographics, and tax bases is integrated into the model. (2024
