@@ -15,12 +15,10 @@ CATEGORIES = ['bgt_revs', 'bgt_exps', 'cmp_data', 'tax_base']
 COLUMNS = ["Year",
            "Municipality",
            "AvgTaxRate",
-           "log_AvgTaxRate",
            "PolExpCapita",
            "OtherExpCapita",
            "OtherRevCapita",
            "TaxBaseCapita",
-           "log_TaxBaseCapita",
            "Provider_MPSA",
            "Provider_Muni",
            "LatestCensusPop"]
@@ -81,13 +79,9 @@ def main():
     
     df_final = (df_final
                 .with_columns(pl.col("AvgTaxRate") / 100)
-                .with_columns(pl.col("AvgTaxRate").log()
-                              .alias("log_AvgTaxRate"))
                 .with_columns(pl.col(COLUMNS_SCALE) / 1e5)
                 .with_columns((pl.col("TaxBase") / pl.col("LatestCensusPop"))
                               .alias("TaxBaseCapita"))
-                .with_columns(pl.col("TaxBaseCapita").log()
-                              .alias("log_TaxBaseCapita"))
                 .with_columns((pl.col("PolExp") / pl.col("LatestCensusPop"))
                               .alias("PolExpCapita"))
                 .with_columns(((pl.col("TotalExp") - pl.col("PolExp"))

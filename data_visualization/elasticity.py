@@ -18,7 +18,6 @@ YLABEL = "Est. Elasticity from Exogenous Police Spending Effects"
 
 XCOLUMN = "MeanPop"
 YCOLUMN = "EstTaxBaseElast"
-RAINBOW_COLUMN = "Municipality"
 
 
 # %%
@@ -35,10 +34,7 @@ def save_elasticity_plot(df: pl.DataFrame, dest: str) -> None:
     sns.set_theme(rc={'figure.figsize': (8, 6)})
     plt.figure()
     
-    plot = sns.scatterplot(df,
-                           x=XCOLUMN, y=YCOLUMN,
-                           hue=RAINBOW_COLUMN, palette='tab10',
-                           legend=False)
+    plot = sns.scatterplot(df, x=XCOLUMN, y=YCOLUMN, legend=False)
     plot.set_title(TITLE, fontsize=TITLESIZE)
     plot.set_xlabel(XLABEL)
     plot.set_ylabel(YLABEL)

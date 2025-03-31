@@ -20,9 +20,6 @@ INDEP_VARS += [f"{var}_mean" for var in INDEP_VARS]
 INDEP_VARS_INDIC = ["Provider_MPSA", "Provider_Muni"]
 INDEP_VARS_INTER = [f"PolExpCapita:{var}" for var in INDEP_VARS_INDIC]
 
-LOG_VARS = ["AvgTaxRate", "TaxBaseCapita"]
-MUNDLAK_VARS = INDEP_VARS + ["log_TaxBaseCapita", "log_TaxBaseCapita_mean"]
-
 
 # %%
 GROUP_COL = "Municipality"
@@ -34,14 +31,6 @@ FORMULAS = {
     'unrstd': f"{DEP_VAR} ~ " \
         f"{' + '.join(INDEP_VARS + INDEP_VARS_INTER + INDEP_VARS_INDIC)}",
 }
-
-formulas_log = {f"{k}_log": v for k, v in FORMULAS.items()}
-
-for var in LOG_VARS:
-    for k, v in formulas_log.items():
-        formulas_log[k] = v.replace(var, f"log_{var}")
-
-FORMULAS |= formulas_log
 
 
 # %%
@@ -62,7 +51,7 @@ def main():
 
 # %%
 def add_mundlak_means(df: pl.DataFrame) -> pl.DataFrame:
-    for var in MUNDLAK_VARS:
+    for var in [DEP_VAR] + INDEP_VARS:
         df = df.with_columns(pl.col(var)
                              .mean()
                              .over(GROUP_COL)

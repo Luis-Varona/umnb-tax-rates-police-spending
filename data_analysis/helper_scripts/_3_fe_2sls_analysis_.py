@@ -21,18 +21,16 @@ DEP_VAR = "AvgTaxRate"
 EXOG = ["PolExpCapita", "OtherExpCapita", "OtherRevCapita",
         "PolExpCapita:Provider_MPSA", "PolExpCapita:Provider_Muni"]
 ENDOG = "TaxBaseCapita"
-INSTRUMENT = "MedHouseInc"
-
-INSTRUMENT_YEARS = list(range(2000, 2021))
+FORMULA = f"{DEP_VAR} ~ {' + '.join(EXOG)} + {ENDOG} + EntityEffects"
 
 
 # %%
 GROUP_COL = "Municipality"
 TIME_COL = "Year"
 
-FORMULA = f"{DEP_VAR} ~ {' + '.join(EXOG)} + {ENDOG} + EntityEffects"
-FORMULA_LOG = (FORMULA.replace(DEP_VAR, f"log_{DEP_VAR}")
-               .replace(ENDOG, f"log_{ENDOG}"))
+INSTRUMENT = "MedHouseInc"
+INSTRUMENT_YEARS = list(range(2000, 2021))
+
 
 # %%
 def main():
@@ -43,19 +41,13 @@ def main():
     dest_result = os.path.join(DEST_DIR, 'model_result.pkl')
     dest_summary = os.path.join(DEST_DIR, 'model_summary.txt')
     dest_tex = os.path.join(DEST_DIR, 'model_summary.tex')
-    dest_result_log = os.path.join(DEST_DIR, 'model_result_log.pkl')
-    dest_summary_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
-    dest_tex_log = os.path.join(DEST_DIR, 'model_summary_log.tex')
     os.makedirs(DEST_DIR, exist_ok=True)
     
     df = first_stage_regress(source, source_instr)
     model, result = fit_model(df)
-    model_log, result_log = fit_model(df, left_log=True)
     
     df.write_excel(dest_df)
     write_model_result(result, dest_result, dest_summary, dest_tex)
-    write_model_result(result_log,
-                       dest_result_log, dest_summary_log, dest_tex_log)
 
 
 # %%
@@ -92,12 +84,13 @@ def interpolate_instrument_data(
     income_series = [income[t] / 1e5 for t in range(len(INSTRUMENT_YEARS))
                      for income in incomes.values()]
     
-    return (pl.DataFrame({
-        GROUP_COL: muni_series,
-        TIME_COL: year_series,
-        INSTRUMENT: income_series
-    })
-            .with_columns(pl.col(INSTRUMENT).log().alias(f"log_{INSTRUMENT}")))
+    return pl.DataFrame(
+        {
+            GROUP_COL: muni_series,
+            TIME_COL: year_series,
+            INSTRUMENT: income_series
+        }
+    )
 
 def get_instrument_data(source_instr: str) -> pl.DataFrame:
     with open(source_instr, 'rb') as f:
@@ -113,22 +106,15 @@ def first_stage_regress(source: str, source_instr: str) -> pl.DataFrame:
           .join(df_instr, on=[GROUP_COL, "Year"], how="left"))
     
     iv_model = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df)
-    iv_model_log = OLS.from_formula(f"log_{ENDOG} ~ log_{INSTRUMENT}", df)
-    
     new_endog = iv_model.fit().predict()
-    new_endog_log = iv_model_log.fit().predict()
     
-    return (df.with_columns(pl.Series(new_endog).alias(ENDOG),
-                            pl.Series(new_endog_log).alias(f"log_{ENDOG}")))
+    return df.with_columns(pl.Series(new_endog).alias(ENDOG))
 
-def fit_model(
-    df: pl.DataFrame, *, left_log: bool = False
-) -> tuple[PanelOLS, PanelResults]:
+def fit_model(df: pl.DataFrame) -> tuple[PanelOLS, PanelResults]:
     df_pandas = df.to_pandas()
     df_pandas.set_index([GROUP_COL, TIME_COL], inplace=True)
     
-    formula = FORMULA_LOG if left_log else FORMULA
-    model = PanelOLS.from_formula(formula, df_pandas)
+    model = PanelOLS.from_formula(FORMULA, df_pandas)
     result = model.fit(cov_type='clustered', cluster_entity=True)
     
     return model, result

@@ -13,7 +13,45 @@ In collaboration with the Union of Municipalities of New Brunswick and Dr.
 Craig Brett of Mount Allison University, we conduct a fixed-effects two-stage
 least squares (or FE-2SLS) regression analysis of average tax rates on police
 spending in New Brunswick municipalities, using median household income as an
-instrument variable to reduce simultaneity bias. [TODO: Elaborate]
+instrument variable to reduce simultaneity bias. We herein investigate whether
+police spending is a significant predictor of municipal tax rates and, if so,
+whether the specific policing provider plays into this correlation. Moreover,
+we leverage the fact that police expenditure (as per Provincial Police Service
+Agreement with the Royal Canadian Mounted Police) is largely an exogenous
+variable outside of municipal control to use this to approximate tax base
+elasticity with respect to tax rates. (In addition, we consider the
+relationship between population and this estimated elasticity.)
+
+## Background of the Problem
+
+Price per unit of public goods&#x2014;particularly police spending, in the
+context of this study&#x2014;varies widely across municipalities in New
+Brunswick. We herein aim to regress regression municipal tax rates on the costs
+of several different public goods. We place particular emphasis on the
+significant variation in per capita cost of municipal bills under the
+Provincial Police Service Agreement (PPSA)&#x2014;a contract between the
+Government of New Brunswick (GNB) and the Royal Canadian Mounted Police (RCMP)
+to provide smaller municipalities with policing services. As the RCMP provides
+the province with a single combined bill, the GNB charges different
+municipalities based on population, safety levels, and other factors, with this
+formula acting as an exogenous factor in the cost of policing services.
+
+On the other hand, it is common for larger municipalities have their own direct
+contracts with the RCMP, further obscuring the relationship between municipal
+spending patterns and taxation. For instance, the Codiac Regional Policing
+Authority serves the municipalities of Dieppe, Moncton, and Riverview, none of
+which pay additional fees to the GNB under the PPSA. Others still maintain
+their own independent police forces like the Bathurst Police Force (although
+there remains an RCMP presence in Bathurst). (As shall be revealed in our
+section on Methodology, Amy Anderson of the Union of Municipalities of New
+Brunswick has provided us with data on municipal policing providers as of 2024
+and a way to map this backwards to jurisdictions from previous years.)
+
+This setup is of interest not only in how [TODO: Elaborate]
+
+## Overview of Our Approach
+
+[TODO: Elaborate]
 
 # Literature Review
 
@@ -152,18 +190,20 @@ as an instrumental variable.
 
 Each of these variables is used throughout our FE-2SLS
 regression model, carried out by the
-[`helper_scripts/_fe_2sls_analysis_.py`](../data_analysis/helper_scripts/_fe_2sls_analysis_.py)
+[`helper_scripts/_3_fe_2sls_analysis_.py`](../data_analysis/helper_scripts/_3_fe_2sls_analysis_.py)
 script. In addition, we have also included vanilla correlated random-effects
 (CRE) and fixed-effects (FE) models, run by
-[`helper_scripts/_cre_analysis_.py`](../data_analysis/helper_scripts/_cre_analysis_.py)
+[`helper_scripts/_1_cre_analysis_.py`](../data_analysis/helper_scripts/_1_cre_analysis_.py)
 and
-[`helper_scripts/_fe_analysis_.py`](../data_analysis/helper_scripts/_fe_analysis_.py),
+[`helper_scripts/_2_fe_analysis_.py`](../data_analysis/helper_scripts/_2_fe_analysis_.py),
 to determine which variables are relevant and to demonstrate the need for an
 instrument variable. All helper scripts are called and run by the main
 executable of the associated directory, [`main.py`](../data_analysis/main.py).
 
 Our final choice of FE in conjunction with 2SLS arose from [TODO: Elaborate,
 particularly on why *TaxBaseCapita* causes simultaneity bias]
+
+Finally, we also approximate elasticity [TODO: Elaborate, link file]
 
 We begin this section by first describing our CRE and FE analyses, then
 delineating more thoroughly our final FE-2SLS model.
@@ -206,8 +246,8 @@ second-stage regression, where we demean all variables over municipality.
 Our primary fixed-effects regression model is now given by
 $$\begin{aligned}
 \ddot{AvgTaxRate}_{it} ={} & \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} +{} \\
-& \beta_4\ddot{\hat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \ast Provider\_MPSA_{it} +{} \\
-& \beta_6\ddot{PolExpCapita}_{it} \ast Provider\_Muni_{it} + \ddot{u}_{it},
+& \beta_4\ddot{\hat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} * Provider\_MPSA_{it} +{} \\
+& \beta_6\ddot{PolExpCapita}_{it} * Provider\_Muni_{it} + \ddot{u}_{it},
 \end{aligned}$$
 
 where we use the notation $\ddot{X}_{it} = X_{it} - \bar{X}_i$ to denote the
@@ -245,10 +285,6 @@ itself but rather the demeaned prediction from our first-stage regression.)
 # Conclusion
 
 [TODO: Elaborate]
-
-[^1]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7
-[^2]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
-[^3]: Department of Economics, Mount Allison University, Sackville, NB E4L  1A7
 
 # Appendix
 
@@ -308,5 +344,9 @@ Included effects: Entity
  Included effects: Entity -->
 
 [TODO: Elaborate]
+
+[^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
+[^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7
+[^3]: Department of Economics, Mount Allison University, Sackville, NB E4L  1A7
 
 # References
