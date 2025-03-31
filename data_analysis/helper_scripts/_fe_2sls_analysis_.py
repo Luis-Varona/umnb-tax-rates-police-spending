@@ -42,8 +42,10 @@ def main():
     dest_df = os.path.join(DEST_DIR, 'data_2sls.xlsx')
     dest_result = os.path.join(DEST_DIR, 'model_result.pkl')
     dest_summary = os.path.join(DEST_DIR, 'model_summary.txt')
+    dest_tex = os.path.join(DEST_DIR, 'model_summary.tex')
     dest_result_log = os.path.join(DEST_DIR, 'model_result_log.pkl')
     dest_summary_log = os.path.join(DEST_DIR, 'model_summary_log.txt')
+    dest_tex_log = os.path.join(DEST_DIR, 'model_summary_log.tex')
     os.makedirs(DEST_DIR, exist_ok=True)
     
     df = first_stage_regress(source, source_instr)
@@ -51,8 +53,9 @@ def main():
     model_log, result_log = fit_model(df, left_log=True)
     
     df.write_excel(dest_df)
-    write_model_result(result, dest_result, dest_summary)
-    write_model_result(result_log, dest_result_log, dest_summary_log)
+    write_model_result(result, dest_result, dest_summary, dest_tex)
+    write_model_result(result_log,
+                       dest_result_log, dest_summary_log, dest_tex_log)
 
 
 # %%
@@ -131,7 +134,7 @@ def fit_model(
     return model, result
 
 def write_model_result(
-    result: PanelResults, dest_result: str, dest_summary: str
+    result: PanelResults, dest_result: str, dest_summary: str, dest_tex: str,
 ) -> None:
     for dest in {dest_result, dest_summary}:
         if os.path.exists(dest):
@@ -142,6 +145,9 @@ def write_model_result(
     
     with open(dest_summary, 'x') as file:
         file.write(result.summary.as_text())
+    
+    with open(dest_tex, 'x') as file:
+        file.write(result.summary.as_latex())
 
 
 # %%

@@ -220,7 +220,23 @@ itself but rather the demeaned prediction from our first-stage regression.)
 
 [TODO: Elaborate]
 
-![image](../data_visualization/main_regress.png)
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=6in]{../data_visualization/fe_2sls.png}
+  \\[-0.5cm]
+  \caption{TODO}
+\end{figure}
+
+[TODO: Some stuff here]
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=6in]{../data_visualization/elasticity.png}
+  \\[-0.5cm]
+  \caption{TODO}
+\end{figure}
+
+[TODO: Elaborate]
 
 # Discussion
 
@@ -237,5 +253,60 @@ itself but rather the demeaned prediction from our first-stage regression.)
 # Appendix
 
 [TODO: Include linearmodels/statsmodels regression summary output]
+
+\begingroup
+\footnotesize
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.4290      \\
+\textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.9794      \\
+\textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.4290      \\
+\textbf{Date:}                       &  Mon, Mar 31 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
+\textbf{Time:}                       &      13:02:08      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
+\textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{  F-statistic:       }   &      213.84      \\
+\textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Avg Obs:}                    &       17.481       & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Min Obs:}                    &       6.0000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       18.000       & \textbf{  F-statistic (robust):} &      27.629      \\
+\textbf{}                            &                    & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Time periods:}               &         18         & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Avg Obs:}                    &       101.00       & \textbf{                     }   &                  \\
+\textbf{Min Obs:}                    &       95.000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       103.00       & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{                     }   &                  \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                                     & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
+\midrule
+\textbf{PolExpCapita}                &       0.5188       &       0.1371       &      3.7845     &      0.0002      &       0.2499      &       0.7877       \\
+\textbf{OtherExpCapita}              &       0.0301       &       0.0255       &      1.1801     &      0.2381      &      -0.0199      &       0.0802       \\
+\textbf{OtherRevCapita}              &       0.1025       &       0.0644       &      1.5912     &      0.1117      &      -0.0238      &       0.2288       \\
+\textbf{TaxBaseCapita}               &       0.0225       &       0.0068       &      3.2987     &      0.0010      &       0.0091      &       0.0359       \\
+\textbf{PolExpCapita:Provider\_MPSA} &       0.0955       &       0.1941       &      0.4923     &      0.6226      &      -0.2851      &       0.4762       \\
+\textbf{PolExpCapita:Provider\_Muni} &      -0.2542       &       0.1821       &     -1.3962     &      0.1628      &      -0.6113      &       0.1029       \\
+\bottomrule
+\end{tabular}
+%\caption{PanelOLS Estimation Summary}
+\end{center}
+\endgroup
+
+```latex
+F-test for Poolability: 115.50
+P-value: 0.0000
+Distribution: F(103,1708)
+
+Included effects: Entity
+```
+
+<!-- F-test for Poolability: 115.50 \newline
+ P-value: 0.0000 \newline
+ Distribution: F(103,1708) \newline
+  \newline
+ Included effects: Entity -->
+
+[TODO: Elaborate]
 
 # References

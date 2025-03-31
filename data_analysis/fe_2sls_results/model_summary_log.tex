@@ -1,0 +1,41 @@
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}              &  log\_AvgTaxRate   & \textbf{  R-squared:         }   &      0.4082      \\
+\textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.0050      \\
+\textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.4082      \\
+\textbf{Date:}                       &  Mon, Mar 31 2025  & \textbf{  R-squared (Overall):}  &      0.0046      \\
+\textbf{Time:}                       &      13:02:08      & \textbf{  Log-likelihood     }   &      3392.0      \\
+\textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{  F-statistic:       }   &      196.34      \\
+\textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Avg Obs:}                    &       17.481       & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Min Obs:}                    &       6.0000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       18.000       & \textbf{  F-statistic (robust):} &      25.705      \\
+\textbf{}                            &                    & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Time periods:}               &         18         & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Avg Obs:}                    &       101.00       & \textbf{                     }   &                  \\
+\textbf{Min Obs:}                    &       95.000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       103.00       & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{                     }   &                  \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                                     & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
+\midrule
+\textbf{PolExpCapita}                &       45.183       &       11.323       &      3.9903     &      0.0001      &       22.974      &       67.392       \\
+\textbf{OtherExpCapita}              &       3.3517       &       2.1803       &      1.5373     &      0.1244      &      -0.9246      &       7.6280       \\
+\textbf{OtherRevCapita}              &       6.9649       &       5.2326       &      1.3311     &      0.1833      &      -3.2981      &       17.228       \\
+\textbf{log\_TaxBaseCapita}          &       0.1897       &       0.1179       &      1.6090     &      0.1078      &      -0.0415      &       0.4208       \\
+\textbf{PolExpCapita:Provider\_MPSA} &      -0.4628       &       16.578       &     -0.0279     &      0.9777      &      -32.978      &       32.052       \\
+\textbf{PolExpCapita:Provider\_Muni} &      -26.363       &       12.537       &     -2.1028     &      0.0356      &      -50.953      &      -1.7735       \\
+\bottomrule
+\end{tabular}
+%\caption{PanelOLS Estimation Summary}
+\end{center}
+
+F-test for Poolability: 110.51 \newline
+ P-value: 0.0000 \newline
+ Distribution: F(103,1708) \newline
+  \newline
+ Included effects: Entity
