@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel", "Cython"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "umnb-tax-rates-police-spending"
 description = "An FE-2SLS regression model of New Brunswick tax rates on police spending."

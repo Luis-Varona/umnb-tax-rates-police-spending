@@ -57,7 +57,7 @@ YLABEL = f"${DEP_VAR}_{{it}} - \overline{{{DEP_VAR}}}_i$  (%)" \
 def main():
       source_2sls = os.path.join(SOURCE_DIR, 'data_2sls.xlsx')
       source_result = os.path.join(SOURCE_DIR, 'model_result.pkl')
-      dest = 'fe_2sls.png'
+      dest = os.path.join(WD, 'fe_2sls.png')
       
       params, params_indic = read_and_process_result(source_result)
       df = read_and_adjust_2sls_data(source_2sls, params)

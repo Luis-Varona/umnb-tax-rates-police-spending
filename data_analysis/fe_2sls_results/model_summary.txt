@@ -4,7 +4,7 @@ Dep. Variable:             AvgTaxRate   R-squared:                        0.4290
 Estimator:                   PanelOLS   R-squared (Between):              0.9794
 No. Observations:                1818   R-squared (Within):               0.4290
 Date:                Tue, Apr 01 2025   R-squared (Overall):              0.9783
-Time:                        15:22:56   Log-likelihood                 1.131e+04
+Time:                        15:44:42   Log-likelihood                 1.131e+04
 Cov. Estimator:             Clustered                                           
                                         F-statistic:                      213.84
 Entities:                         104   P-value                           0.0000

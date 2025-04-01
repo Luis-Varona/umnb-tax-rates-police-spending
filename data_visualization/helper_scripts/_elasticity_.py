@@ -28,7 +28,7 @@ YCOLUMN = "EstTaxBaseElast"
 # %%
 def main():
     source = os.path.join(SOURCE_DIR, 'elasticity.xlsx')
-    dest = 'elasticity.png'
+    dest = os.path.join(WD, 'elasticity.png')
     
     df = pl.read_excel(source)
     save_elasticity_plot(df, dest)
