@@ -47,15 +47,49 @@ section on Methodology, Amy Anderson of the Union of Municipalities of New
 Brunswick has provided us with data on municipal policing providers as of 2024
 and a way to map this backwards to jurisdictions from previous years.)
 
-This setup is of interest not only in how [TODO: Elaborate]
+[TODO: Explain why this setup is of interest not only insofar as showing how,
+and why, different level of exogeneity affect tax rates in different ways, but
+also in terms of ... other stuff?]
 
 ## Overview of Our Approach
 
-[TODO: Elaborate]
+[TODO: Introduce, at a high level, how our general FE-2SLS model works, how we
+are estimating stuff like elasticity, our general desired results, etc.]
 
 # Literature Review
 
-[TODO: Elaborate]
+[TODO: Elaborate on this now that we have a first draft, especially with
+regards to what methodology we took away]
+
+We review three relevant articles on municipal taxation and
+spending&#x2014;[@CP03], [@FMP08], and @[Gad17]. Brett and Pinkse 2003
+investigate the "determinants of municipal tax rates in British Columbia,"
+considering population, distance from major metropolitan centers (namely
+Vancouver), income, and several other factors as determinants of tax rates
+[@CP03]. They do not particularly emphasize spending patterns as a potential
+factor in municipal taxation, but the methodology presented in their paper will
+provide a useful framework on which to build for our project.
+
+Foucault, Madies, and Paty 2008 consider how spending patterns of
+municipalities in close proximity are interrelated, and to what extent
+neighboring jurisdictions affect municipal decisions [@FMP08] Although we are
+interested less in determinants of spending patterns and more in determinants
+of taxation, this study may inform us in an attempt to include geographical
+distance to other municipalities as a determinant of tax rates and tax bases.
+
+Gadenne 2017 provides a study in how extra tax revenue truly affects the
+quantity and quality of public services [@Gad17]. Again, we are going the
+"other way" in that we are examining how public spnding costs affect taxation,
+but several of the case studies here are of interest. The relevant study also
+investigates municipalities specifically, so the methodology laid out
+(especially in Section B: Local Public Revenues) proves useful.
+
+[TODO: Add lit. review for stuff like our elasticity estimates, median income
+as an instrument for tax base/capita, etc. specifically]
+
+[TODO: Moreover, and this is important&#x2014;add literature review on whether
+or not police expenditure is typically this exogenous (it should not be), and
+discuss further how the PPSA affects it. Maybe for the previous section too?]
 
 # Methodology
 
@@ -203,10 +237,15 @@ executable of the associated directory, [`main.py`](../data_analysis/main.py).
 Our final choice of FE in conjunction with 2SLS arose from [TODO: Elaborate,
 particularly on why *TaxBaseCapita* causes simultaneity bias]
 
-Finally, we also approximate elasticity [TODO: Elaborate, link file]
+It is worth noting that we chose not to use non-linear functional
+forms&#x2014;with the most obvious candidate for a study in this particular
+real-world context being log transformation&#x2014;as we found that the
+[TODO: Elaborate on relative lack of skewedness in the data]
 
-We begin this section by first describing our CRE and FE analyses, then
-delineating more thoroughly our final FE-2SLS model.
+Finally, we also estimate tax base elasticity by [TODO: Elaborate]
+
+We now turn to describing our vanilla CRE and FE analyses, then proceed to
+more thoroughly delineate our final FE-2SLS regression model.
 
 ### Correlated Random-Effects (CRE)
 
@@ -256,6 +295,15 @@ mean value of $X$ for municipality $i$ over all years. (Note that
 $\ddot{\hat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
 itself but rather the demeaned prediction from our first-stage regression.)
 
+## Tax Base Elasticity Estimates
+
+Given these results, we now approximate tax base elasticity with respect to tax
+rates by multiplying our obtained coefficient on **PolExpCapita**&#x2014;one of
+the most exogenous expenditure categories, as previously discussed&#x2014;by
+*TaxBaseCapita*. [TODO: Elaborate]
+
+[TODO: Show the calculus for this, i.e., the $\frac{1}{1 + \eta}$ formula]
+
 # Results
 
 [TODO: Elaborate]
@@ -267,7 +315,7 @@ itself but rather the demeaned prediction from our first-stage regression.)
   \caption{TODO}
 \end{figure}
 
-[TODO: Some stuff here]
+[TODO: Add explanation of the above figure]
 
 \begin{figure}[H]
   \centering
@@ -276,7 +324,7 @@ itself but rather the demeaned prediction from our first-stage regression.)
   \caption{TODO}
 \end{figure}
 
-[TODO: Elaborate]
+[TODO: Add explanation of the above figure]
 
 # Discussion
 
@@ -288,7 +336,7 @@ itself but rather the demeaned prediction from our first-stage regression.)
 
 # Appendix
 
-[TODO: Include linearmodels/statsmodels regression summary output]
+The final FE-2SLS regression model used in our analysis is given below:
 
 \begingroup
 \footnotesize
@@ -337,13 +385,8 @@ Distribution: F(103,1708)
 Included effects: Entity
 ```
 
-<!-- F-test for Poolability: 115.50 \newline
- P-value: 0.0000 \newline
- Distribution: F(103,1708) \newline
-  \newline
- Included effects: Entity -->
-
-[TODO: Elaborate]
+[TODO: Explain results further; potentially show in the **Results** section
+instead, and show the other preliminary models here?]
 
 [^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
 [^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7

@@ -8,5 +8,6 @@ metadata="config_files/meta.yaml"
 dest="$name.pdf"
 
 rm -f "$dest"
-pandoc "$source" "$metadata" -o "$dest" --pdf-engine=lualatex --citeproc
+pandoc -s -C -f markdown+smart-implicit_figures -t pdf --pdf-engine=lualatex \
+    "$source" "$metadata" -o "$dest"
 cd "$wd" || exit
