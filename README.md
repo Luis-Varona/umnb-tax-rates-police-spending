@@ -1,6 +1,5 @@
 # umnb-tax-rates-police-spending
 
-[![Build Status](https://github.com/Luis-Varona/umnb-tax-rates-police-spending/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/Luis-Varona/umnb-tax-rates-police-spending/actions/workflows/pylint.yml?query=branch%3Amain)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 
 A fixed-effects two-stage least squares regression analysis of municipal tax
