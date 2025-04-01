@@ -11,7 +11,8 @@ import seaborn as sns
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_analysis', 'fe_2sls_results')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'fe_2sls_results')
 
 
 # %%
@@ -156,10 +157,4 @@ def save_regress_plot(
 
 # %%
 if __name__ == "__main__":
-      wd = os.getcwd()
-      os.chdir(os.path.dirname(__file__))
-      
-      try:
-            main()
-      finally:
-            os.chdir(wd)
+      main()

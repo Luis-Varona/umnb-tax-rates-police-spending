@@ -7,7 +7,12 @@ import seaborn as sns
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_analysis', 'elasticity_results')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD,
+                          '..',
+                          '..',
+                          'data_analysis',
+                          'elasticity_results')
 
 
 # %%
@@ -50,10 +55,4 @@ def save_elasticity_plot(df: pl.DataFrame, dest: str) -> None:
 
 # %%
 if __name__ == "__main__":
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

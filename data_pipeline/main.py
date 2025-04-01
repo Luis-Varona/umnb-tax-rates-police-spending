@@ -1,25 +1,17 @@
 # %%
 import os
-import subprocess
+import sys
 
-
-# %%
-SCRIPT_DIR = 'helper_scripts'
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..'))
+from modules.run_helpers import run_helpers
 
 
 # %%
 def main():
-    for script in sorted(os.listdir(SCRIPT_DIR)):
-        if script.startswith('_') and script.endswith('.py'):
-            subprocess.run(['python', os.path.join(SCRIPT_DIR, script)])
+    script_dir = os.path.join(WD, 'helper_scripts')
+    run_helpers(script_dir)
 
 
 # %%
 if __name__ == '__main__':
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

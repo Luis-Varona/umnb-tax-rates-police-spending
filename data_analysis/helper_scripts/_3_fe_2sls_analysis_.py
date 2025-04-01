@@ -11,9 +11,10 @@ from statsmodels.regression.linear_model import OLS
 
 
 # %%
-SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join('..', 'fe_2sls_results')
-INSTRUMENT_DIR = os.path.join('..', '..', 'data_iv', 'results')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join(WD, '..', 'fe_2sls_results')
+INSTRUMENT_DIR = os.path.join(WD, '..', '..', 'data_iv', 'results')
 
 
 # %%
@@ -138,10 +139,4 @@ def write_model_result(
 
 # %%
 if __name__ == "__main__":
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

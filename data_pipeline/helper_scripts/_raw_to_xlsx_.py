@@ -1,16 +1,20 @@
 # %%
 import os
+import sys
 from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
 import polars as pl
-from fastexcel_logging import suppress_fastexcel_logging
+
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from modules.fastexcel_logging import suppress_fastexcel_logging
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_raw')
-DEST_DIR = os.path.join('..', 'data_xlsx')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', 'data_raw')
+DEST_DIR = os.path.join(WD, '..', 'data_xlsx')
 
 
 # %%
@@ -67,10 +71,4 @@ def get_file_name(file: str) -> str:
 
 # %%
 if __name__ == '__main__':
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

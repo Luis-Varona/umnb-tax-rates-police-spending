@@ -7,8 +7,9 @@ from xlsxwriter import Workbook
 
 
 # %%
-SOURCE_DIR = 'data_clean'
-DEST_DIR = 'data_final'
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_clean')
+DEST_DIR = os.path.join(WD, '..', '..', 'data_final')
 
 
 # %%
@@ -183,11 +184,4 @@ def melt_provider_data(source: str,
 
 # %%
 if __name__ == '__main__':
-    wd = os.getcwd()
-    nd = os.path.join(os.path.dirname(__file__), '..', '..')
-    os.chdir(nd)
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

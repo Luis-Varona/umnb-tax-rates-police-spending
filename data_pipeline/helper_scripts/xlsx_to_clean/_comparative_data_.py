@@ -6,17 +6,25 @@ from io import BytesIO
 import polars as pl
 import polars.selectors as cs
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from fastexcel_logging import suppress_fastexcel_logging
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)),
+                             '..',
+                             '..',
+                             '..'))
+from modules.fastexcel_logging import suppress_fastexcel_logging
+
+
+# %%
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_xlsx')
+DEST_DIR = os.path.join(WD, '..', '..', 'data_clean')
 
 
 # %%
 def main():
     for year in list(range(2000, 2005)) + list(range(2006, 2019)):
-        source = os.path.join('data_xlsx',
+        source = os.path.join(SOURCE_DIR,
                               str(year),
                               f'GNB{year}_cmp_data.xlsx')
-        dest = os.path.join('data_clean',
+        dest = os.path.join(DEST_DIR,
                             str(year),
                             f'GNB{year}_cmp_data_clean.xlsx')
         os.makedirs(os.path.dirname(dest), exist_ok=True)

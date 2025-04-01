@@ -4,15 +4,23 @@ import sys
 
 import polars as pl
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from fastexcel_logging import suppress_fastexcel_logging
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)),
+                             '..',
+                             '..',
+                             '..'))
+from modules.fastexcel_logging import suppress_fastexcel_logging
+
+
+# %%
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_xlsx')
+DEST_DIR = os.path.join(WD, '..', '..', 'data_clean')
 
 
 # %%
 def main():
-    source = os.path.join('data_xlsx', 'GNB2024_pol_prov.xlsx')
-    dest = os.path.join('data_clean', 'GNB2024_pol_prov_clean.xlsx')
-    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    source = os.path.join(SOURCE_DIR, 'GNB2024_pol_prov.xlsx')
+    dest = os.path.join(DEST_DIR, 'GNB2024_pol_prov_clean.xlsx')
+    os.makedirs(DEST_DIR, exist_ok=True)
     
     with suppress_fastexcel_logging():
         (clean_pol_prov_data(get_muni_map(read_provider_data(source)))
@@ -109,14 +117,4 @@ def clean_pol_prov_data(muni_map: dict[str, list[tuple]]) -> pl.DataFrame:
 
 # %%
 if __name__ == '__main__':
-    if (wd := os.getcwd()).endswith('xlsx_to_clean'):
-        os.chdir('../..')
-    elif wd.endswith('helper_scripts'):
-        os.chdir('..')
-    elif not wd.endswith('data_pipeline'):
-        os.chdir('data_pipeline')
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

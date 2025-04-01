@@ -9,8 +9,9 @@ from unidecode import unidecode
 
 
 # %%
-SOURCE_DIR = os.path.join('..', 'data_pipeline', 'data_final')
-DEST_DIR = 'results'
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join(WD, 'results')
 
 
 # %%
@@ -40,9 +41,11 @@ def read_data() -> dict[int, pl.DataFrame]:
     income_dfs = {}
     
     for year in YEARS:
-        for file in os.listdir(str(year)):
+        directory = os.path.join(WD, str(year))
+        
+        for file in os.listdir(directory):
             if file.endswith('.csv'):
-                df = pl.read_csv(os.path.join(str(year), file),
+                df = pl.read_csv(os.path.join(directory, file),
                                  encoding=ENCODINGS[year])
                 
                 if year == 2001:
@@ -130,10 +133,4 @@ def map_munis(
 
 # %%
 if __name__ == '__main__':
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

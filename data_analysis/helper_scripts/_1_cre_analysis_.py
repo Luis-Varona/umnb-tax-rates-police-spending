@@ -8,8 +8,9 @@ from statsmodels.regression.mixed_linear_model \
 
 
 # %%
-SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join('..', 'cre_results')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join(WD, '..', 'cre_results')
 
 
 # %%
@@ -82,13 +83,7 @@ def write_model_summary(summary: Summary, dest: str) -> None:
 
 # %%
 if __name__ == "__main__":
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()
 
 
 # %%

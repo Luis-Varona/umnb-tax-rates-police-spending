@@ -6,9 +6,10 @@ import polars as pl
 
 
 # %%
-SOURCE_DIR = os.path.join('..', '..', 'data_pipeline', 'data_final')
-SOURCE_RES = os.path.join('..', 'fe_2sls_results', 'model_result.pkl')
-DEST_DIR = os.path.join('..', 'elasticity_results')
+WD = os.path.dirname(__file__)
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
+SOURCE_RES = os.path.join(WD, '..', 'fe_2sls_results', 'model_result.pkl')
+DEST_DIR = os.path.join(WD, '..', 'elasticity_results')
 
 
 # %%
@@ -37,10 +38,4 @@ def main():
 
 # %%
 if __name__ == '__main__':
-    wd = os.getcwd()
-    os.chdir(os.path.dirname(__file__))
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()
