@@ -19,7 +19,8 @@ SOURCE_DIR = os.path.join(WD,
 TITLE = "Estimated NB Municipal Tax Base Elasticity by Mean Population"
 TITLESIZE = 14
 XLABEL = "Mean Population from 2000\u20132018 (log scale)"
-YLABEL = "Est. Elasticity from Exogenous Police Spending Effects"
+YLABEL = "Estimated Elasticity $\it{(based~on}$\n" \
+    "$\it{exogenous~police~spending~effects)}$"
 
 XCOLUMN = "MeanPop"
 YCOLUMN = "EstTaxBaseElast"
@@ -28,7 +29,7 @@ YCOLUMN = "EstTaxBaseElast"
 # %%
 def main():
     source = os.path.join(SOURCE_DIR, 'elasticity.xlsx')
-    dest = os.path.join(WD, 'elasticity.png')
+    dest = os.path.join(WD, '..', 'elasticity.png')
     
     df = pl.read_excel(source)
     save_elasticity_plot(df, dest)
