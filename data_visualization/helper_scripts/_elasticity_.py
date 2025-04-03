@@ -1,13 +1,15 @@
 # %%
 import os
+import sys
 
-import matplotlib.pyplot as plt
 import polars as pl
 import seaborn as sns
 
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from utils import config_and_save_plot
+
 
 # %%
-WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD,
                           '..',
                           '..',
@@ -37,21 +39,16 @@ def main():
 
 # %%
 def save_elasticity_plot(df: pl.DataFrame, dest: str) -> None:
-    sns.set_theme(rc={'figure.figsize': (8, 6)})
-    plt.figure()
-    
-    plot = sns.scatterplot(df, x=XCOLUMN, y=YCOLUMN, legend=False)
-    plot.set_title(TITLE, fontsize=TITLESIZE)
-    plot.set_xlabel(XLABEL)
-    plot.set_ylabel(YLABEL)
-    
-    plot.set_xscale('log')
-    plot.set_xlim(1e2 / 1.1, 1e5 * 1.1)
-    plot.set_xticks([10**i for i in range(2, 6)])
-    plot.set_xticklabels([f"{int(i):,}" for i in plot.get_xticks()])
-    
-    plt.savefig(dest, dpi=300, bbox_inches='tight')
-    plt.close()
+    with config_and_save_plot(dest):
+        plot = sns.scatterplot(df, x=XCOLUMN, y=YCOLUMN, legend=False)
+        plot.set_title(TITLE, fontsize=TITLESIZE)
+        plot.set_xlabel(XLABEL)
+        plot.set_ylabel(YLABEL)
+        
+        plot.set_xscale('log')
+        plot.set_xlim(1e2 / 1.1, 1e5 * 1.1)
+        plot.set_xticks([10**i for i in range(2, 6)])
+        plot.set_xticklabels([f"{int(i):,}" for i in plot.get_xticks()])
 
 
 # %%

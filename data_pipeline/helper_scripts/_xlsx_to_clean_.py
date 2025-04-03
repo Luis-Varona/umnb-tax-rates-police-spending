@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
-from modules.run_helpers import run_helpers
+from utils import run_helpers
 
 
 # %%

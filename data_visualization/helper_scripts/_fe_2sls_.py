@@ -1,17 +1,19 @@
 # %%
 import os
+import sys
 import pickle
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import polars as pl
 import polars.selectors as cs
 import seaborn as sns
 
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from utils import config_and_save_plot
+
 
 # %%
-WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'fe_2sls_results')
 
 
@@ -140,20 +142,18 @@ def generate_lobfs(
 def save_regress_plot(
     df: pl.DataFrame, x: np.ndarray, ys: list, dest: str
 ) -> None:
-    sns.set_theme(rc={'figure.figsize': (8, 6)})
-    plt.figure()
-    plot = sns.scatterplot(df,
-                           x=INDEP_VAR, y=DEP_VAR,
-                           hue=HUE_VAR, hue_order=map(get_indic, INDICS_ALL),
-                           alpha=0.8, s=25)
-    plot.set_title(TITLE, fontsize=TITLESIZE)
-    plot.set(xlabel=XLABEL, ylabel=YLABEL)
+    hue_order = [get_indic(col) for col in INDICS_ALL]
     
-    for y in ys:
-        sns.lineplot(x=x, y=y, lw=2, legend=False)
-    
-    plt.savefig(dest, dpi=300, bbox_inches='tight')
-    plt.close()
+    with config_and_save_plot(dest):
+        plot = sns.scatterplot(df,
+                               x=INDEP_VAR, y=DEP_VAR,
+                               hue=HUE_VAR, hue_order=hue_order,
+                               alpha=0.8, s=25)
+        plot.set_title(TITLE, fontsize=TITLESIZE)
+        plot.set(xlabel=XLABEL, ylabel=YLABEL)
+        
+        for y in ys:
+            sns.lineplot(x=x, y=y, lw=2, legend=False)
 
 
 # %%

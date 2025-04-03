@@ -10,7 +10,7 @@ sys.path.append(os.path.join((WD := os.path.dirname(__file__)),
                              '..',
                              '..',
                              '..'))
-from modules.fastexcel_logging import suppress_fastexcel_logging
+from utils import suppress_fastexcel_logging
 
 
 # %%

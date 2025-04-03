@@ -1,17 +1,21 @@
 # %%
-import os
-from setuptools import setup, find_packages
+import sys
+from setuptools import setup
 from Cython.Build import cythonize
 
 
 # %%
-cython_files = [os.path.join('modules', 'fastexcel_logging.pyx'),
-                os.path.join('modules', 'run_helpers.pyx')]
+def main():
+    sys.argv.extend(["build_ext", "--inplace"])
+    setup(
+        packages=[],
+        ext_modules=cythonize(
+            'utils.pyx',
+            compiler_directives={'language_level': '3'},
+        ),
+    )
 
-setup(
-    packages=find_packages(include=['modules', 'modules.*']),
-    ext_modules=cythonize(
-        cython_files,
-        compiler_directives={'language_level': '3'},
-    ),
-)
+
+# %%
+if __name__ == '__main__':
+    main()

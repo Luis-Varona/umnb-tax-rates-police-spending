@@ -1,15 +1,17 @@
 # %%
 import os
+import sys
 import pickle
 
-import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
 import seaborn as sns
 
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from utils import config_and_save_plot
+
 
 # %%
-WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'fe_2sls_results')
 
 
@@ -109,21 +111,17 @@ def pred_rates(source_2sls: str, params: pd.Series) -> pl.DataFrame:
 
 # %%
 def plot_rates(df: pl.DataFrame, dest: str) -> None:
-    sns.set_theme(rc={'figure.figsize': (8, 6)})
-    plt.figure()
-    plot = sns.scatterplot(df,
-                           x=TIME_COL, y=DEP_VAR,
-                           alpha=0.8, s=25)
-    plot.set_title(TITLE, fontsize=TITLESIZE)
-    plot.set(ylabel=YLABEL, xticks=YEARS)
-    
-    for y, (ls, label) in CATS.items():
-        sns.lineplot(df,
-                     x=TIME_COL, y=y,
-                     ls=ls, label=label)
-    
-    plt.savefig(dest, dpi=300, bbox_inches='tight')
-    plt.close()
+    with config_and_save_plot(dest):
+        plot = sns.scatterplot(df,
+                               x=TIME_COL, y=DEP_VAR,
+                               alpha=0.8, s=25)
+        plot.set_title(TITLE, fontsize=TITLESIZE)
+        plot.set(ylabel=YLABEL, xticks=YEARS)
+        
+        for y, (ls, label) in CATS.items():
+            sns.lineplot(df,
+                         x=TIME_COL, y=y,
+                         ls=ls, label=label)
 
 
 # %%

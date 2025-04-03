@@ -123,7 +123,7 @@ def fit_model(df: pl.DataFrame) -> tuple[PanelOLS, PanelResults]:
 def write_model_result(
     result: PanelResults, dest_result: str, dest_summary: str, dest_tex: str,
 ) -> None:
-    for dest in {dest_result, dest_summary}:
+    for dest in {dest_result, dest_summary, dest_tex}:
         if os.path.exists(dest):
             os.remove(dest)
     
