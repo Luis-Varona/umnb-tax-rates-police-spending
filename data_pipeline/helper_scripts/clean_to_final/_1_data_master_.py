@@ -98,8 +98,8 @@ SCHEMAS = {
 
 # %%
 def main():
+    os.makedirs(DEST_DIR, exist_ok=True)
     dest = os.path.join(DEST_DIR, 'data_master.xlsx')
-    os.makedirs(os.path.dirname(dest), exist_ok=True)
     
     source_maps = {cat: {year: os.path.join(SOURCE_DIR,
                                             str(year),

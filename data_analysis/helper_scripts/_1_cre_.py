@@ -1,16 +1,18 @@
 # %%
 import os
+import sys
 
 import polars as pl
-from statsmodels.iolib.summary2 import Summary
-from statsmodels.regression.mixed_linear_model \
-    import MixedLM, MixedLMResultsWrapper
+from statsmodels.regression.mixed_linear_model import MixedLM
+
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from utils import ModelResults
 
 
 # %%
 WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join(WD, '..', 'cre_results')
+DEST_DIR = os.path.join(WD, '..', 'cre')
 
 
 # %%
@@ -36,18 +38,16 @@ FORMULAS = {
 
 # %%
 def main():
-    source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     os.makedirs(DEST_DIR, exist_ok=True)
+    source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     
     df = add_mundlak_means(pl.read_excel(source))
-    models = {}
     
     for model_id in FORMULAS.keys():
-        model, result = fit_model(df, model_id)
-        models[model_id] = (model, result)
-        
-        dest = os.path.join(DEST_DIR, f'model_summary_{model_id}.txt')
-        write_model_summary(result.summary(), dest)
+        dest_result = os.path.join(DEST_DIR, f"results_{model_id}.pkl")
+        dest_summary = os.path.join(DEST_DIR, f"summary_{model_id}")
+        model_results = fit_model(df, model_id)
+        save_output(model_results, dest_result, dest_summary)
 
 
 # %%
@@ -62,23 +62,20 @@ def add_mundlak_means(df: pl.DataFrame) -> pl.DataFrame:
 
 
 # %%
-def fit_model(
-    df: pl.DataFrame, model_id: str,
-) -> tuple[MixedLM, MixedLMResultsWrapper]:
+def fit_model(df: pl.DataFrame, model_id: str) -> ModelResults:
     formula = FORMULAS[model_id]
     group = df.select(GROUP_COL).to_series()
+    
     model = MixedLM.from_formula(formula, df, groups=group)
     result = model.fit(reml=True)
-    return model, result
+    return ModelResults(result, 'statsmodels')
 
 
 # %%
-def write_model_summary(summary: Summary, dest: str) -> None:
-    if os.path.exists(dest):
-        os.remove(dest)
-    
-    with open(dest, 'x') as file:
-        file.write(summary.as_text())
+def save_output(model_results: ModelResults,
+                dest_results: str, dest_summary: str) -> None:
+    model_results.save_results(dest_results)
+    model_results.save_summary(f"{dest_summary}.txt", f"{dest_summary}.tex")
 
 
 # %%
@@ -94,18 +91,18 @@ os.chdir(os.path.dirname(__file__))
 # %%
 source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
 df = add_mundlak_means(pl.read_excel(source))
-models = {}
+results = {}
 
 for model_id in FORMULAS.keys():
-    model, result = fit_model(df, model_id)
-    models[model_id] = (model, result)
+    model_results = fit_model(df, model_id)
+    results[model_id] = model_results.results
 
 
 # %%
-results_rstd = models['rstd'][1]
-results_indic = models['indic'][1]
-results_inter = models['inter'][1]
-results_unrstd = models['unrstd'][1]
+results_rstd = results['rstd']
+results_indic = results['indic']
+results_inter = results['inter']
+results_unrstd = results['unrstd']
 
 
 # %%

@@ -61,24 +61,16 @@ are estimating stuff like elasticity, our general desired results, etc.]
 [TODO: Elaborate on this now that we have a first draft, especially with
 regards to what methodology we took away]
 
-We review three relevant articles on municipal taxation and
-spending&#x2014;[@CP03], [@FMP08], and @[Gad17]. Brett and Pinkse 2003
-investigate the "determinants of municipal tax rates in British Columbia,"
-considering population, distance from major metropolitan centers (namely
-Vancouver), income, and several other factors as determinants of tax rates
-[@CP03]. They do not particularly emphasize spending patterns as a potential
-factor in municipal taxation, but the methodology presented in their paper will
-provide a useful framework on which to build for our project.
+We review two relevant articles on municipal taxation and
+spending [@CP03; @Gad17]. @CP03 investigate the "determinants of municipal tax
+rates in British Columbia," considering population, distance from major
+metropolitan centers (namely Vancouver), income, and several other factors as
+determinants of tax rates. They do not particularly emphasize spending patterns
+as a potential factor in municipal taxation, but the methodology presented in
+their paper will provide a useful framework on which to build for our project.
 
-Foucault, Madies, and Paty 2008 consider how spending patterns of
-municipalities in close proximity are interrelated, and to what extent
-neighboring jurisdictions affect municipal decisions [@FMP08] Although we are
-interested less in determinants of spending patterns and more in determinants
-of taxation, this study may inform us in an attempt to include geographical
-distance to other municipalities as a determinant of tax rates and tax bases.
-
-Gadenne 2017 provides a study in how extra tax revenue truly affects the
-quantity and quality of public services [@Gad17]. Again, we are going the
+@Gad17 provides a study in how extra tax revenue truly affects the
+quantity and quality of public services. Again, we are going the
 "other way" in that we are examining how public spnding costs affect taxation,
 but several of the case studies here are of interest. The relevant study also
 investigates municipalities specifically, so the methodology laid out
@@ -90,6 +82,8 @@ as an instrument for tax base/capita, etc. specifically]
 [TODO: Moreover, and this is important&#x2014;add literature review on whether
 or not police expenditure is typically this exogenous (it should not be), and
 discuss further how the PPSA affects it. Maybe for the previous section too?]
+
+[TODO: Add @CT08; @Dah24]
 
 # Methodology
 
@@ -295,6 +289,9 @@ mean value of $X$ for municipality $i$ over all years. (Note that
 $\ddot{\hat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
 itself but rather the demeaned prediction from our first-stage regression.)
 
+Our covariance estimator in this model is clustered by municipality, as [TODO:
+Elaborate]
+
 ## Tax Base Elasticity Estimates
 
 Given these results, we now approximate tax base elasticity with respect to tax
@@ -336,6 +333,100 @@ the most exogenous expenditure categories, as previously discussed&#x2014;by
 
 # Appendix
 
+The raw fixed-effects regression model used in our analysis is given below:
+\begingroup
+\footnotesize
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.7216      \\
+\textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.1325      \\
+\textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.7216      \\
+\textbf{Date:}                       &  Fri, Apr 04 2025  & \textbf{  R-squared (Overall):}  &      0.1356      \\
+\textbf{Time:}                       &      18:11:50      & \textbf{  Log-likelihood     }   &    1.196e+04     \\
+\textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{  F-statistic:       }   &      738.02      \\
+\textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Avg Obs:}                    &       17.481       & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Min Obs:}                    &       6.0000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       18.000       & \textbf{  F-statistic (robust):} &      66.473      \\
+\textbf{}                            &                    & \textbf{  P-value            }   &      0.0000      \\
+\textbf{Time periods:}               &         18         & \textbf{  Distribution:      }   &    F(6,1708)     \\
+\textbf{Avg Obs:}                    &       101.00       & \textbf{                     }   &                  \\
+\textbf{Min Obs:}                    &       95.000       & \textbf{                     }   &                  \\
+\textbf{Max Obs:}                    &       103.00       & \textbf{                     }   &                  \\
+\textbf{}                            &                    & \textbf{                     }   &                  \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                                     & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
+\midrule
+\textbf{PolExpCapita}                &       1.3092       &       0.0990       &      13.222     &      0.0000      &       1.1150      &       1.5034       \\
+\textbf{OtherExpCapita}              &       0.9665       &       0.0914       &      10.575     &      0.0000      &       0.7872      &       1.1458       \\
+\textbf{OtherRevCapita}              &      -0.8964       &       0.0991       &     -9.0486     &      0.0000      &      -1.0907      &      -0.7021       \\
+\textbf{TaxBaseCapita}               &      -0.0122       &       0.0012       &     -10.440     &      0.0000      &      -0.0145      &      -0.0099       \\
+\textbf{PolExpCapita:Provider\_MPSA} &      -0.5551       &       0.1951       &     -2.8459     &      0.0045      &      -0.9377      &      -0.1725       \\
+\textbf{PolExpCapita:Provider\_Muni} &      -0.6083       &       0.1377       &     -4.4162     &      0.0000      &      -0.8784      &      -0.3381       \\
+\bottomrule
+\end{tabular}
+%\caption{PanelOLS Estimation Summary}
+\end{center}
+\endgroup
+
+```latex
+F-test for Poolability: 51.098
+P-value: 0.0000
+Distribution: F(103,1708)
+
+Included effects: Entity
+```
+
+[TODO: Elaborate]
+
+[TODO: Explain first stage regression]
+
+\begingroup
+\small
+\begin{center}
+\begin{tabular}{lclc}
+\toprule
+\textbf{Dep. Variable:}    &  TaxBaseCapita   & \textbf{  R-squared:         } &     0.011   \\
+\textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.011   \\
+\textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     20.99   \\
+\textbf{Date:}             & Fri, 04 Apr 2025 & \textbf{  Prob (F-statistic):} &  4.93e-06   \\
+\textbf{Time:}             &     18:11:51     & \textbf{  Log-Likelihood:    } &   -363.29   \\
+\textbf{No. Observations:} &        1818      & \textbf{  AIC:               } &     730.6   \\
+\textbf{Df Residuals:}     &        1816      & \textbf{  BIC:               } &     741.6   \\
+\textbf{Df Model:}         &           1      & \textbf{                     } &             \\
+\textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &             \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lcccccc}
+                     & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
+\midrule
+\textbf{Intercept}   &       0.6668  &        0.020     &    33.737  &         0.000        &        0.628    &        0.706     \\
+\textbf{MedHouseInc} &     -11.2497  &        2.455     &    -4.582  &         0.000        &      -16.066    &       -6.434     \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{lclc}
+\textbf{Omnibus:}       & 920.376 & \textbf{  Durbin-Watson:     } &    1.434  \\
+\textbf{Prob(Omnibus):} &   0.000 & \textbf{  Jarque-Bera (JB):  } & 8236.943  \\
+\textbf{Skew:}          &   2.196 & \textbf{  Prob(JB):          } &     0.00  \\
+\textbf{Kurtosis:}      &  12.458 & \textbf{  Cond. No.          } &     354.  \\
+\bottomrule
+\end{tabular}
+%\caption{OLS Regression Results}
+\end{center}
+\endgroup
+
+\begingroup
+\small
+```latex
+Notes:
+ [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+```
+\endgroup
+
 The final FE-2SLS regression model used in our analysis is given below:
 
 \begingroup
@@ -346,8 +437,8 @@ The final FE-2SLS regression model used in our analysis is given below:
 \textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.4290      \\
 \textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.9794      \\
 \textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.4290      \\
-\textbf{Date:}                       &  Mon, Mar 31 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
-\textbf{Time:}                       &      13:02:08      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
+\textbf{Date:}                       &  Fri, Apr 04 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
+\textbf{Time:}                       &      18:11:51      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
 \textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
 \textbf{}                            &                    & \textbf{  F-statistic:       }   &      213.84      \\
 \textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\

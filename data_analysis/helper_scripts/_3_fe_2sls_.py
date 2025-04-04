@@ -1,19 +1,22 @@
 # %%
 import os
 import pickle
+import sys
 
 import numpy as np
 import polars as pl
 
 from linearmodels.panel.model import PanelOLS
-from linearmodels.panel.results import PanelResults
-from statsmodels.regression.linear_model import OLS, RegressionResultsWrapper
+from statsmodels.regression.linear_model import OLS
+
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+from utils import ModelResults
 
 
 # %%
 WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join(WD, '..', 'fe_2sls_results')
+DEST_DIR = os.path.join(WD, '..', 'fe_2sls')
 INSTRUMENT_DIR = os.path.join(WD, '..', '..', 'data_iv', 'results')
 
 
@@ -35,24 +38,21 @@ INSTRUMENT_YEARS = list(range(2000, 2021))
 
 # %%
 def main():
+    os.makedirs(DEST_DIR, exist_ok=True)
     source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     source_instr = os.path.join(INSTRUMENT_DIR, 'muni_map.pkl')
     
     dest_df = os.path.join(DEST_DIR, 'data_2sls.xlsx')
-    dest_s1_result = os.path.join(DEST_DIR, 's1_result.pkl')
-    dest_s1_summary = os.path.join(DEST_DIR, 's1_summary.txt')
-    dest_s1_tex = os.path.join(DEST_DIR, 's1_summary.tex')
-    dest_result = os.path.join(DEST_DIR, 'model_result.pkl')
-    dest_summary = os.path.join(DEST_DIR, 'model_summary.txt')
-    dest_tex = os.path.join(DEST_DIR, 'model_summary.tex')
-    os.makedirs(DEST_DIR, exist_ok=True)
+    dest_results1 = os.path.join(DEST_DIR, 'stage1_results.pkl')
+    dest_summary1 = os.path.join(DEST_DIR, 'stage1_summary')
+    dest_results2 = os.path.join(DEST_DIR, 'stage2_results.pkl')
+    dest_summary2 = os.path.join(DEST_DIR, 'stage2_summary')
     
-    s1_result, df = first_stage_regress(source, source_instr)
-    model, result = fit_model(df)
-    
-    df.write_excel(dest_df)
-    write_model_result(s1_result, dest_s1_result, dest_s1_summary, dest_s1_tex)
-    write_model_result(result, dest_result, dest_summary, dest_tex)
+    model_results1, df = stage1_results_and_data(source, source_instr)
+    model_results2 = stage2_results(df)
+    save_output(df, model_results1, model_results2,
+                dest_df, dest_results1, dest_summary1,
+                dest_results2, dest_summary2)
 
 
 # %%
@@ -69,6 +69,8 @@ def process_muni_map(muni_map: dict[int, dict]) -> tuple[list, dict]:
     
     return munis, incomes
 
+
+# %%
 def get_interp_args(incomes: dict[str, np.ndarray]) -> tuple[dict, dict, dict]:
     nans = {muni: np.isnan(income) for muni, income in incomes.items()}
     xs = {muni: np.where(nan)[0] for muni, nan in nans.items()}
@@ -105,49 +107,37 @@ def get_instrument_data(source_instr: str) -> pl.DataFrame:
 
 
 # %%
-def first_stage_regress(
-    source: str, source_instr: str
-) -> tuple[RegressionResultsWrapper, pl.DataFrame]:
+def stage1_results_and_data(source: str, source_instr: str
+                            ) -> tuple[ModelResults, pl.DataFrame]:
     df_instr = get_instrument_data(source_instr)
     df = (pl.read_excel(source)
           .join(df_instr, on=[GROUP_COL, "Year"], how="left"))
     
-    s1_result = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df).fit()
-    new_endog = s1_result.predict()
-    df = df.with_columns(pl.Series(new_endog).alias(ENDOG))
-    
-    return s1_result, df
+    model = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df)
+    results = model.fit()
+    df = df.with_columns(pl.Series(results.predict()).alias(ENDOG))
+    return ModelResults(results, 'statsmodels'), df
 
-def fit_model(df: pl.DataFrame) -> tuple[PanelOLS, PanelResults]:
+def stage2_results(df: pl.DataFrame) -> ModelResults:
     df_pandas = df.to_pandas()
     df_pandas.set_index([GROUP_COL, TIME_COL], inplace=True)
     
     model = PanelOLS.from_formula(FORMULA, df_pandas)
-    result = model.fit(cov_type='clustered', cluster_entity=True)
-    
-    return model, result
+    results = model.fit(cov_type='clustered', cluster_entity=True)
+    return ModelResults(results, 'linearmodels')
 
-def write_model_result(result: RegressionResultsWrapper | PanelResults,
-                       dest_result: str,
-                       dest_summary: str,
-                       dest_tex: str) -> None:
-    for dest in {dest_result, dest_summary, dest_tex}:
-        if os.path.exists(dest):
-            os.remove(dest)
-    
-    if isinstance(result, RegressionResultsWrapper):
-        summary = result.summary()
-    else:
-        summary = result.summary
-    
-    with open(dest_result, 'xb') as file:
-        pickle.dump(result, file)
-    
-    with open(dest_summary, 'x') as file:
-        file.write(summary.as_text())
-    
-    with open(dest_tex, 'x') as file:
-        file.write(summary.as_latex())
+
+# %%
+def save_output(df: pl.DataFrame,
+                model_results1: ModelResults, model_results2: ModelResults,
+                dest_df: str,
+                dest_results1: str, dest_summary1: str,
+                dest_results2: str, dest_summary2: str) -> None:
+    df.write_excel(dest_df)
+    model_results1.save_results(dest_results1)
+    model_results1.save_summary(f"{dest_summary1}.txt", f"{dest_summary1}.tex")
+    model_results2.save_results(dest_results2)
+    model_results2.save_summary(f"{dest_summary2}.txt", f"{dest_summary2}.tex")
 
 
 # %%

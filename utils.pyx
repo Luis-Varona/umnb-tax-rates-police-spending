@@ -1,6 +1,7 @@
 # cython: language_level=3
 import logging
 import os
+import pickle
 import subprocess
 
 from concurrent.futures import ThreadPoolExecutor
@@ -8,6 +9,46 @@ from contextlib import contextmanager
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+
+cdef class ModelResults:
+    cdef object _results
+    cdef bint _linearmodels
+    
+    def __init__(self, object results, str library):
+        if library == 'statsmodels':
+            self._linearmodels = False
+        elif library == 'linearmodels':
+            self._linearmodels = True
+        else:
+            raise ValueError(f"Unsupported library: {library}")
+        
+        self._results = results
+    
+    @property
+    def results(self) -> object:
+        return self._results
+    
+    def save_results(self, str dest) -> None:
+        if self._linearmodels:
+            with open(dest, 'wb') as f:
+                pickle.dump(self._results, f)
+        else:
+            self._results.save(dest)
+    
+    def save_summary(self, str dest_text, str dest_latex) -> None:
+        cdef object summary
+        
+        if self._linearmodels:
+            summary = self._results.summary
+        else:
+            summary = self._results.summary()
+        
+        with open(dest_text, 'w') as f:
+            f.write(summary.as_text())
+        
+        with open(dest_latex, 'w') as f:
+            f.write(summary.as_latex())
 
 
 cdef void run_script(str script):

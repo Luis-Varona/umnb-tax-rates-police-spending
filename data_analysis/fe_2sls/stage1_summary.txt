@@ -4,7 +4,7 @@ Dep. Variable:          TaxBaseCapita   R-squared:                       0.011
 Model:                            OLS   Adj. R-squared:                  0.011
 Method:                 Least Squares   F-statistic:                     20.99
 Date:                Fri, 04 Apr 2025   Prob (F-statistic):           4.93e-06
-Time:                        13:38:55   Log-Likelihood:                -363.29
+Time:                        18:11:51   Log-Likelihood:                -363.29
 No. Observations:                1818   AIC:                             730.6
 Df Residuals:                    1816   BIC:                             741.6
 Df Model:                           1                                         

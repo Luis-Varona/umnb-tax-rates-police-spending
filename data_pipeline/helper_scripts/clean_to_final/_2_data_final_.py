@@ -61,7 +61,7 @@ COLUMN_MAPS = {
 def main():
     source = os.path.join(SOURCE_DIR, 'data_master.xlsx')
     dest = os.path.join(DEST_DIR, 'data_final.xlsx')
-    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    
     
     dfs = {cat: pl.read_excel(source,
                               sheet_name=cat,

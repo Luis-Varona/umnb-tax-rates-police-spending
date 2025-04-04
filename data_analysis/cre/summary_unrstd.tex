@@ -1,0 +1,40 @@
+\begin{table}
+\caption{Mixed Linear Model Regression Results}
+\label{}
+\begin{center}
+\begin{tabular}{llll}
+\hline
+Model:            & MixedLM & Dependent Variable: & AvgTaxRate  \\
+No. Observations: & 1818    & Method:             & REML        \\
+No. Groups:       & 104     & Scale:              & 0.0000      \\
+Min. group size:  & 6       & Log-Likelihood:     & 11651.4921  \\
+Max. group size:  & 18      & Converged:          & Yes         \\
+Mean group size:  & 17.5    &                     &             \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{lrrrrrr}
+\hline
+                            &  Coef. & Std.Err. &       z & P$> |$z$|$ & [0.025 & 0.975]  \\
+\hline
+Intercept                   &  0.012 &    0.000 &  52.256 &       0.000 &  0.012 &  0.013  \\
+PolExpCapita                &  1.306 &    0.038 &  34.329 &       0.000 &  1.231 &  1.380  \\
+OtherExpCapita              &  0.966 &    0.022 &  44.659 &       0.000 &  0.924 &  1.008  \\
+OtherRevCapita              & -0.896 &    0.026 & -34.670 &       0.000 & -0.947 & -0.845  \\
+TaxBaseCapita               & -0.012 &    0.000 & -43.716 &       0.000 & -0.013 & -0.012  \\
+PolExpCapita\_mean          &  0.568 &    0.160 &   3.550 &       0.000 &  0.254 &  0.881  \\
+OtherExpCapita\_mean        &  0.287 &    0.081 &   3.524 &       0.000 &  0.127 &  0.447  \\
+OtherRevCapita\_mean        & -0.312 &    0.104 &  -3.012 &       0.003 & -0.516 & -0.109  \\
+TaxBaseCapita\_mean         & -0.004 &    0.001 &  -4.955 &       0.000 & -0.006 & -0.003  \\
+PolExpCapita:Provider\_MPSA & -0.555 &    0.062 &  -8.924 &       0.000 & -0.677 & -0.433  \\
+PolExpCapita:Provider\_Muni & -0.597 &    0.047 & -12.644 &       0.000 & -0.690 & -0.505  \\
+Provider\_MPSA              &  0.001 &    0.000 &   3.742 &       0.000 &  0.000 &  0.001  \\
+Provider\_Muni              &  0.001 &    0.000 &   4.121 &       0.000 &  0.000 &  0.001  \\
+Group Var                   &  0.000 &    0.000 &         &             &        &         \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\bigskip

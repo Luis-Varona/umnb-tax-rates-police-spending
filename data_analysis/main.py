@@ -9,7 +9,7 @@ from utils import run_helpers
 # %%
 def main():
     script_dir = os.path.join(WD, 'helper_scripts')
-    run_helpers(script_dir)
+    run_helpers(script_dir, False)
 
 
 # %%

@@ -12,7 +12,7 @@ from utils import config_and_save_plot
 
 
 # %%
-SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'fe_2sls_results')
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'fe_2sls')
 
 
 # %%
@@ -64,7 +64,7 @@ YLABEL = "Mean of Municipal Average Tax Rates  (%)"
 # %%
 def main():
     source_2sls = os.path.join(SOURCE_DIR, 'data_2sls.xlsx')
-    source_result = os.path.join(SOURCE_DIR, 'model_result.pkl')
+    source_result = os.path.join(SOURCE_DIR, 'stage2_results.pkl')
     dest = os.path.join(WD, '..', 'alt_tax_rates.png')
     
     result = pickle.load(open(source_result, 'rb'))

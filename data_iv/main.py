@@ -26,10 +26,10 @@ MATCH_THRESHOLD = 7
 
 # %%
 def main():
+    os.makedirs(DEST_DIR, exist_ok=True)
     source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     dest1 = os.path.join(DEST_DIR, 'income_dfs.pkl')
     dest2 = os.path.join(DEST_DIR, 'muni_map.pkl')
-    os.makedirs(DEST_DIR, exist_ok=True)
     
     income_dfs = read_data()
     pickle.dump(income_dfs, open(dest1, "wb"))

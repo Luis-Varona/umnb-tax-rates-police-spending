@@ -8,8 +8,8 @@ import polars as pl
 # %%
 WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
-SOURCE_RES = os.path.join(WD, '..', 'fe_2sls_results', 'model_result.pkl')
-DEST_DIR = os.path.join(WD, '..', 'elasticity_results')
+SOURCE_RES = os.path.join(WD, '..', 'fe_2sls', 'stage2_results.pkl')
+DEST_DIR = os.path.join(WD, '..', 'elasticity')
 
 
 # %%
@@ -19,9 +19,9 @@ RES_COL = "EstTaxBaseElast"
 
 # %%
 def main():
+    os.makedirs(DEST_DIR, exist_ok=True)
     source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     dest = os.path.join(DEST_DIR, 'elasticity.xlsx')
-    os.makedirs(DEST_DIR, exist_ok=True)
     
     pol_exp_capita = pickle.load(open(SOURCE_RES, "rb")).params['PolExpCapita']
     df_final = pl.read_excel(source)

@@ -10,11 +10,7 @@ from utils import config_and_save_plot
 
 
 # %%
-SOURCE_DIR = os.path.join(WD,
-                          '..',
-                          '..',
-                          'data_analysis',
-                          'elasticity_results')
+SOURCE_DIR = os.path.join(WD, '..', '..', 'data_analysis', 'elasticity')
 
 
 # %%
