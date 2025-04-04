@@ -7,7 +7,7 @@ import polars as pl
 
 from linearmodels.panel.model import PanelOLS
 from linearmodels.panel.results import PanelResults
-from statsmodels.regression.linear_model import OLS
+from statsmodels.regression.linear_model import OLS, RegressionResultsWrapper
 
 
 # %%
@@ -39,15 +39,19 @@ def main():
     source_instr = os.path.join(INSTRUMENT_DIR, 'muni_map.pkl')
     
     dest_df = os.path.join(DEST_DIR, 'data_2sls.xlsx')
+    dest_s1_result = os.path.join(DEST_DIR, 's1_result.pkl')
+    dest_s1_summary = os.path.join(DEST_DIR, 's1_summary.txt')
+    dest_s1_tex = os.path.join(DEST_DIR, 's1_summary.tex')
     dest_result = os.path.join(DEST_DIR, 'model_result.pkl')
     dest_summary = os.path.join(DEST_DIR, 'model_summary.txt')
     dest_tex = os.path.join(DEST_DIR, 'model_summary.tex')
     os.makedirs(DEST_DIR, exist_ok=True)
     
-    df = first_stage_regress(source, source_instr)
+    s1_result, df = first_stage_regress(source, source_instr)
     model, result = fit_model(df)
     
     df.write_excel(dest_df)
+    write_model_result(s1_result, dest_s1_result, dest_s1_summary, dest_s1_tex)
     write_model_result(result, dest_result, dest_summary, dest_tex)
 
 
@@ -101,15 +105,18 @@ def get_instrument_data(source_instr: str) -> pl.DataFrame:
 
 
 # %%
-def first_stage_regress(source: str, source_instr: str) -> pl.DataFrame:
+def first_stage_regress(
+    source: str, source_instr: str
+) -> tuple[RegressionResultsWrapper, pl.DataFrame]:
     df_instr = get_instrument_data(source_instr)
     df = (pl.read_excel(source)
           .join(df_instr, on=[GROUP_COL, "Year"], how="left"))
     
-    iv_model = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df)
-    new_endog = iv_model.fit().predict()
+    s1_result = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df).fit()
+    new_endog = s1_result.predict()
+    df = df.with_columns(pl.Series(new_endog).alias(ENDOG))
     
-    return df.with_columns(pl.Series(new_endog).alias(ENDOG))
+    return s1_result, df
 
 def fit_model(df: pl.DataFrame) -> tuple[PanelOLS, PanelResults]:
     df_pandas = df.to_pandas()
@@ -120,21 +127,27 @@ def fit_model(df: pl.DataFrame) -> tuple[PanelOLS, PanelResults]:
     
     return model, result
 
-def write_model_result(
-    result: PanelResults, dest_result: str, dest_summary: str, dest_tex: str,
-) -> None:
+def write_model_result(result: RegressionResultsWrapper | PanelResults,
+                       dest_result: str,
+                       dest_summary: str,
+                       dest_tex: str) -> None:
     for dest in {dest_result, dest_summary, dest_tex}:
         if os.path.exists(dest):
             os.remove(dest)
+    
+    if isinstance(result, RegressionResultsWrapper):
+        summary = result.summary()
+    else:
+        summary = result.summary
     
     with open(dest_result, 'xb') as file:
         pickle.dump(result, file)
     
     with open(dest_summary, 'x') as file:
-        file.write(result.summary.as_text())
+        file.write(summary.as_text())
     
     with open(dest_tex, 'x') as file:
-        file.write(result.summary.as_latex())
+        file.write(summary.as_latex())
 
 
 # %%
