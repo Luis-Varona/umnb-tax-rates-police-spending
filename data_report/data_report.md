@@ -3,7 +3,7 @@ title: "Data Report"
 author:
   - "Luis M. B. Varona[^1][^2]"
   - "Otoha Hanatani[^3]"
-date: March 31, 2025
+date: April 8, 2025
 output: github_document
 bibliography: config_files/references.bib
 ---
@@ -13,14 +13,22 @@ In collaboration with the Union of Municipalities of New Brunswick and Dr.
 Craig Brett of Mount Allison University, we conduct a fixed-effects two-stage
 least squares (or FE-2SLS) regression analysis of average tax rates on police
 spending in New Brunswick municipalities, using median household income as an
-instrument variable to reduce simultaneity bias. We herein investigate whether
-police spending is a significant predictor of municipal tax rates and, if so,
-whether the specific policing provider plays into this correlation. Moreover,
-we leverage the fact that police expenditure (as per Provincial Police Service
-Agreement with the Royal Canadian Mounted Police) is largely an exogenous
-variable outside of municipal control to use this to approximate tax base
-elasticity with respect to tax rates. (In addition, we consider the
-relationship between population and this estimated elasticity.)
+instrumental variable to reduce simultaneity bias. We herein investigate
+whether police spending is a significant predictor of municipal tax rates and,
+if so, whether the specific policing provider plays into this correlation.
+Moreover, we leverage the fact that police expenditure (as per the Provincial
+Police Service Agreement with the Royal Canadian Mounted Police) is largely an
+exogenous variable outside of municipal control to use this to approximate tax
+base elasticity with respect to tax rates. In addition, we consider the
+relationship between population and this estimated elasticity, observing that
+smaller municipalities tend to exhibit higher tax base elasticity than larger
+ones due to a variety of mobility factors.
+
+(Note that this report is intended to be taken together with our
+[GitHub project repository](https://github.com/Luis-Varona/umnb-tax-rates-police-spending),
+with repeated references to specific scripts/file paths. However, it is
+certainly possible to peruse this document independently, as we have made every
+effort to ensure that all relevant information is encapsulated herein.)
 
 ## Background of the Problem
 
@@ -51,10 +59,22 @@ and a way to map this backwards to jurisdictions from previous years.)
 and why, different level of exogeneity affect tax rates in different ways, but
 also in terms of ... other stuff?]
 
-## Overview of Our Approach
+We use a fixed-effects two-stage least squares (FE-2SLS) regression model to
+investigate the relationships described above. The "fixed-effects" (FE) part of
+this model allows us to control for time-invariant biases, controlling for
+unobserved heterogeneity across municipalities. However, this fails to address
+the problem of simultaneity bias arising from the bidirectional relationship
+between average tax rate (our response variable) and tax base per capita (one
+of our explanatory variables).
 
-[TODO: Introduce, at a high level, how our general FE-2SLS model works, how we
-are estimating stuff like elasticity, our general desired results, etc.]
+Hence, the "two-stage least squares" (2SLS) part of our model utilizes the fact
+that median household income (our instrumental variable) is correlated with tax
+base per capita but not with average tax rate. Regressing tax base on median
+income and using our predicted values in the second-stage fixed-effects
+regression allows us to isolate (to some extent) the effect of tax base on tax
+rate from the effect of tax rate on tax base. Both aspects of our combined
+FE-2SLS model are common approaches in econometrics, and we outline both more
+thoroughly in the **Methodology** section.
 
 # Literature Review
 
@@ -85,15 +105,28 @@ discuss further how the PPSA affects it. Maybe for the previous section too?]
 
 [TODO: Add @CT08; @Dah24]
 
+Finally, a review of previous studies of tax rate both as a response variable
+[@Bue03, p. 116] and as an explanatory one [@Fer19, p. 8] reveals that the
+inclusion of tax base on the other side of the equation is well-known to cause
+simultaneity bias. While our other explanatory variables (expenditure, revenue,
+etc.) are fairly *exogenous* in that they are determined outside of the model,
+tax base per capita is an *endogenous* variable highly bicorrelated with (and
+thus determined by) tax rate, which creates bias in regression estimates.
+Findings from @AC99 [p. 689] indicate that household income is viable as an
+instrument to reduce this bias, being correlated with tax base (as higher
+income implies more taxable property) but not tax rate (as Canadian taxation
+schemes tend not to be overly progressive). This supports the overall structure
+of our FE-2SLS model described in the **Methodology** section below.
+
 # Methodology
 
-In this section, we delineate our data collection process, data organization
-methods, and econometric models and analysis. We use Python (primarily the
-polars and linearmodels/statsmodels ecosystems) to parse and clean data from
-the Government of New Brunswick and Statistics Canada. Subsequently, we run
-several fixed-effects and correlated random-effects regression models on the
-resulting data in combination with an instrumental variable to account for
-simultaneity bias.
+We now delineate our data collection process, data organization methods, and
+econometric models. We use Python (namely the polars and
+linearmodels/statsmodels ecosystems) to parse and clean data from Statistics
+Canada and the Government of New Brunswick. Subsequently, we run several
+fixed-effects and correlated random-effects regression models on the resulting
+data in combination with median household income as an instrumental variable to
+account for simultaneity bias.
 
 ## Data Collection and Sources
 
@@ -111,7 +144,7 @@ This is supplemented by 2024 data on municipal policing provider agreements
 from previous years and integrate indicators into interaction terms in our
 panel as described below.
 
-Finally, the instrument variable in the first stage of our 2SLS regression is
+Finally, the instrumental variable in the first stage of our 2SLS regression is
 median household income, given in census data from Statistics Canada. Data is
 only available from 2000 [@SC01], 2005 [@SC06], 2015 [@SC16], and 2020 [@SC21];
 hence, linear interpolation is applied for the intervening years. The resulting
@@ -130,12 +163,12 @@ municipalities, as well as 2024 data on municipal policing providers. Given
 that some of these files are `.xls` and `.xlw` workbooks, we copy and convert
 them all to `.xlsx` format in the [`data_xlsx/`](../data_pipeline/data_xlsx/)
 subdirectory. The
-[`helper_scripts/_raw_to_xlsx_.py`](../data_pipeline/helper_scripts/_raw_to_xlsx_.py)
+[`helper_scripts/_1_raw_to_xlsx_.py`](../data_pipeline/helper_scripts/_1_raw_to_xlsx_.py)
 script is used for this purpose.
 
 Files in this [`data_xlsx/`](../data_pipeline/data_xlsx/) subdirectory are
 cleaned and organized by
-[`helper_scripts/_xlsx_to_clean_.py`](../data_pipeline/helper_scripts/_xlsx_to_clean_.py).
+[`helper_scripts/_2_xlsx_to_clean_.py`](../data_pipeline/helper_scripts/_2_xlsx_to_clean_.py).
 Finding that data from 2005 and 2019&#x2013;2022 is unusable due to
 missing/improperly formatted tokens, our output (placed in the
 [`data_clean/`](../data_pipeline/data_clean/) subdirectory) excludes these time
@@ -145,10 +178,10 @@ and notes)&#x2014;it is all simply reorganized into parseable form.
 Addressing inconsistent municipality naming conventions across years/categories
 and concatenating all annual panels within each category (budget expenditures,
 budget revenues, comparative demographics, and tax bases), the
-[`helper_scripts/_clean_to_final_.py`](../data_pipeline/helper_scripts/_clean_to_final_.py)
+[`helper_scripts/_3_clean_to_final_.py`](../data_pipeline/helper_scripts/_3_clean_to_final_.py)
 script then writes all four resulting worksheets&#x2014;plus a fifth for
 provider data&#x2014;to a single
-[`data_fina;/data_master.xlsx`](../data_pipeline/data_final/data_master.xlsx)
+[`data_final/data_master.xlsx`](../data_pipeline/data_final/data_master.xlsx)
 workbook. (The new municipal naming convention is also used to map provider
 data on newer, reformed 2024 municipalities and districts to past jurisdictions
 all the way back to 2000.)
@@ -204,7 +237,12 @@ directory. Our included variables are:
   - *Municipal Police*, or *Provider_MPSA* (included)
 - **Median Household Income**, or **MedHouseInc** &#x2013; $10^5$ CAD / person
 
-Our dependent variable is *AvgTaxRate*, which is calculated as a weighted
+(These scaling factors are chosen to make our regression coefficients more
+interpretable, but when visualizing our results in the form of plots, we switch
+back to % for *AvgTaxRate* and CAD / person for the remaining expenditure and
+revenue variables.)
+
+Our response variable is *AvgTaxRate*, which is calculated as a weighted
 average of the residential and non-residential tax rates in a municipal
 jurisdiction. (That is&#x2014;as per government formulae, non-residential rates
 are multiplied by a factor of $1.5$ before being integrated into the calculated
@@ -218,14 +256,14 @@ as an instrumental variable.
 
 Each of these variables is used throughout our FE-2SLS
 regression model, carried out by the
-[`helper_scripts/_3_fe_2sls_analysis_.py`](../data_analysis/helper_scripts/_3_fe_2sls_analysis_.py)
+[`helper_scripts/_3_fe_2sls_.py`](../data_analysis/helper_scripts/_3_fe_2sls_.py)
 script. In addition, we have also included vanilla correlated random-effects
 (CRE) and fixed-effects (FE) models, run by
-[`helper_scripts/_1_cre_analysis_.py`](../data_analysis/helper_scripts/_1_cre_analysis_.py)
+[`helper_scripts/_1_cre_.py`](../data_analysis/helper_scripts/_1_cre_.py)
 and
-[`helper_scripts/_2_fe_analysis_.py`](../data_analysis/helper_scripts/_2_fe_analysis_.py),
+[`helper_scripts/_2_fe_.py`](../data_analysis/helper_scripts/_2_fe_.py),
 to determine which variables are relevant and to demonstrate the need for an
-instrument variable. All helper scripts are called and run by the main
+instrumental variable. All helper scripts are called and run by the main
 executable of the associated directory, [`main.py`](../data_analysis/main.py).
 
 Our final choice of FE in conjunction with 2SLS arose from [TODO: Elaborate,
