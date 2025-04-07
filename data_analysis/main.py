@@ -8,8 +8,10 @@ from utils import run_helpers
 
 # %%
 def main():
-    script_dir = os.path.join(WD, 'helper_scripts')
-    run_helpers(script_dir, False)
+    script_dir1 = os.path.join(WD, 'helper_scripts', 'allow_concurrent')
+    script_dir2 = os.path.join(WD, 'helper_scripts', 'second_run')
+    run_helpers(script_dir1)
+    run_helpers(script_dir2)
 
 
 # %%

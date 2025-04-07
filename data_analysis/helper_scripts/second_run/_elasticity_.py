@@ -7,9 +7,9 @@ import polars as pl
 
 # %%
 WD = os.path.dirname(__file__)
-SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
-SOURCE_RES = os.path.join(WD, '..', 'fe_2sls', 'stage2_results.pkl')
-DEST_DIR = os.path.join(WD, '..', 'elasticity')
+SOURCE_DIR = os.path.join(WD, '..', '..', '..', 'data_pipeline', 'data_final')
+SOURCE_RES = os.path.join(WD, '..', '..', 'fe_2sls', 'stage2_results.pkl')
+DEST_DIR = os.path.join(WD, '..', '..', 'elasticity')
 
 
 # %%

@@ -256,12 +256,12 @@ as an instrumental variable.
 
 Each of these variables is used throughout our FE-2SLS
 regression model, carried out by the
-[`helper_scripts/_3_fe_2sls_.py`](../data_analysis/helper_scripts/_3_fe_2sls_.py)
-script. In addition, we have also included vanilla correlated random-effects
-(CRE) and fixed-effects (FE) models, run by
-[`helper_scripts/_1_cre_.py`](../data_analysis/helper_scripts/_1_cre_.py)
+[`helper_scripts/allow_concurrent/_fe_2sls_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_2sls_.py)
+script. We have also included "vanilla" correlated random-effects (CRE) and
+fixed-effects (FE) models, run by
+[`helper_scripts/allow_concurrent/_cre_.py`](../data_analysis/helper_scripts/allow_concurrent/_cre_.py)
 and
-[`helper_scripts/_2_fe_.py`](../data_analysis/helper_scripts/_2_fe_.py),
+[`helper_scripts/allow_concurrent/_fe_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_.py),
 to determine which variables are relevant and to demonstrate the need for an
 instrumental variable. All helper scripts are called and run by the main
 executable of the associated directory, [`main.py`](../data_analysis/main.py).
@@ -283,8 +283,8 @@ found that our particular variables of interest do not.)
 
 Finally, we also estimate tax base elasticity by [TODO: Elaborate]
 
-We now turn to describing our vanilla CRE and FE analyses, then proceed to
-more thoroughly delineate our final FE-2SLS regression model.
+We now turn to describing our instrument-free CRE and FE analyses, then proceed
+to more thoroughly delineate our final FE-2SLS regression model.
 
 ### Correlated Random-Effects (CRE)
 
@@ -473,8 +473,8 @@ also available directly in both `.txt` and `.tex` format in the
 \textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.7216      \\
 \textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.1325      \\
 \textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.7216      \\
-\textbf{Date:}                       &  Fri, Apr 04 2025  & \textbf{  R-squared (Overall):}  &      0.1356      \\
-\textbf{Time:}                       &      18:11:50      & \textbf{  Log-likelihood     }   &    1.196e+04     \\
+\textbf{Date:}                       &  Mon, Apr 07 2025  & \textbf{  R-squared (Overall):}  &      0.1356      \\
+\textbf{Time:}                       &      16:00:34      & \textbf{  Log-likelihood     }   &    1.196e+04     \\
 \textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
 \textbf{}                            &                    & \textbf{  F-statistic:       }   &      738.02      \\
 \textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
@@ -524,8 +524,8 @@ Included effects: Entity
 \textbf{Dep. Variable:}    &  TaxBaseCapita   & \textbf{  R-squared:         } &     0.011   \\
 \textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.011   \\
 \textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     20.99   \\
-\textbf{Date:}             & Fri, 04 Apr 2025 & \textbf{  Prob (F-statistic):} &  4.93e-06   \\
-\textbf{Time:}             &     18:11:51     & \textbf{  Log-Likelihood:    } &   -363.29   \\
+\textbf{Date:}             & Mon, 07 Apr 2025 & \textbf{  Prob (F-statistic):} &  4.93e-06   \\
+\textbf{Time:}             &     16:00:35     & \textbf{  Log-Likelihood:    } &   -363.29   \\
 \textbf{No. Observations:} &        1818      & \textbf{  AIC:               } &     730.6   \\
 \textbf{Df Residuals:}     &        1816      & \textbf{  BIC:               } &     741.6   \\
 \textbf{Df Model:}         &           1      & \textbf{                     } &             \\
@@ -568,8 +568,8 @@ Notes:
 \textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.4290      \\
 \textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.9794      \\
 \textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.4290      \\
-\textbf{Date:}                       &  Fri, Apr 04 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
-\textbf{Time:}                       &      18:11:51      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
+\textbf{Date:}                       &  Mon, Apr 07 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
+\textbf{Time:}                       &      16:00:34      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
 \textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
 \textbf{}                            &                    & \textbf{  F-statistic:       }   &      213.84      \\
 \textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\

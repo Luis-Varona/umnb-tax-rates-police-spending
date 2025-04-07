@@ -5,14 +5,15 @@ import sys
 import polars as pl
 from linearmodels.panel.model import PanelOLS
 
-sys.path.append(os.path.join((WD := os.path.dirname(__file__)), '..', '..'))
+sys.path.append(os.path.join((WD := os.path.dirname(__file__)),
+                             '..', '..', '..'))
 from utils import ModelResults
 
 
 # %%
 WD = os.path.dirname(__file__)
-SOURCE_DIR = os.path.join(WD, '..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join(WD, '..', 'fe')
+SOURCE_DIR = os.path.join(WD, '..', '..', '..', 'data_pipeline', 'data_final')
+DEST_DIR = os.path.join(WD, '..', '..', 'fe')
 
 
 # %%
