@@ -20,6 +20,6 @@ details regarding the data pipeline process can be found at
 [data_pipeline/README.md](data_pipeline/README.md), and a data summary can be
 found at [data_summary/data_summary.pdf](data_summary/data_summary.pdf). The
 official data report is at
-[data_report/data_report.pdf](data_report/findidata_reportngs_results.pdf).
+[data_report/data_report.pdf](data_report/data_report.pdf).
 
 (The final report in collaboration with the UMNB yet to be completed.)

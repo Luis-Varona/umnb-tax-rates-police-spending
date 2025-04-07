@@ -124,14 +124,4 @@ def clean_cmp_data(source: str) -> pl.DataFrame:
 
 # %%
 if __name__ == '__main__':
-    if (wd := os.getcwd()).endswith('xlsx_to_clean'):
-        os.chdir('../..')
-    elif wd.endswith('helper_scripts'):
-        os.chdir('..')
-    elif not wd.endswith('data_pipeline'):
-        os.chdir('data_pipeline')
-    
-    try:
-        main()
-    finally:
-        os.chdir(wd)
+    main()

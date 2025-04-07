@@ -6,7 +6,7 @@ command -v lualatex >/dev/null 2>&1 || \
 
 wd="$(pwd)"
 trap 'cd "$wd"' EXIT
-cd "$(dirname "$0")" || exit
+cd "$(dirname "$0")" || exit 1
 
 name="data_report"
 source="$name.md"

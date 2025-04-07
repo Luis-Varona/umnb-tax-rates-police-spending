@@ -6,7 +6,17 @@ lang: en
 documentclass: article
 papersize: letter
 geometry: margin=1in
+colorlinks: true
+linkcolor: blue
+urlcolor: blue
+citecolor: blue
 header-includes: |
+  \usepackage{amsmath,amsxtra,amssymb,amsthm,amsfonts}
+  \usepackage{color,graphicx}
+  \usepackage{mathtools}
+  \usepackage{float}
+  \usepackage{booktabs}
+  \usepackage[linktocpage=true,colorlinks=true,linkcolor=blue,citecolor=blue,pagebackref]{hyperref}
   \renewcommand{\thefootnote}{\arabic{footnote}}
   \setcounter{footnote}{0}
 include-before: \input{config_files/affiliations.tex}
