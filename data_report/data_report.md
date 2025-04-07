@@ -234,7 +234,7 @@ directory. Our included variables are:
 - **Policing Provider** &#x2013; boolean, three categories:
   - *Provincial Police Service Agreement* (excluded control variable)
   - *Municipal Police Service Agreement*, or *Provider_MPSA* (included)
-  - *Municipal Police*, or *Provider_MPSA* (included)
+  - *Municipally Owned Police Force*, or *Provider_Muni* (included)
 - **Median Household Income**, or **MedHouseInc** &#x2013; $10^5$ CAD / person
 
 (These scaling factors are chosen to make our regression coefficients more
@@ -316,22 +316,22 @@ TaxBaseCapita_{it} = \alpha_0 + \alpha_1MedHouseInc_{it} + v_{it}.
 By performing this regression before proceeding to a fixed-effects model, we
 manage to reduce simultaneity bias, as *MedHouseInc* is correlated with
 *TaxBaseCapita* but not with *AvgTaxRate*. We use these predicted
-$\hat{TaxBaseCapita}_{it} = TaxBaseCapita_{it} - v_{it}$ values in the
+$\widehat{TaxBaseCapita}_{it} = TaxBaseCapita_{it} - v_{it}$ values in the
 second-stage regression, where we demean all variables over municipality.
 
 #### Stage 2
 
 Our primary fixed-effects regression model is now given by
 $$\begin{aligned}
-\ddot{AvgTaxRate}_{it} ={} & \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} +{} \\
-& \beta_4\ddot{\hat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} * Provider\_MPSA_{it} +{} \\
-& \beta_6\ddot{PolExpCapita}_{it} * Provider\_Muni_{it} + \ddot{u}_{it},
+\ddot{AvgTaxRate}_{it} & = \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} \\
+& + \beta_4\ddot{\widehat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it} \\
+& + \beta_6\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it} + \ddot{u}_{it},
 \end{aligned}$$
 
 where we use the notation $\ddot{X}_{it} \coloneqq X_{it} - \bar{X}_i$ to
 denote the difference between the value of $X$ for municipality $i$ in year $t$
 and the mean value of $X$ for municipality $i$ over all years. (Note that
-$\ddot{\hat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
+$\ddot{\widehat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
 itself but rather the demeaned prediction from our first-stage regression.)
 
 Our covariance estimator in this model is clustered by municipality, as [TODO:
@@ -386,6 +386,45 @@ over the period 2000&#x2013;2018. [TODO: Add time effects here?]
 
 [TODO: Elaborate]
 
+## Correlated Random-Effects (CRE)
+
+[TODO: Discuss CRE results]
+
+## Fixed-Effects (FE)
+
+[TODO: Discuss vanilla FE results]
+
+## Fixed-Effects Two-Stage Least Squares (FE-2SLS)
+
+We now turn to consideration of *MedHouseInc* as a potential instrumental
+variable to address endogeneity of *TaxBaseCapita*. As seen in the **Appendix**
+below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc*
+yields the results
+$$\begin{aligned}
+TaxBaseCapita_{it} = \underset{(0.020)}{0.668} - \underset{(2.455)}{11.2497MedHouseInc_{it}} + v_{it}, \quad\quad R^2 = 0.011, \, F_{1,1816} = 20.99,
+\end{aligned}$$
+
+where the $F$-statistic of $20.99$ is far above the threshold of $10$ for
+viable instruments. Therefore, we can safely integrate these results into the
+second-stage fixed-effects regression, using the (demeaned) fitted values of
+$\widehat{TaxBaseCapita}$ from this stage. (Note that the low $R^2$ of $0.011$
+is irrelevant&#x2014;we are concerned primarily with the correlation between
+the instrumental and endogenous variables, not with goodness-of-fit.)
+
+Running a fixed-effects regression on the demeaned data and clustering by
+municipality, we obtain the following results (with full computer output once
+again available in the **Appendix**):
+$$\begin{aligned}
+\ddot{AvgTaxRate}_{it} & = \underset{(0.1371)}{0.5188\ddot{PolExpCapita}_{it}} + \underset{(0.0255)}{0.0301\ddot{OtherExpCapita}} + \underset{(0.0644)}{0.1025\ddot{OtherRevCapita}} \\
+& + \underset{(0.0068)}{0.0225\ddot{\widehat{TaxBaseCapita}}_{it}} + \underset{(0.1941)}{0.0955\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
+& - \underset{(0.1821)}{0.2542\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad\quad R^2 = 0.4290, \, F_{6,1708} = 27.629.
+\end{aligned}$$
+
+(Note that the $F$-statistic provided here is robust to clustering.) [TODO:
+Elaborate further on this before providing visualization]
+
+## Visualization
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=6in]{../data_visualization/fe_2sls.png}
@@ -414,7 +453,18 @@ over the period 2000&#x2013;2018. [TODO: Add time effects here?]
 
 # Appendix
 
-The raw fixed-effects regression model used in our analysis is given below:
+We herein present raw computer output from our regression models. The first two
+sections pertain to our vanilla CRE and FE models without an instrument, and
+the last section presents the results of our final FE-2SLS model. (This data is
+also available directly in both `.txt` and `.tex` format in the
+[`data_analysis/`](../data_analysis/) directory of our GitHub repository.)
+
+## Correlated Random-Effects (CRE)
+
+[TODO: Add CRE output]
+
+## Fixed-Effects (FE)
+
 \begingroup
 \footnotesize
 \begin{center}
@@ -462,9 +512,9 @@ Distribution: F(103,1708)
 Included effects: Entity
 ```
 
-[TODO: Elaborate]
+## Fixed-Effects Two-Stage Least Squares (FE-2SLS)
 
-[TODO: Explain first stage regression]
+### Stage 1
 
 \begingroup
 \small
@@ -508,7 +558,7 @@ Notes:
 ```
 \endgroup
 
-The final FE-2SLS regression model used in our analysis is given below:
+### Stage 2
 
 \begingroup
 \footnotesize
@@ -556,9 +606,6 @@ Distribution: F(103,1708)
 
 Included effects: Entity
 ```
-
-[TODO: Explain results further; potentially show in the **Results** section
-instead, and show the other preliminary models here?]
 
 [^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
 [^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7
