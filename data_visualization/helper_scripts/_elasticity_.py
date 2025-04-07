@@ -48,5 +48,5 @@ def save_elasticity_plot(df: pl.DataFrame, dest: str) -> None:
 
 
 # %%
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

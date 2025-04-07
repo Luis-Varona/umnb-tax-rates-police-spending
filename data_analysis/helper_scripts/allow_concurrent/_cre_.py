@@ -80,7 +80,7 @@ def save_output(model_results: ModelResults,
 
 
 # %%
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
 

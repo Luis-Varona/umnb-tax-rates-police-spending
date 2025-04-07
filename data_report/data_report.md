@@ -5,7 +5,7 @@ author:
   - "Otoha Hanatani[^3]"
 date: April 8, 2025
 output: github_document
-bibliography: config_files/references.bib
+bibliography: references.bib
 ---
 # Introduction
 
@@ -425,21 +425,19 @@ Elaborate further on this before providing visualization]
 
 ## Visualization
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=6in]{../data_visualization/fe_2sls.png}
-  \\[-0.5cm]
-  \caption{TODO}
-\end{figure}
+*[Figure 1 will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\input{figure1.tex}
+``` -->
 
 [TODO: Add explanation of the above figure]
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=6in]{../data_visualization/elasticity.png}
-  \\[-0.5cm]
-  \caption{TODO}
-\end{figure}
+*[Figure 2 will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\input{figure2.tex}
+``` -->
 
 [TODO: Add explanation of the above figure]
 
@@ -465,150 +463,39 @@ also available directly in both `.txt` and `.tex` format in the
 
 ## Fixed-Effects (FE)
 
+*[The fixed-effects regression results will appear here in the PDF.]*
+
+<!-- ```{=latex}
 \begingroup
 \footnotesize
-\begin{center}
-\begin{tabular}{lclc}
-\toprule
-\textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.7216      \\
-\textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.1325      \\
-\textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.7216      \\
-\textbf{Date:}                       &  Mon, Apr 07 2025  & \textbf{  R-squared (Overall):}  &      0.1356      \\
-\textbf{Time:}                       &      16:00:34      & \textbf{  Log-likelihood     }   &    1.196e+04     \\
-\textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
-\textbf{}                            &                    & \textbf{  F-statistic:       }   &      738.02      \\
-\textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
-\textbf{Avg Obs:}                    &       17.481       & \textbf{  Distribution:      }   &    F(6,1708)     \\
-\textbf{Min Obs:}                    &       6.0000       & \textbf{                     }   &                  \\
-\textbf{Max Obs:}                    &       18.000       & \textbf{  F-statistic (robust):} &      66.473      \\
-\textbf{}                            &                    & \textbf{  P-value            }   &      0.0000      \\
-\textbf{Time periods:}               &         18         & \textbf{  Distribution:      }   &    F(6,1708)     \\
-\textbf{Avg Obs:}                    &       101.00       & \textbf{                     }   &                  \\
-\textbf{Min Obs:}                    &       95.000       & \textbf{                     }   &                  \\
-\textbf{Max Obs:}                    &       103.00       & \textbf{                     }   &                  \\
-\textbf{}                            &                    & \textbf{                     }   &                  \\
-\bottomrule
-\end{tabular}
-\begin{tabular}{lcccccc}
-                                     & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
-\midrule
-\textbf{PolExpCapita}                &       1.3092       &       0.0990       &      13.222     &      0.0000      &       1.1150      &       1.5034       \\
-\textbf{OtherExpCapita}              &       0.9665       &       0.0914       &      10.575     &      0.0000      &       0.7872      &       1.1458       \\
-\textbf{OtherRevCapita}              &      -0.8964       &       0.0991       &     -9.0486     &      0.0000      &      -1.0907      &      -0.7021       \\
-\textbf{TaxBaseCapita}               &      -0.0122       &       0.0012       &     -10.440     &      0.0000      &      -0.0145      &      -0.0099       \\
-\textbf{PolExpCapita:Provider\_MPSA} &      -0.5551       &       0.1951       &     -2.8459     &      0.0045      &      -0.9377      &      -0.1725       \\
-\textbf{PolExpCapita:Provider\_Muni} &      -0.6083       &       0.1377       &     -4.4162     &      0.0000      &      -0.8784      &      -0.3381       \\
-\bottomrule
-\end{tabular}
-%\caption{PanelOLS Estimation Summary}
-\end{center}
+\input{../data_analysis/fe/summary.tex}
 \endgroup
-
-```latex
-F-test for Poolability: 51.098
-P-value: 0.0000
-Distribution: F(103,1708)
-
-Included effects: Entity
-```
+``` -->
 
 ## Fixed-Effects Two-Stage Least Squares (FE-2SLS)
 
 ### Stage 1
 
-\begingroup
-\small
-\begin{center}
-\begin{tabular}{lclc}
-\toprule
-\textbf{Dep. Variable:}    &  TaxBaseCapita   & \textbf{  R-squared:         } &     0.011   \\
-\textbf{Model:}            &       OLS        & \textbf{  Adj. R-squared:    } &     0.011   \\
-\textbf{Method:}           &  Least Squares   & \textbf{  F-statistic:       } &     20.99   \\
-\textbf{Date:}             & Mon, 07 Apr 2025 & \textbf{  Prob (F-statistic):} &  4.93e-06   \\
-\textbf{Time:}             &     16:00:35     & \textbf{  Log-Likelihood:    } &   -363.29   \\
-\textbf{No. Observations:} &        1818      & \textbf{  AIC:               } &     730.6   \\
-\textbf{Df Residuals:}     &        1816      & \textbf{  BIC:               } &     741.6   \\
-\textbf{Df Model:}         &           1      & \textbf{                     } &             \\
-\textbf{Covariance Type:}  &    nonrobust     & \textbf{                     } &             \\
-\bottomrule
-\end{tabular}
-\begin{tabular}{lcccccc}
-                     & \textbf{coef} & \textbf{std err} & \textbf{t} & \textbf{P$> |$t$|$} & \textbf{[0.025} & \textbf{0.975]}  \\
-\midrule
-\textbf{Intercept}   &       0.6668  &        0.020     &    33.737  &         0.000        &        0.628    &        0.706     \\
-\textbf{MedHouseInc} &     -11.2497  &        2.455     &    -4.582  &         0.000        &      -16.066    &       -6.434     \\
-\bottomrule
-\end{tabular}
-\begin{tabular}{lclc}
-\textbf{Omnibus:}       & 920.376 & \textbf{  Durbin-Watson:     } &    1.434  \\
-\textbf{Prob(Omnibus):} &   0.000 & \textbf{  Jarque-Bera (JB):  } & 8236.943  \\
-\textbf{Skew:}          &   2.196 & \textbf{  Prob(JB):          } &     0.00  \\
-\textbf{Kurtosis:}      &  12.458 & \textbf{  Cond. No.          } &     354.  \\
-\bottomrule
-\end{tabular}
-%\caption{OLS Regression Results}
-\end{center}
-\endgroup
+*[The stage 1 FE-2SLS regression results will appear here in the PDF.]*
 
+<!-- ```{=latex}
 \begingroup
 \small
-```latex
-Notes:
- [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-```
+\input{../data_analysis/fe_2sls/stage1_summary.tex}
 \endgroup
+``` -->
 
 ### Stage 2
 
+*[The stage 2 FE-2SLS regression results will appear here in the PDF.]*
+
+<!-- ```{=latex}
 \begingroup
 \footnotesize
-\begin{center}
-\begin{tabular}{lclc}
-\toprule
-\textbf{Dep. Variable:}              &     AvgTaxRate     & \textbf{  R-squared:         }   &      0.4290      \\
-\textbf{Estimator:}                  &      PanelOLS      & \textbf{  R-squared (Between):}  &      0.9794      \\
-\textbf{No. Observations:}           &        1818        & \textbf{  R-squared (Within):}   &      0.4290      \\
-\textbf{Date:}                       &  Mon, Apr 07 2025  & \textbf{  R-squared (Overall):}  &      0.9783      \\
-\textbf{Time:}                       &      16:00:34      & \textbf{  Log-likelihood     }   &    1.131e+04     \\
-\textbf{Cov. Estimator:}             &     Clustered      & \textbf{                     }   &                  \\
-\textbf{}                            &                    & \textbf{  F-statistic:       }   &      213.84      \\
-\textbf{Entities:}                   &        104         & \textbf{  P-value            }   &      0.0000      \\
-\textbf{Avg Obs:}                    &       17.481       & \textbf{  Distribution:      }   &    F(6,1708)     \\
-\textbf{Min Obs:}                    &       6.0000       & \textbf{                     }   &                  \\
-\textbf{Max Obs:}                    &       18.000       & \textbf{  F-statistic (robust):} &      27.629      \\
-\textbf{}                            &                    & \textbf{  P-value            }   &      0.0000      \\
-\textbf{Time periods:}               &         18         & \textbf{  Distribution:      }   &    F(6,1708)     \\
-\textbf{Avg Obs:}                    &       101.00       & \textbf{                     }   &                  \\
-\textbf{Min Obs:}                    &       95.000       & \textbf{                     }   &                  \\
-\textbf{Max Obs:}                    &       103.00       & \textbf{                     }   &                  \\
-\textbf{}                            &                    & \textbf{                     }   &                  \\
-\bottomrule
-\end{tabular}
-\begin{tabular}{lcccccc}
-                                     & \textbf{Parameter} & \textbf{Std. Err.} & \textbf{T-stat} & \textbf{P-value} & \textbf{Lower CI} & \textbf{Upper CI}  \\
-\midrule
-\textbf{PolExpCapita}                &       0.5188       &       0.1371       &      3.7845     &      0.0002      &       0.2499      &       0.7877       \\
-\textbf{OtherExpCapita}              &       0.0301       &       0.0255       &      1.1801     &      0.2381      &      -0.0199      &       0.0802       \\
-\textbf{OtherRevCapita}              &       0.1025       &       0.0644       &      1.5912     &      0.1117      &      -0.0238      &       0.2288       \\
-\textbf{TaxBaseCapita}               &       0.0225       &       0.0068       &      3.2987     &      0.0010      &       0.0091      &       0.0359       \\
-\textbf{PolExpCapita:Provider\_MPSA} &       0.0955       &       0.1941       &      0.4923     &      0.6226      &      -0.2851      &       0.4762       \\
-\textbf{PolExpCapita:Provider\_Muni} &      -0.2542       &       0.1821       &     -1.3962     &      0.1628      &      -0.6113      &       0.1029       \\
-\bottomrule
-\end{tabular}
-%\caption{PanelOLS Estimation Summary}
-\end{center}
+\input{../data_analysis/fe_2sls/stage2_summary.tex}
 \endgroup
+``` -->
 
-```latex
-F-test for Poolability: 115.50
-P-value: 0.0000
-Distribution: F(103,1708)
-
-Included effects: Entity
-```
-
-[^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
-[^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7
-[^3]: Department of Economics, Mount Allison University, Sackville, NB E4L  1A7
-
-# References
+[^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1E6
+[^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1A7
+[^3]: Department of Economics, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1A7

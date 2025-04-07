@@ -5,7 +5,7 @@ author:
   - "Otoha Hanatani[^3]"
 date: March 4, 2025
 output: github_document
-bibliography: config_files/references.bib
+bibliography: references.bib
 ---
 This report provides a summary of the Government of New Brunswick [GNB] panel
 data used in our correlated random-effects [CRE] regression analysis of
@@ -195,8 +195,6 @@ ATR_{it} ={} & \beta_1'''PSC_{it} + \beta_2'''TBC_{it} +{} \\
 & \beta_5'''POP_{it} + \beta_6'''MPSA_i + \beta_7'''MUNI_i + \alpha_i''' + u_{it}'''.
 \end{aligned}$$
 
-[^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB E4L  1E6
-[^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB E4L  1A7
-[^3]: Department of Economics, Mount Allison University, Sackville, NB E4L  1A7
-
-## References
+[^1]: Department of Mathematics & Computer Science, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1E6
+[^2]: Department of Politics & International Relations, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1A7
+[^3]: Department of Economics, Mount Allison University, Sackville, NB&nbsp;&nbsp;E4L 1A7
