@@ -11,7 +11,9 @@ linkcolor: blue
 urlcolor: blue
 citecolor: blue
 header-includes: |
-  \usepackage{graphicx}
+  \usepackage{amsmath,amsxtra,amssymb,amsthm,amsfonts}
+  \usepackage{color,graphicx}
+  \usepackage{mathtools}
   \usepackage{float}
   \usepackage{booktabs}
   \usepackage[linktocpage=true,colorlinks=true,linkcolor=blue,citecolor=blue,pagebackref]{hyperref}

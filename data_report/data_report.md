@@ -266,13 +266,20 @@ to determine which variables are relevant and to demonstrate the need for an
 instrumental variable. All helper scripts are called and run by the main
 executable of the associated directory, [`main.py`](../data_analysis/main.py).
 
-Our final choice of FE in conjunction with 2SLS arose from [TODO: Elaborate,
-particularly on why *TaxBaseCapita* causes simultaneity bias]
+Our decision to integrate a panel data model with 2SLS, clearly, arose from the
+factors described above in our **Literature Review**, as the inclusion of
+*TaxBaseCapita* in the model creates simultaneity bias if unaddressed. Our
+ultimate choice of FE over CRE for the base panel OLS was motivated by [TODO:
+Elaborate]
 
 It is worth noting that we chose not to use non-linear functional
 forms&#x2014;with the most obvious candidate for a study in this particular
-real-world context being log transformation&#x2014;as we found that the
-[TODO: Elaborate on relative lack of skewedness in the data]
+real-world context being log transformation&#x2014;as summary statistics
+indicate that both the *AvgTaxRate* data and explanatory variables are fairly
+normally distributed and do not exhibit significant skewness. (Although many
+economic parameters such as income and GDP indeed exhibit right-skewed
+distributions&#x2014;hence the popularity of the log transformation&#x2014;we
+found that our particular variables of interest do not.)
 
 Finally, we also estimate tax base elasticity by [TODO: Elaborate]
 
@@ -321,9 +328,9 @@ $$\begin{aligned}
 & \beta_6\ddot{PolExpCapita}_{it} * Provider\_Muni_{it} + \ddot{u}_{it},
 \end{aligned}$$
 
-where we use the notation $\ddot{X}_{it} = X_{it} - \bar{X}_i$ to denote the
-difference between the value of $X$ for municipality $i$ in year $t$ and the
-mean value of $X$ for municipality $i$ over all years. (Note that
+where we use the notation $\ddot{X}_{it} \coloneqq X_{it} - \bar{X}_i$ to
+denote the difference between the value of $X$ for municipality $i$ in year $t$
+and the mean value of $X$ for municipality $i$ over all years. (Note that
 $\ddot{\hat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
 itself but rather the demeaned prediction from our first-stage regression.)
 
@@ -335,9 +342,45 @@ Elaborate]
 Given these results, we now approximate tax base elasticity with respect to tax
 rates by multiplying our obtained coefficient on **PolExpCapita**&#x2014;one of
 the most exogenous expenditure categories, as previously discussed&#x2014;by
-*TaxBaseCapita*. [TODO: Elaborate]
+*TaxBaseCapita*. First, we set up the following notation:
 
-[TODO: Show the calculus for this, i.e., the $\frac{1}{1 + \eta}$ formula]
+- $E$ &nbsp;for government expenditure,
+- $A$ &nbsp;for tax base assessed for rate,
+- $t$&nbsp;&nbsp;&nbsp;&nbsp;for tax rate,
+- $\beta \coloneqq \frac{\mathrm{d}t}{\mathrm{d}E}$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for the effect of expenditure on tax rate, and
+- $\eta \coloneqq \frac{t}{A}\frac{\mathrm{d}A}{\mathrm{d}t}$&nbsp;&nbsp;for tax base elasticity w.r.t. tax rate.
+
+Given small deficits/surpluses, expenditure is approximately $E \approx tA$;
+hence, assuming exogeneity of the expenditure variable so that $\beta$ is
+(relatively) free of simultaneity bias, we obtain the following:
+
+$$\begin{aligned}
+\frac{\mathrm{d}E}{\mathrm{d}t} & \approx A + t\frac{\mathrm{d}A}{\mathrm{d}t} = A + A\eta = A(1 + \eta) \\
+\mathrel{\therefore} 1 + \eta & \approx \frac{1}{A}\frac{\mathrm{d}E}{\mathrm{d}t} \\
+\mathrel{\therefore} \frac{1}{1 + \eta} & \approx A\frac{\mathrm{d}t}{\mathrm{d}E} = A\beta \\
+\mathrel{\therefore} \eta & \approx \frac{1}{A\beta} - 1
+\end{aligned}$$
+
+Clearly, the assumption of exogenous expenditure is vital to this calculus;
+many types of expenditure are endogenously influenced by taxation, so the
+(relative) exogeneity of police expenditure via the PPSA is a key factor in our
+approximation. Using $\hat{\beta}$ to represent the coefficient on
+*PolExpCapita* in our FE-2SLS regression model and $TBC$ as shorthand for
+*TaxBaseCapita*, it therefore follows that for the $i^{th}$ municipality,
+
+$$\begin{aligned}
+A_i\beta \approx \overline{TBC}_{i} \cdot \hat{\beta},
+\end{aligned}$$
+
+since the per-capita transformations on tax base (averaged over time) and
+police spending cancel out. Hence, we obtain the tax base elasticity estimate
+
+$$\begin{aligned}
+\hat{\eta}_i \coloneqq \frac{1}{\overline{TBC}_{i} \cdot \hat{\beta}} - 1,
+\end{aligned}$$
+
+where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$
+over the period 2000&#x2013;2018. [TODO: Add time effects here?]
 
 # Results
 
