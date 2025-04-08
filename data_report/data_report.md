@@ -9,20 +9,20 @@ bibliography: references.bib
 ---
 # Introduction
 
-In collaboration with the Union of Municipalities of New Brunswick and Dr.
-Craig Brett of Mount Allison University, we conduct a fixed-effects two-stage
-least squares (or FE-2SLS) regression analysis of average tax rates on police
-spending in New Brunswick municipalities, using median household income as an
-instrumental variable to reduce simultaneity bias. We herein investigate
-whether police spending is a significant predictor of municipal tax rates and,
-if so, whether the specific policing provider plays into this correlation.
-Moreover, we leverage the fact that police expenditure (as per the Provincial
-Police Service Agreement with the Royal Canadian Mounted Police) is largely an
-exogenous variable outside of municipal control to use this to approximate tax
-base elasticity with respect to tax rates. In addition, we consider the
-relationship between population and this estimated elasticity, observing that
-smaller municipalities tend to exhibit higher tax base elasticity than larger
-ones due to a variety of mobility factors.
+In collaboration with the Union of Municipalities of New Brunswick and Dr. Craig
+Brett of Mount Allison University, we conduct a fixed-effects two-stage least
+squares (or FE-2SLS) regression analysis of average tax rates on police spending
+in New Brunswick municipalities, using median household income as an
+instrumental variable to reduce simultaneity bias. We herein investigate whether
+police spending is a significant predictor of municipal tax rates and, if so,
+how specific policing providers play into this correlation. Moreover, we
+leverage the fact that police expenditure (as per the Provincial Police Service
+Agreement with the Royal Canadian Mounted Police) is largely an exogenous bill
+outside of municipal control to use this to approximate tax base elasticity with
+respect to tax rates. In addition, we consider the relationship between
+population and this estimated elasticity, observing that smaller municipalities
+tend to exhibit higher tax base elasticity than larger ones due to a variety of
+mobility factors.
 
 (Note that this report is intended to be taken together with our
 [GitHub project repository](https://github.com/Luis-Varona/umnb-tax-rates-police-spending),
@@ -36,38 +36,43 @@ Price per unit of public goods&#x2014;particularly police spending, in the
 context of this study&#x2014;varies widely across municipalities in New
 Brunswick. We herein aim to regress regression municipal tax rates on the costs
 of several different public goods. We place particular emphasis on the
-significant variation in per capita cost of municipal bills under the
-Provincial Police Service Agreement (PPSA)&#x2014;a contract between the
-Government of New Brunswick (GNB) and the Royal Canadian Mounted Police (RCMP)
-to provide smaller municipalities with policing services. As the RCMP provides
-the province with a single combined bill, the GNB charges different
-municipalities based on population, safety levels, and other factors, with this
-formula acting as an exogenous factor in the cost of policing services.
+significant variation in per capita cost of municipal bills under the Provincial
+Police Service Agreement (PPSA)&#x2014;a contract between the Government of New
+Brunswick (GNB) and the Royal Canadian Mounted Police (RCMP) to provide smaller
+municipalities with policing services. As the RCMP provides the province with a
+single combined bill, the GNB charges different municipalities based on
+population, safety levels, and other factors, with this formula acting as an
+exogenous factor in the cost of policing services.
 
 On the other hand, it is common for larger municipalities have their own direct
 contracts with the RCMP, further obscuring the relationship between municipal
 spending patterns and taxation. For instance, the Codiac Regional Policing
 Authority serves the municipalities of Dieppe, Moncton, and Riverview, none of
-which pay additional fees to the GNB under the PPSA. Others still maintain
-their own independent police forces like the Bathurst Police Force (although
-there remains an RCMP presence in Bathurst). (As shall be revealed in our
-section on Methodology, Amy Anderson of the Union of Municipalities of New
-Brunswick has provided us with data on municipal policing providers as of 2024
-and a way to map this backwards to jurisdictions from previous years.)
+which pay additional fees to the GNB under the PPSA. Others still maintain their
+own independent police forces like the Bathurst Police Force (although there
+still remains an RCMP presence in Bathurst).
+
+The Union of Municipalities of New Brunswick has provided us with data on
+municipal policing providers as of 2024 to aid in our analysis. Confounding
+this, however, is the 2023 New Brunswick local governance reform, which [TODO:
+Elaborate on issue, including pre-2023 municipal remapping] Regardless, we have
+found a reliable way to map the 2024 data backwards to past municipal
+jurisdictions (this is further described in the **Methodology** section),
+allowing us to integrate time-invariant provider indicators into our model.
 
 [TODO: Explain why this setup is of interest not only insofar as showing how,
 and why, different level of exogeneity affect tax rates in different ways, but
-also in terms of ... other stuff?]
+also in terms of tax base elasticity]
 
-We use a fixed-effects two-stage least squares (FE-2SLS) regression model to
-investigate the relationships described above. The "fixed-effects" (FE) part of
-this model allows us to control for time-invariant biases, controlling for
-unobserved heterogeneity across municipalities. However, this fails to address
-the problem of simultaneity bias arising from the bidirectional relationship
-between average tax rate (our response variable) and tax base per capita (one
-of our explanatory variables).
+With this out of the way, we therefore use a fixed-effects two-stage least
+squares (FE-2SLS) regression model to investigate the relationships described
+above. The *fixed-effects* (FE) part of this model allows us to control for
+time-invariant biases, controlling for unobserved heterogeneity across
+municipalities. However, this fails to address the problem of simultaneity bias
+arising from the bidirectional relationship between average tax rate (our
+response variable) and tax base per capita (one of our explanatory variables).
 
-Hence, the "two-stage least squares" (2SLS) part of our model utilizes the fact
+Hence, the *two-stage least squares* (2SLS) part of our model utilizes the fact
 that median household income (our instrumental variable) is correlated with tax
 base per capita but not with average tax rate. Regressing tax base on median
 income and using our predicted values in the second-stage fixed-effects
@@ -78,32 +83,26 @@ thoroughly in the **Methodology** section.
 
 # Literature Review
 
-[TODO: Elaborate on this now that we have a first draft, especially with
-regards to what methodology we took away]
+First off, @CP03 investigate the "determinants of municipal tax rates in British
+Columbia," considering population, distance from major metropolitan centers
+(namely Vancouver), income, and several other factors as determinants of tax
+rates. They do not particularly emphasize spending patterns as a potential
+factor in municipal taxation, but the methodology presented in their paper
+provide a useful framework on which to build for our project.
 
-We review two relevant articles on municipal taxation and
-spending [@CP03; @Gad17]. @CP03 investigate the "determinants of municipal tax
-rates in British Columbia," considering population, distance from major
-metropolitan centers (namely Vancouver), income, and several other factors as
-determinants of tax rates. They do not particularly emphasize spending patterns
-as a potential factor in municipal taxation, but the methodology presented in
-their paper will provide a useful framework on which to build for our project.
+In a similar vein, @CT08 [TODO: Add, then tie into our actual methodology.
+Mention personal conversations with Dr. Brett as well]
 
-@Gad17 provides a study in how extra tax revenue truly affects the
-quantity and quality of public services. Again, we are going the
-"other way" in that we are examining how public spnding costs affect taxation,
-but several of the case studies here are of interest. The relevant study also
-investigates municipalities specifically, so the methodology laid out
-(especially in Section B: Local Public Revenues) proves useful.
+We find also from @SSG12 that when tax rates change, individuals and businesses
+often relocate [p. 29] when possible, in turn affecting the tax base. This
+highlights the fact that the higher mobility associated with smaller localities
+allows for greater elasticity of the tax base with respect to tax rates. Indeed,
+this is a well-known phenomenon in the literature, proving key to our project's
+hypothesis that smaller municipalities may show higher elasticity, preventing
+local governments from raising tax rates to cover ever-growing PPSA bills
+without the erosion of their tax base.
 
-[TODO: Add lit. review for stuff like our elasticity estimates, median income
-as an instrument for tax base/capita, etc. specifically]
-
-[TODO: Moreover, and this is important&#x2014;add literature review on whether
-or not police expenditure is typically this exogenous (it should not be), and
-discuss further how the PPSA affects it. Maybe for the previous section too?]
-
-[TODO: Add @CT08; @Dah24]
+@Dah24 further validates this hypothesis, finding that [TODO: Elaborate]
 
 Finally, a review of previous studies of tax rate both as a response variable
 [@Bue03, p. 116] and as an explanatory one [@Fer19, p. 8] reveals that the
@@ -121,35 +120,33 @@ of our FE-2SLS model described in the **Methodology** section below.
 # Methodology
 
 We now delineate our data collection process, data organization methods, and
-econometric models. We use Python (namely the polars and
+statistical models. We use Python (namely the polars and
 linearmodels/statsmodels ecosystems) to parse and clean data from Statistics
-Canada and the Government of New Brunswick. Subsequently, we run several
-fixed-effects and correlated random-effects regression models on the resulting
-data in combination with median household income as an instrumental variable to
-account for simultaneity bias.
+Canada and the GNB. Subsequently, we run several fixed-effects and correlated
+random-effects regressions on the resulting data in combination with median
+household income as an instrumental variable to account for simultaneity bias.
 
 ## Data Collection and Sources
 
-We use an unbalanced panel of annual data from 2000&#x2013;2018 on New
-Brunswick municipalities, received via personal correspondence with the GNB
-and Dr. Craig Brett of Mount Allison University; however, this data is also
-publicly available at [@GNB00to18], albeit in a less structured format.
-(The year 2005 is excluded due to missing/improperly formatted tokens, but we
-may coordinate further with the GNB to obtain this data in the future.) Each
-set of annual data contains 95 to 103 municipalities, with a total of 104
-unique municipalities across all years.
+We use an unbalanced panel of annual data from 2000&#x2013;2018 on New Brunswick
+municipalities, received via personal correspondence with the GNB and Dr. Craig
+Brett of Mount Allison University; however, this data is also publicly available
+at [@GNB00to18], albeit in a less structured format. (The year 2005 is excluded
+due to missing/improperly formatted tokens, but we may coordinate further with
+the GNB to obtain this data in the future.) Each set of annual data contains 95
+to 103 municipalities, with a total of 104 unique municipalities over all years.
 
 This is supplemented by 2024 data on municipal policing provider agreements
 [@And25]. We map this data backwards to municipal jurisdictions and boundaries
-from previous years and integrate indicators into interaction terms in our
-panel as described below.
+from previous years and integrate indicators into interaction terms in our panel
+as described below.
 
 Finally, the instrumental variable in the first stage of our 2SLS regression is
-median household income, given in census data from Statistics Canada. Data is
-only available from 2000 [@SC01], 2005 [@SC06], 2015 [@SC16], and 2020 [@SC21];
-hence, linear interpolation is applied for the intervening years. The resulting
-income data (typically correlated with tax base per capita but not with tax
-rate) is then used to reduce simultaneity bias in our fixed-effects model.
+median household income, given in census data from Statistics Canada (StatsCan).
+Data is only available from 2000 [@SC01], 2005 [@SC06], 2015 [@SC16], and 2020
+[@SC21]; hence, linear interpolation is applied for the intervening years. The
+resulting income data (typically correlated with tax base but not with tax rate)
+is then used to reduce simultaneity bias in our fixed-effects model.
 
 ## Data Cleaning and Organization
 
@@ -159,9 +156,9 @@ Primary data is cleaned in the [`data_pipeline/`](../data_pipeline/) directory.
 The original Excel files extracted from `.zip` archives provided by the GNB and
 the UMNB are contained in the [`data_raw/`](../data_pipeline/data_raw/)
 subdirectory. These contain annual data from 2000&#x2013;2022 on New Brunswick
-municipalities, as well as 2024 data on municipal policing providers. Given
-that some of these files are `.xls` and `.xlw` workbooks, we copy and convert
-them all to `.xlsx` format in the [`data_xlsx/`](../data_pipeline/data_xlsx/)
+municipalities, as well as 2024 data on municipal policing providers. Given that
+some of these files are `.xls` and `.xlw` workbooks, we copy and convert them
+all to `.xlsx` format in the [`data_xlsx/`](../data_pipeline/data_xlsx/)
 subdirectory. The
 [`helper_scripts/_1_raw_to_xlsx_.py`](../data_pipeline/helper_scripts/_1_raw_to_xlsx_.py)
 script is used for this purpose.
@@ -182,9 +179,9 @@ budget revenues, comparative demographics, and tax bases), the
 script then writes all four resulting worksheets&#x2014;plus a fifth for
 provider data&#x2014;to a single
 [`data_final/data_master.xlsx`](../data_pipeline/data_final/data_master.xlsx)
-workbook. (The new municipal naming convention is also used to map provider
-data on newer, reformed 2024 municipalities and districts to past jurisdictions
-all the way back to 2000.)
+workbook. (The new municipal naming convention is also used to map provider data
+on newer, reformed 2024 municipalities and districts to past jurisdictions all
+the way back to 2000.)
 
 All scripts are called and run by the main executable of the associated
 directory, [`main.py`](../data_pipeline/main.py).
@@ -193,23 +190,22 @@ directory, [`main.py`](../data_pipeline/main.py).
 
 Data on the instrumental income data is stored and processed in the
 [`data_iv/`](../data_iv/) directory. There is one folder each for 2001, 2006,
-2016, and 2021 (the years in which the census data were released) containing
-the original files downloaded from the Statistics Canada website. For 2016 and
-2021, the downloads are straightforward, nicely formatted `.csv` files
-requiring no further processing. For 2001 and 2006, however, full data is only
-available in `.ivt` and `.xml` format; no schemas are available to parse the
-XML data, so we use the Government of Canada's Beyond 20/20 Browser to extract
-and download the data in `.csv` format. (Unfortunately, this process is not
-easily documentable, as the browser requires manual processing.)
+2016, and 2021 (the years in which the census data were released) containing the
+original files downloaded from the StatsCan website. For 2016 and 2021, the
+downloads are straightforward, nicely formatted `.csv` files requiring no
+further processing. For 2001 and 2006, however, full data is only available in
+`.ivt` and `.xml` format; no schemas are available to parse the XML data, so we
+use the Government of Canada's Beyond 20/20 Browser to extract and download the
+data in `.csv` format. (Unfortunately, this process is not easily documentable,
+as the browser requires manual processing.)
 
-With CSV files for all four years, the
-[`main.py`](../data_iv/main.py) executable script is finally used to clean and
-combine the relevant columns and rows into a single polars DataFrame. This is
-then saved as an `.xlsx` file in the [`results/`](../data_iv/results/)
-subdirectory for immediate usage in the data analysis stage. (The
-aforementioned data interpolation&#x2014;performed using Python's numpy
-library&#x2014;is not applied until this stage and is thus not considered part
-of the data cleaning and organization pipeline.)
+With CSV files for all four years, the [`main.py`](../data_iv/main.py)
+executable script is finally used to clean and combine the relevant columns and
+rows into a single polars DataFrame. This is then saved as an `.xlsx` file in
+the [`results/`](../data_iv/results/) subdirectory for immediate usage in the
+data analysis stage. (The aforementioned data interpolation&#x2014;performed
+using Python's numpy library&#x2014;is not applied until this stage and is thus
+not considered part of the data cleaning and organization pipeline.)
 
 It is worth noting that although household income data from Canada censuses is
 publicly accessible for municipal-level geographic localities in 2000, 2005,
@@ -218,8 +214,8 @@ publicly accessible for municipal-level geographic localities in 2000, 2005,
 disaggregated data at lower levels of geography, so we are unable to map it to
 most of the 104 municipalities in our dataset. Hence, linear interpolation is
 used to estimate the missing data for 2010, just as for all the other missing
-years. In the future, we may collaborate further with Statistics Canada to
-obtain the geographically disaggregated data, if it remains in their records.
+years. In the future, we may collaborate further with StatsCan to obtain the
+geographically disaggregated data, if it remains in their records.
 
 ## Data Analysis and Modelling
 
@@ -242,20 +238,20 @@ interpretable, but when visualizing our results in the form of plots, we switch
 back to % for *AvgTaxRate* and CAD / person for the remaining expenditure and
 revenue variables.)
 
-Our response variable is *AvgTaxRate*, which is calculated as a weighted
-average of the residential and non-residential tax rates in a municipal
-jurisdiction. (That is&#x2014;as per government formulae, non-residential rates
-are multiplied by a factor of $1.5$ before being integrated into the calculated
-average. Said averages are already available in the raw data [@GNB00to18], not
-calculated by us; we take note of the process simply to clarify the layout of
-our data.) Our exogenous explanatory variables are *PolExpCapita*,
-*OtherExpCapita*, *OtherRevCapita*, *PolExpCapita*&#x2217;*Provider_MPSA*, and
+Our response variable is *AvgTaxRate*, which is calculated as a weighted average
+of the residential and non-residential tax rates in a municipal jurisdiction.
+(That is&#x2014;as per government formulae, non-residential rates are multiplied
+by a factor of $1.5$ before being integrated into the calculated average. Said
+averages are already available in the raw data [@GNB00to18], not calculated by
+us; we take note of the process simply to clarify the layout of our data.) Our
+exogenous explanatory variables are *PolExpCapita*, *OtherExpCapita*,
+*OtherRevCapita*, *PolExpCapita*&#x2217;*Provider_MPSA*, and
 *PolExpCapita*&#x2217;*Provider_Muni*. Our sole endogenous explanatory variable
 is *TaxBaseCapita*, for which we control simultaneity bias using *MedHouseInc*
 as an instrumental variable.
 
-Each of these variables is used throughout our FE-2SLS
-regression model, carried out by the
+Each of these variables is used throughout our FE-2SLS regression model, carried
+out by the
 [`helper_scripts/allow_concurrent/_fe_2sls_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_2sls_.py)
 script. We have also included "vanilla" correlated random-effects (CRE) and
 fixed-effects (FE) models, run by
@@ -279,9 +275,14 @@ indicate that both the *AvgTaxRate* data and explanatory variables are fairly
 normally distributed and do not exhibit significant skewness. (Although many
 economic parameters such as income and GDP indeed exhibit right-skewed
 distributions&#x2014;hence the popularity of the log transformation&#x2014;we
-found that our particular variables of interest do not.)
+find that our particular variables of interest do not.)
 
-Finally, we also estimate tax base elasticity by [TODO: Elaborate]
+Finally, we also approximate tax base elasticity by multiplying the coefficient
+on *PolExpCapita* by the average *TaxBaseCapita* for each municipality,
+subsequently performing some basic algebraic manipulations. This allows us to
+obtain a rough estimate of how sensitive taxable income and property in a
+municipality is to tax hikes given increases in PPSA bils, providing key insight
+into potential policy changes to the current New Brunswick policing system.
 
 We now turn to describing our instrument-free CRE and FE analyses, then proceed
 to more thoroughly delineate our final FE-2SLS regression model.
@@ -292,7 +293,7 @@ to more thoroughly delineate our final FE-2SLS regression model.
 
 ### Fixed-Effects (FE)
 
-After deeming the potential benefits of including the policing provider
+After deeming the potential benefits of including the policing provider on
 indicators directly (not in interaction terms) insufficient to warrant [TODO:
 Elaborate]
 
@@ -303,8 +304,8 @@ Finally, we decided on [TODO: Elaborate]
 #### Stage 1
 
 We begin by estimating *MedHouseInc* data for the years missing from the
-Statistics Canada census data, which we do using simple linear interpolation.
-(As this project continues to develop, we may investigate more sophisticated
+StatsCan census data, which we do using simple linear interpolation. (As this
+project continues to develop, we may investigate more sophisticated
 approximation approaches, but this shall do for now.) After this is done, we
 perform an ordinary least squares regression of *TaxBaseCapita* on
 *MedHouseInc* to obtain
@@ -328,14 +329,14 @@ $$\begin{aligned}
 & + \beta_6\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it} + \ddot{u}_{it},
 \end{aligned}$$
 
-where we use the notation $\ddot{X}_{it} \coloneqq X_{it} - \bar{X}_i$ to
-denote the difference between the value of $X$ for municipality $i$ in year $t$
-and the mean value of $X$ for municipality $i$ over all years. (Note that
-$\ddot{\widehat{TaxBaseCapita}}_{it}$ is not the demeaning of $TaxBaseCapita_{it}$
-itself but rather the demeaned prediction from our first-stage regression.)
-
-Our covariance estimator in this model is clustered by municipality, as [TODO:
-Elaborate]
+where we use the notation $\ddot{X}_{it} \coloneqq X_{it} - \bar{X}_i$ to denote
+the difference between the value of $X$ for municipality $i$ in year $t$ and the
+mean value of $X$ for municipality $i$ over all years. (Note that
+$\ddot{\widehat{TaxBaseCapita}}_{it}$ is not the demeaning of
+$TaxBaseCapita_{it}$ itself but rather the demeaned prediction from our
+first-stage regression.) We further opt to cluster our covariance estimator by
+municipality, as this is a common approach in the literature to account for
+unobserved heterogeneity in panel data.
 
 ## Tax Base Elasticity Estimates
 
@@ -361,9 +362,9 @@ $$\begin{aligned}
 \mathrel{\therefore} \eta & \approx \frac{1}{A\beta} - 1
 \end{aligned}$$
 
-Clearly, the assumption of exogenous expenditure is vital to this calculus;
-many types of expenditure are endogenously influenced by taxation, so the
-(relative) exogeneity of police expenditure via the PPSA is a key factor in our
+Clearly, the assumption of exogenous expenditure is vital to this calculus; many
+types of expenditure are endogenously influenced by taxation, so the (relative)
+exogeneity of police expenditure via the PPSA is a key factor in our
 approximation. Using $\hat{\beta}$ to represent the coefficient on
 *PolExpCapita* in our FE-2SLS regression model and $TBC$ as shorthand for
 *TaxBaseCapita*, it therefore follows that for the $i^{th}$ municipality,
@@ -372,15 +373,15 @@ $$\begin{aligned}
 A_i\beta \approx \overline{TBC}_{i} \cdot \hat{\beta},
 \end{aligned}$$
 
-since the per-capita transformations on tax base (averaged over time) and
-police spending cancel out. Hence, we obtain the tax base elasticity estimate
+since the per-capita transformations on tax base (averaged over time) and police
+spending cancel out. Hence, we obtain the tax base elasticity estimate
 
 $$\begin{aligned}
 \hat{\eta}_i \coloneqq \frac{1}{\overline{TBC}_{i} \cdot \hat{\beta}} - 1,
 \end{aligned}$$
 
-where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$
-over the period 2000&#x2013;2018. [TODO: Add time effects here?]
+where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$ over
+the period 2000&#x2013;2018. [TODO: Elaborate on interpretation of this value]
 
 # Results
 
@@ -398,18 +399,18 @@ over the period 2000&#x2013;2018. [TODO: Add time effects here?]
 
 We now turn to consideration of *MedHouseInc* as a potential instrumental
 variable to address endogeneity of *TaxBaseCapita*. As seen in the **Appendix**
-below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc*
-yields the results
+below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc* yields
+the results
 $$\begin{aligned}
 TaxBaseCapita_{it} = \underset{(0.020)}{0.668} - \underset{(2.455)}{11.2497MedHouseInc_{it}} + v_{it}, \quad\quad R^2 = 0.011, \, F_{1,1816} = 20.99,
 \end{aligned}$$
 
-where the $F$-statistic of $20.99$ is far above the threshold of $10$ for
-viable instruments. Therefore, we can safely integrate these results into the
+where the $F$-statistic of $20.99$ is far above the threshold of $10$ for viable
+instruments. Therefore, we can safely integrate these results into the
 second-stage fixed-effects regression, using the (demeaned) fitted values of
 $\widehat{TaxBaseCapita}$ from this stage. (Note that the low $R^2$ of $0.011$
-is irrelevant&#x2014;we are concerned primarily with the correlation between
-the instrumental and endogenous variables, not with goodness-of-fit.)
+is irrelevant&#x2014;we are concerned primarily with the correlation between the
+instrumental and endogenous variables, not with goodness-of-fit.)
 
 Running a fixed-effects regression on the demeaned data and clustering by
 municipality, we obtain the following results (with full computer output once
@@ -421,9 +422,14 @@ $$\begin{aligned}
 \end{aligned}$$
 
 (Note that the $F$-statistic provided here is robust to clustering.) [TODO:
-Elaborate further on this before providing visualization]
+Elaborate]
 
-## Visualization
+In the following section, we proffer a more thorough discussion of our results
+and their real-world implications.
+
+# Discussion
+
+[TODO: Section intro]
 
 *[Figure 1 will appear here in the PDF.]*
 
@@ -441,10 +447,6 @@ Elaborate further on this before providing visualization]
 
 [TODO: Add explanation of the above figure]
 
-# Discussion
-
-[TODO: Elaborate]
-
 # Conclusion
 
 [TODO: Elaborate]
@@ -452,9 +454,9 @@ Elaborate further on this before providing visualization]
 # Appendix
 
 We herein present raw computer output from our regression models. The first two
-sections pertain to our vanilla CRE and FE models without an instrument, and
-the last section presents the results of our final FE-2SLS model. (This data is
-also available directly in both `.txt` and `.tex` format in the
+sections pertain to our vanilla CRE and FE models without an instrument, and the
+last section presents the results of our final FE-2SLS model. (This data is also
+available directly in both `.txt` and `.tex` format in the
 [`data_analysis/`](../data_analysis/) directory of our GitHub repository.)
 
 ## Correlated Random-Effects (CRE)
