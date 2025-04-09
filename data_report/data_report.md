@@ -17,12 +17,12 @@ instrumental variable to reduce simultaneity bias. We herein investigate whether
 police spending is a significant predictor of municipal tax rates and, if so,
 how specific policing providers play into this correlation. Moreover, we
 leverage the fact that police expenditure (as per the Provincial Police Service
-Agreement with the Royal Canadian Mounted Police) is largely an exogenous bill
-outside of municipal control to use this to approximate tax base elasticity with
-respect to tax rates. In addition, we consider the relationship between
-population and this estimated elasticity, observing that smaller municipalities
-tend to exhibit higher tax base elasticity than larger ones due to a variety of
-mobility factors.
+Agreement [PPSA] with the Royal Canadian Mounted Police [RCMP]) is largely an
+exogenous bill outside of municipal control to use this to approximate tax base
+elasticity with respect to tax rates. In addition, we consider the relationship
+between population and this estimated elasticity, observing that smaller
+municipalities tend to exhibit higher tax base elasticity than larger ones due
+to a variety of mobility factors.
 
 (Note that this report is intended to be taken together with our
 [GitHub project repository](https://github.com/Luis-Varona/umnb-tax-rates-police-spending),
@@ -36,13 +36,12 @@ Price per unit of public goods&#x2014;particularly police spending, in the
 context of this study&#x2014;varies widely across municipalities in New
 Brunswick. We herein aim to regress regression municipal tax rates on the costs
 of several different public goods. We place particular emphasis on the
-significant variation in per capita cost of municipal bills under the Provincial
-Police Service Agreement (PPSA)&#x2014;a contract between the Government of New
-Brunswick (GNB) and the Royal Canadian Mounted Police (RCMP) to provide smaller
-municipalities with policing services. As the RCMP provides the province with a
-single combined bill, the GNB charges different municipalities based on
-population, safety levels, and other factors, with this formula acting as an
-exogenous factor in the cost of policing services.
+significant variation in per capita cost of municipal bills under the
+PPSA&#x2014;a contract between the Government of New Brunswick [GNB] and the
+RCMP to provide smaller municipalities with policing services. As the RCMP
+provides the province with a single combined bill, the GNB charges different
+municipalities based on population, safety levels, and other factors, with this
+formula acting as an exogenous factor in the cost of policing services.
 
 On the other hand, it is common for larger municipalities have their own direct
 contracts with the RCMP, further obscuring the relationship between municipal
@@ -50,7 +49,7 @@ spending patterns and taxation. For instance, the Codiac Regional Policing
 Authority serves the municipalities of Dieppe, Moncton, and Riverview, none of
 which pay additional fees to the GNB under the PPSA. Others still maintain their
 own independent police forces like the Bathurst Police Force (although there
-still remains an RCMP presence in Bathurst).
+remains a minor RCMP presence in Bathurst).
 
 The Union of Municipalities of New Brunswick has provided us with data on
 municipal policing providers as of 2024 to aid in our analysis. Confounding
@@ -58,20 +57,26 @@ this, however, is the 2023 New Brunswick local governance reform, which redrew a
 large swath of municipal boundaries, partly driven by the desire to cut down on
 "redundant" local service districts. Not only were several municipalities and
 districts merged together, but in many cases, entirely new municipalities with
-original names were created. To make matters worse, although this was certainly
-the most significant reform in New Brunswick municipal governance in decades, it
-was not the first&#x2014;municipal recombination on a smaller scale transpired
-multiple times over the 2000&#x2013;2018 period as well. Regardless, we have
-found a reliable way to map the 2024 data backwards to past municipal
+original names were created [@GNB24].
+
+To make matters worse, although this was certainly the most significant reform
+in New Brunswick municipal governance in decades, it was not the
+first&#x2014;our panel data reveals municipal recombination on a smaller scale
+transpired multiple times over the 2000&#x2013;2018 period as well. Regardless,
+we have found a reliable way to map the 2024 data backwards to past municipal
 jurisdictions (this is further described in the **Methodology** section),
 allowing us to integrate time-invariant provider indicators into our model. In
 future extensions of this project, we may utilize more recent data to study the
 current policing system situation while collaborating with the UMNB.
 
 Overall, this setup is of interest insofar that it allows us to study the
-effects of [TODO: Explain why this setup is of interest not only insofar as
-showing how, and why, different level of exogeneity affect tax rates in
-different ways, but also in terms of tax base elasticity]
+effects of different expenditure categories with different levels of exogeneity
+on tax rate, as well as approximate tax base elasticity given the exogenous
+nature of police spending under the PPSA. The coefficient on police spending per
+capita shall reveal how much of a burden municipal residents bear as PPSA bills
+increase, while our elasticity estimates may provide insight into the
+revenue-raising capabilities of municipalities and justify policy changes to the
+current policing system in New Brunswick.
 
 As such, we herein construct a fixed-effects two-stage least squares (FE-2SLS)
 regression model of the relationships described above. The *fixed-effects* (FE)
@@ -105,7 +110,9 @@ surprising takeaways was the finding that, in a generalized method of moments
 instrumentation than ours, the coefficient on tax base when predicting tax
 rate was positive [@CT08, pp. 448--49]. This concurs with findings we shall
 present in the **Results** section&#x2014;seemingly a weird counteintuitive
-quirk of the NB economic system in particular.
+quirk of the NB economic system in particular. (Indeed, the methodology used in
+@CT08 is quite similar to our own, with several refinements, and may inspire
+improvements on our statistical models as this project continues to develop.)
 
 We find also from @SSG12 [p. 29] that when tax rates change, individuals and
 businesses often relocate when possible, in turn affecting the tax base. This
@@ -116,7 +123,15 @@ hypothesis that smaller municipalities may show higher elasticity, preventing
 local governments from raising tax rates to cover ever-growing PPSA bills
 without the erosion of their tax base.
 
-@Dah24 further validates this hypothesis, finding that [TODO: Elaborate]
+@Dah24 [p. 1] further supports this hypothesis, finding that&#x2014;particularly
+in recent years&#x2014;climbing tax rates in Newfoundland and Labrador, Ontario,
+and British Columbia have resulted in altered "volume and allocation of land,
+labour, and capital in the economy, reducing our income and consumption
+opportunities." This is a clear indication that tax hikes are not a sustainably
+viable solution to covering rising municipal bills, as they oftentimes lead to
+a significant loss of tax base. Our own findings in the **Results** and
+**Discussion** sections below support the hypothesis that this applies in a New
+runswick context as well, especially when it comes to smaller municipalities.
 
 Finally, a review of previous studies of tax rate both as a response variable
 [@Bue03, p. 116] and as an explanatory one [@Fer19, p. 8] reveals that the
@@ -126,10 +141,10 @@ etc.) are fairly *exogenous* in that they are determined outside of the model,
 tax base per capita is an *endogenous* variable highly bicorrelated with (and
 thus determined by) tax rate, which creates bias in regression estimates.
 Findings from @AC99 [p. 689] indicate that household income is viable as an
-instrument to reduce this bias, being correlated with tax base (as higher
-income implies more taxable property) but not tax rate (since income is not an
-explicit determinan of property tax base). This supports the overall structure
-of our FE-2SLS model described in the **Methodology** section below.
+instrument to reduce this bias, being correlated with tax base (since higher
+income indirectly yields more taxable property) but not tax rate (since income
+is not an *explicit* determinant of property base). This validates the overall
+structure of our FE-2SLS model described in the **Methodology** section below.
 
 # Methodology
 
@@ -156,7 +171,7 @@ from previous years and integrate indicators into interaction terms in our panel
 as described below.
 
 Finally, the instrumental variable in the first stage of our 2SLS regression is
-median household income, given in census data from Statistics Canada (StatsCan).
+median household income, given in census data from Statistics Canada [StatsCan].
 Data is only available from 2000 [@SC01], 2005 [@SC06], 2015 [@SC16], and 2020
 [@SC21]; hence, linear interpolation is applied for the intervening years. The
 resulting income data (typically correlated with tax base but not with tax rate)
@@ -279,10 +294,15 @@ executable of the associated directory, [`main.py`](../data_analysis/main.py).
 Our decision to integrate a panel data model with 2SLS, clearly, arose from the
 factors described above in our **Literature Review**, as the inclusion of
 *TaxBaseCapita* in the model creates simultaneity bias if unaddressed. Our
-ultimate choice of FE over CRE for the base panel OLS was motivated by [TODO:
-Elaborate]
+ultimate choice of FE over CRE for the base panel OLS was motivated by the fact
+that, although statistically significant, the coefficients on the raw provider
+indicator variables were so low that they barely explained any variance in the
+response variable (more on this in the **Results** section). Meanwhile, it is
+clear that *TaxBaseCapita* casues simultaneity bias; the construction of a
+vanilla FE model was never intended as a viable alternative to our main FE-2SLS
+model, but rather to act as a baseline for comparison.
 
-It is worth noting that we chose not to use non-linear functional
+It is also worth noting that we chose not to use non-linear functional
 forms&#x2014;with the most obvious candidate for a study in this particular
 real-world context being log transformation&#x2014;as summary statistics
 indicate that both the *AvgTaxRate* data and explanatory variables are fairly
@@ -303,7 +323,7 @@ to more thoroughly delineate our final FE-2SLS regression model.
 
 ### Correlated Random-Effects (CRE)
 
-[TODO: Elaborate]
+[TODO: Elaborate, also on how we may include instrumentation here in the future]
 
 ### Fixed-Effects (FE)
 
@@ -395,28 +415,46 @@ $$\begin{aligned}
 \end{aligned}$$
 
 where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$ over
-the period 2000&#x2013;2018. [TODO: Elaborate on interpretation of this value]
+the period 2000&#x2013;2018. Once finally calculated, this estimate serves as a
+decent (if rough) approximation of how sensitive the tax base is to changes in
+tax rate, given the exogenous nature of police expenditure in NB municipalities
+covered by the PPSA.
 
 # Results
 
-[TODO: Elaborate]
+We now present the numerical results of our statistical models. A more thorough
+discussion of the real-world implications of these findings is provided in the
+**Discussion** section, and raw computer output is included in the **Appendix**.
 
 ## Correlated Random-Effects (CRE)
 
-[TODO: Discuss CRE results]
+Our CRE model yielded the following results:
+
+[TODO: Elaborate]
 
 ## Fixed-Effects (FE)
 
-[TODO: Discuss vanilla FE results]
+Our instrument-free FE model yielded the following results:
+
+$$\begin{aligned}
+\ddot{AvgTaxRate}_{it} & = \underset{(0.0990)}{1.3092\ddot{PolExpCapita}_{it}} + \underset{(0.0914)}{0.9665\ddot{OtherExpCapita}} - \underset{(0.0991)}{0.8964\ddot{OtherRevCapita}} \\
+& - \underset{(0.0012)}{0.0122\ddot{TaxBaseCapita}_{it}} - \underset{(0.1951)}{0.5551\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
+& - \underset{(0.1377)}{0.6083\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad\quad R^2 = 0.7216, \, F_{6,1708} = 66.473.
+\end{aligned}$$
+
+(Note that the $F$-statistic provided here is robust to clustering.) On their
+own, these numbers are not particularly insightful&#x2014;they simply serve as a
+baseline to which we can compare our FE-2SLS results, investigating how (the
+lack of) instrumentation affects our coefficients.
 
 ## Fixed-Effects Two-Stage Least Squares (FE-2SLS)
 
 We now turn to consideration of *MedHouseInc* as a potential instrumental
 variable to address endogeneity of *TaxBaseCapita*. As seen in the **Appendix**
-below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc* yields
-the results
+below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc*
+yielded the results
 $$\begin{aligned}
-TaxBaseCapita_{it} = \underset{(0.020)}{0.668} - \underset{(2.455)}{11.2497MedHouseInc_{it}} + v_{it}, \quad\quad R^2 = 0.011, \, F_{1,1816} = 20.99,
+TaxBaseCapita_{it} = \underset{(0.020)}{0.668} - \underset{(2.455)}{11.2497MedHouseInc_{it}} + v_{it}, \quad\quad R^2 = 0.011, \, R^2_{adj} = 0.011, \, F_{1,1816} = 20.99,
 \end{aligned}$$
 
 where the $F$-statistic of $20.99$ is far above the threshold of $10$ for viable
@@ -435,11 +473,15 @@ $$\begin{aligned}
 & - \underset{(0.1821)}{0.2542\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad\quad R^2 = 0.4290, \, F_{6,1708} = 27.629.
 \end{aligned}$$
 
-(Note that the $F$-statistic provided here is robust to clustering.) [TODO:
-Elaborate]
+(Again, the $F$-statistic here is robust to clustering.) [TODO: Elaborate on the
+changes in coefficients post-instrumentation, citing again @CT08]
 
 In the following section, we proffer a more thorough discussion of our results
 and their real-world implications.
+
+## Tax Base Elasticity Estimates
+
+[TODO: Elaborate]
 
 # Discussion
 
@@ -452,7 +494,8 @@ and their real-world implications.
     \centering
     \includegraphics[width=6in]{../data_visualization/fe_2sls.png}
     \\[-0.5cm]
-    \caption{TODO}
+    \caption{Lines of best fit from our FE-2SLS regression model, disaggregated
+    by policing provider.}
 \end{figure}
 ``` -->
 
@@ -465,7 +508,8 @@ and their real-world implications.
     \centering
     \includegraphics[width=6in]{../data_visualization/alt_tax_rates.png}
     \\[-0.5cm]
-    \caption{TODO}
+    \caption{Counterfactual predictions of tax rates, holding police spending
+    constant at 2000 levels.}
 \end{figure}
 ``` -->
 
@@ -478,11 +522,13 @@ and their real-world implications.
     \centering
     \includegraphics[width=6in]{../data_visualization/elasticity.png}
     \\[-0.5cm]
-    \caption{TODO}
+    \caption{Tax base elasticity estimates. Smaller municipalities tend to
+    exhibit higher asset mobility.}
 \end{figure}
 ``` -->
 
-[TODO: Add explanation of the above figure]
+[TODO: Add explanation of the above figure. Potentially, also add hue by
+policing provider?]
 
 # Conclusion
 

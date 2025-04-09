@@ -13,10 +13,8 @@ obtained from occassional Statistics Canada census data on median household
 income and interpolated to the years of interest.
 
 The final data used for analysis is in the
-[data_final.xlsx](data_pipeline/data_final/data_final.xlsx)
-workbook, produced by the
-[clean_to_final.py](data_pipeline/clean_to_final.py) script. Further
-details regarding the data pipeline process can be found at
+[data_pipeline/data_final/data_final.xlsx](data_pipeline/data_final/data_final.xlsx)
+workbook. Further details regarding the data pipeline process can be found at
 [data_pipeline/README.md](data_pipeline/README.md), and a data summary can be
 found at [data_summary/data_summary.pdf](data_summary/data_summary.pdf). The
 official data report is at
