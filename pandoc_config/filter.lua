@@ -41,18 +41,18 @@ end
 
 local function start_references(doc)
   local doc_blocks = doc.blocks
-  local references_header = pandoc.Header(1, "References")
 
   for i = #doc_blocks, 1, -1 do
     local block = doc_blocks[i]
 
     if block.t == "Div" and block.attr.classes:includes("references") then
+      local references_header = pandoc.Header(1, "References")
       table.insert(doc_blocks, i, references_header)
       return doc
     end
   end
 
-  io.stderr:write("Error: No 'references' Div found in the document.\n")
+  io.stderr:write("Error: No 'References' section found in the document.\n")
   os.exit(1)
 end
 
@@ -60,12 +60,10 @@ end
 local function move_appendix(doc)
   local doc_blocks = doc.blocks
   local appendix_blocks = {}
+  local indices_remove = {}
   local in_appendix = false
-  local i = 1
 
-  while i <= #doc_blocks do
-    local block = doc_blocks[i]
-
+  for i, block in ipairs(doc_blocks) do
     if block.t == "Header" and block.level == 1 then
       if block.content[1].text == "Appendix" then
         in_appendix = true
@@ -76,14 +74,21 @@ local function move_appendix(doc)
 
     if in_appendix then
       table.insert(appendix_blocks, block)
-      table.remove(doc_blocks, i)
-    else
-      i = i + 1
+      table.insert(indices_remove, i)
     end
   end
 
-  for _, block in ipairs(appendix_blocks) do
-    table.insert(doc_blocks, block)
+  for i = #indices_remove, 1, -1 do
+    table.remove(doc_blocks, indices_remove[i])
+  end
+
+  if #appendix_blocks > 0 then
+    local newpage_break = pandoc.RawBlock("latex", "\\newpage")
+    table.insert(doc_blocks, newpage_break)
+
+    for _, block in ipairs(appendix_blocks) do
+      table.insert(doc_blocks, block)
+    end
   end
 
   return doc

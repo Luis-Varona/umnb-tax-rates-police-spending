@@ -48,7 +48,8 @@ cdef class ModelResults:
             f.write(summary.as_text())
         
         with open(dest_latex, 'w') as f:
-            f.write(summary.as_latex())
+            f.write(summary.as_latex()
+                    .replace("\\begin{table}", "\\begin{table}[H]", 1))
 
 
 cdef void run_script(str script):

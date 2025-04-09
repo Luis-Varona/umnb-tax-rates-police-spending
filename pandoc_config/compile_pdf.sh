@@ -91,10 +91,9 @@ fi
 
 if [ -f "$DEST" ]; then
     echo "$DEST already exists. Overwriting..."
-    rm "$DEST"
 fi
 
-if ! mv "$TEMP_OUT" "$DEST"; then
+if ! mv -f "$TEMP_OUT" "$DEST"; then
     echo >&2 "Error: Failed to save output to $DEST."
     exit 1
 fi

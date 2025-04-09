@@ -54,22 +54,30 @@ still remains an RCMP presence in Bathurst).
 
 The Union of Municipalities of New Brunswick has provided us with data on
 municipal policing providers as of 2024 to aid in our analysis. Confounding
-this, however, is the 2023 New Brunswick local governance reform, which [TODO:
-Elaborate on issue, including pre-2023 municipal remapping] Regardless, we have
+this, however, is the 2023 New Brunswick local governance reform, which redrew a
+large swath of municipal boundaries, partly driven by the desire to cut down on
+"redundant" local service districts. Not only were several municipalities and
+districts merged together, but in many cases, entirely new municipalities with
+original names were created. To make matters worse, although this was certainly
+the most significant reform in New Brunswick municipal governance in decades, it
+was not the first&#x2014;municipal recombination on a smaller scale transpired
+multiple times over the 2000&#x2013;2018 period as well. Regardless, we have
 found a reliable way to map the 2024 data backwards to past municipal
 jurisdictions (this is further described in the **Methodology** section),
-allowing us to integrate time-invariant provider indicators into our model.
+allowing us to integrate time-invariant provider indicators into our model. In
+future extensions of this project, we may utilize more recent data to study the
+current policing system situation while collaborating with the UMNB.
 
-[TODO: Explain why this setup is of interest not only insofar as showing how,
-and why, different level of exogeneity affect tax rates in different ways, but
-also in terms of tax base elasticity]
+Overall, this setup is of interest insofar that it allows us to study the
+effects of [TODO: Explain why this setup is of interest not only insofar as
+showing how, and why, different level of exogeneity affect tax rates in
+different ways, but also in terms of tax base elasticity]
 
-With this out of the way, we therefore use a fixed-effects two-stage least
-squares (FE-2SLS) regression model to investigate the relationships described
-above. The *fixed-effects* (FE) part of this model allows us to control for
-time-invariant biases, controlling for unobserved heterogeneity across
-municipalities. However, this fails to address the problem of simultaneity bias
-arising from the bidirectional relationship between average tax rate (our
+As such, we herein construct a fixed-effects two-stage least squares (FE-2SLS)
+regression model of the relationships described above. The *fixed-effects* (FE)
+aspect allows us to address time-invariant biases, controlling for unobserved
+heterogeneity across municipalities. However, this neglects the simultaneity
+bias arising from the bidirectional relationship between average tax rate (our
 response variable) and tax base per capita (one of our explanatory variables).
 
 Hence, the *two-stage least squares* (2SLS) part of our model utilizes the fact
@@ -90,11 +98,17 @@ rates. They do not particularly emphasize spending patterns as a potential
 factor in municipal taxation, but the methodology presented in their paper
 provide a useful framework on which to build for our project.
 
-In a similar vein, @CT08 [TODO: Add, then tie into our actual methodology.
-Mention personal conversations with Dr. Brett as well]
+In a similar vein, we consider studies of how increased provincial suppoort for
+municipal budgets affected tax rates in New Brunswick. One of our more
+surprising takeaways was the finding that, in a generalized method of moments
+(GMM) three-stage least squares (3SLS) model with even more sophisticated
+instrumentation than ours, the coefficient on tax base when predicting tax
+rate was positive [@CT08, pp. 448--49]. This concurs with findings we shall
+present in the **Results** section&#x2014;seemingly a weird counteintuitive
+quirk of the NB economic system in particular.
 
-We find also from @SSG12 that when tax rates change, individuals and businesses
-often relocate [p. 29] when possible, in turn affecting the tax base. This
+We find also from @SSG12 [p. 29] that when tax rates change, individuals and
+businesses often relocate when possible, in turn affecting the tax base. This
 highlights the fact that the higher mobility associated with smaller localities
 allows for greater elasticity of the tax base with respect to tax rates. Indeed,
 this is a well-known phenomenon in the literature, proving key to our project's
@@ -113,8 +127,8 @@ tax base per capita is an *endogenous* variable highly bicorrelated with (and
 thus determined by) tax rate, which creates bias in regression estimates.
 Findings from @AC99 [p. 689] indicate that household income is viable as an
 instrument to reduce this bias, being correlated with tax base (as higher
-income implies more taxable property) but not tax rate (as Canadian taxation
-schemes tend not to be overly progressive). This supports the overall structure
+income implies more taxable property) but not tax rate (since income is not an
+explicit determinan of property tax base). This supports the overall structure
 of our FE-2SLS model described in the **Methodology** section below.
 
 # Methodology
@@ -434,7 +448,12 @@ and their real-world implications.
 *[Figure 1 will appear here in the PDF.]*
 
 <!-- ```{=latex}
-\input{figure1.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{../data_visualization/fe_2sls.png}
+    \\[-0.5cm]
+    \caption{TODO}
+\end{figure}
 ``` -->
 
 [TODO: Add explanation of the above figure]
@@ -442,7 +461,25 @@ and their real-world implications.
 *[Figure 2 will appear here in the PDF.]*
 
 <!-- ```{=latex}
-\input{figure2.tex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{../data_visualization/alt_tax_rates.png}
+    \\[-0.5cm]
+    \caption{TODO}
+\end{figure}
+``` -->
+
+[TODO: Add explanation of the above figure]
+
+*[Figure 3 will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{../data_visualization/elasticity.png}
+    \\[-0.5cm]
+    \caption{TODO}
+\end{figure}
 ``` -->
 
 [TODO: Add explanation of the above figure]
@@ -451,17 +488,26 @@ and their real-world implications.
 
 [TODO: Elaborate]
 
+<!-- ```{=latex}
+\newpage
+``` -->
+
 # Appendix
 
-We herein present raw computer output from our regression models. The first two
-sections pertain to our vanilla CRE and FE models without an instrument, and the
-last section presents the results of our final FE-2SLS model. (This data is also
-available directly in both `.txt` and `.tex` format in the
+We herein present raw computer output from our CRE, FE, and FE-2SLS regression
+models. (The original `.tex` output files are available in the
 [`data_analysis/`](../data_analysis/) directory of our GitHub repository.)
 
 ## Correlated Random-Effects (CRE)
 
-[TODO: Add CRE output]
+*[The correlated random effects results will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\begingroup
+\footnotesize
+\input{../data_analysis/cre/summary_unrstd.tex}
+\endgroup
+``` -->
 
 ## Fixed-Effects (FE)
 
@@ -482,7 +528,7 @@ available directly in both `.txt` and `.tex` format in the
 
 <!-- ```{=latex}
 \begingroup
-\small
+\footnotesize
 \input{../data_analysis/fe_2sls/stage1_summary.tex}
 \endgroup
 ``` -->
