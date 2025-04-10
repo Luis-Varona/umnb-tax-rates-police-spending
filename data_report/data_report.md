@@ -149,11 +149,12 @@ structure of our FE-2SLS model described in the **Methodology** section below.
 # Methodology
 
 We now delineate our data collection process, data organization methods, and
-statistical models. We use Python (namely the polars and
-linearmodels/statsmodels ecosystems) to parse and clean data from Statistics
-Canada and the GNB. Subsequently, we run several fixed-effects and correlated
-random-effects regressions on the resulting data in combination with median
-household income as an instrumental variable to account for simultaneity bias.
+statistical models. We use Python&#x2014;namely the polars and linearmodels
+ecosystems&#x2014;to parse and clean data from Statistics Canada and the GNB.
+(We also use matplotlib and seaborn to visualize our results later on.)
+Subsequently, we run several fixed-effects and correlated random-effects
+regressions on the resulting data in combination with median household income as
+an instrumental variable to account for simultaneity bias.
 
 ## Data Collection and Sources
 
@@ -288,8 +289,10 @@ fixed-effects (FE) models, run by
 and
 [`helper_scripts/allow_concurrent/_fe_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_.py),
 to determine which variables are relevant and to demonstrate the need for an
-instrumental variable. All helper scripts are called and run by the main
-executable of the associated directory, [`main.py`](../data_analysis/main.py).
+instrumental variable. In each model, we opt to cluster our covariance estimator
+by municipality&#x2014;a common approach to account for unobserved heterogeneity
+in panel data. All helper scripts are called and run by the main executable of
+the associated directory, [`main.py`](../data_analysis/main.py).
 
 Our decision to integrate a panel data model with 2SLS, clearly, arose from the
 factors described above in our **Literature Review**, as the inclusion of
@@ -297,10 +300,11 @@ factors described above in our **Literature Review**, as the inclusion of
 ultimate choice of FE over CRE for the base panel OLS was motivated by the fact
 that, although statistically significant, the coefficients on the raw provider
 indicator variables were so low that they barely explained any variance in the
-response variable (more on this in the **Results** section). Meanwhile, it is
-clear that *TaxBaseCapita* casues simultaneity bias; the construction of a
-vanilla FE model was never intended as a viable alternative to our main FE-2SLS
-model, but rather to act as a baseline for comparison.
+response variable (more on this in the **Results** section). [TODO: Or maybe we
+do just use CRE-2SLS?] Meanwhile, it is clear that *TaxBaseCapita* casues
+simultaneity bias; the construction of a vanilla FE model was never intended as
+a viable alternative to our main FE-2SLS model, but rather to act as a baseline
+for comparison.
 
 It is also worth noting that we chose not to use non-linear functional
 forms&#x2014;with the most obvious candidate for a study in this particular
@@ -324,6 +328,18 @@ to more thoroughly delineate our final FE-2SLS regression model.
 ### Correlated Random-Effects (CRE)
 
 [TODO: Elaborate, also on how we may include instrumentation here in the future]
+
+$$\begin{aligned}
+AvgTaxRate_{it} & = \beta_0 + \beta_1PolExpCapita_{it} + \beta_2OtherExpCapita_{it} + \beta_3OtherRevCapita_{it} \\
+& \phantom{+} + \beta_4TaxBaseCapita_{it} + \beta_5PolExpCapita_{it} \mathord{*} Provider\_MPSA_{it} \\
+& \phantom{+} + \beta_6PolExpCapita_{it} \mathord{*} Provider\_Muni_{it} \\
+& + \gamma_1Provider\_MPSA_{it} + \gamma_2Provider\_Muni_{it} \\
+& + \delta_1\overline{PolExpCapita}_i + \delta_2\overline{OtherExpCapita}_i + \delta_3\overline{OtherRevCapita}_i \\
+& \phantom{+} + \delta_4\overline{TaxBaseCapita}_i + \delta_5\overline{PolExpCapita}_i \mathord{*} Provider\_MPSA_{it} \\
+& \phantom{+} + \delta_6\overline{PolExpCapita}_i \mathord{*} Provider\_Muni_{it} + \underbrace{\ \ \varepsilon_{it}\ \ }_{\alpha_i + u_{it}}.
+\end{aligned}$$
+
+Here [TODO: Elaborate on each bit]
 
 ### Fixed-Effects (FE)
 
@@ -359,8 +375,8 @@ second-stage regression, where we demean all variables over municipality.
 Our primary fixed-effects regression model is now given by
 $$\begin{aligned}
 \ddot{AvgTaxRate}_{it} & = \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} \\
-& + \beta_4\ddot{\widehat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it} \\
-& + \beta_6\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it} + \ddot{u}_{it},
+& \phantom{+} + \beta_4\ddot{\widehat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it} \\
+& \phantom{+} + \beta_6\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it} + \ddot{u}_{it},
 \end{aligned}$$
 
 where we use the notation $\ddot{X}_{it} \coloneqq X_{it} - \bar{X}_i$ to denote
@@ -368,9 +384,7 @@ the difference between the value of $X$ for municipality $i$ in year $t$ and the
 mean value of $X$ for municipality $i$ over all years. (Note that
 $\ddot{\widehat{TaxBaseCapita}}_{it}$ is not the demeaning of
 $TaxBaseCapita_{it}$ itself but rather the demeaned prediction from our
-first-stage regression.) We further opt to cluster our covariance estimator by
-municipality, as this is a common approach in the literature to account for
-unobserved heterogeneity in panel data.
+first-stage regression.)
 
 ## Tax Base Elasticity Estimates
 
@@ -422,9 +436,10 @@ covered by the PPSA.
 
 # Results
 
-We now present the numerical results of our statistical models. A more thorough
-discussion of the real-world implications of these findings is provided in the
-**Discussion** section, and raw computer output is included in the **Appendix**.
+We herein present the numerical results of our statistical models. A more
+thorough discussion of the real-world implications of these findings is provided
+in the **Discussion** section, and raw computer output from Python's
+linearmodels library is available in the **Appendix**.
 
 ## Correlated Random-Effects (CRE)
 
@@ -438,11 +453,11 @@ Our instrument-free FE model yielded the following results:
 
 $$\begin{aligned}
 \ddot{AvgTaxRate}_{it} & = \underset{(0.0990)}{1.3092\ddot{PolExpCapita}_{it}} + \underset{(0.0914)}{0.9665\ddot{OtherExpCapita}} - \underset{(0.0991)}{0.8964\ddot{OtherRevCapita}} \\
-& - \underset{(0.0012)}{0.0122\ddot{TaxBaseCapita}_{it}} - \underset{(0.1951)}{0.5551\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
-& - \underset{(0.1377)}{0.6083\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad\quad R^2 = 0.7216, \, F_{6,1708} = 66.473.
+& \phantom{+} - \underset{(0.0012)}{0.0122\ddot{TaxBaseCapita}_{it}} - \underset{(0.1951)}{0.5551\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
+& \phantom{+} - \underset{(0.1377)}{0.6083\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad R^2 = 0.7216, \, F_{6,1708} = 66.473.
 \end{aligned}$$
 
-(Note that the $F$-statistic provided here is robust to clustering.) On their
+(Note that the $F$-statistic reported here is robust to clustering.) On their
 own, these numbers are not particularly insightful&#x2014;they simply serve as a
 baseline to which we can compare our FE-2SLS results, investigating how (the
 lack of) instrumentation affects our coefficients.
@@ -450,27 +465,37 @@ lack of) instrumentation affects our coefficients.
 ## Fixed-Effects Two-Stage Least Squares (FE-2SLS)
 
 We now turn to consideration of *MedHouseInc* as a potential instrumental
-variable to address endogeneity of *TaxBaseCapita*. As seen in the **Appendix**
-below, the first-stage OLS regression of *TaxBaseCapita* on *MedHouseInc*
-yielded the results
+variable to address endogeneity of *TaxBaseCapita* before re-running our
+fixed-effects regression.
+
+### Stage 1
+
+As seen in the **Appendix** below, a first-stage OLS regression of
+*TaxBaseCapita* on *MedHouseInc* produced the regression results
 $$\begin{aligned}
-TaxBaseCapita_{it} = \underset{(0.020)}{0.668} - \underset{(2.455)}{11.2497MedHouseInc_{it}} + v_{it}, \quad\quad R^2 = 0.011, \, R^2_{adj} = 0.011, \, F_{1,1816} = 20.99,
+TaxBaseCapita_{it} = \underset{(0.0194)}{0.6668} - \underset{(2.4347)}{11.250MedHouseInc_{it}} + v_{it}, \quad R^2 = 0.0114, \, F_{1,1816} = 21.350,
 \end{aligned}$$
 
-where the $F$-statistic of $20.99$ is far above the threshold of $10$ for viable
-instruments. Therefore, we can safely integrate these results into the
-second-stage fixed-effects regression, using the (demeaned) fitted values of
-$\widehat{TaxBaseCapita}$ from this stage. (Note that the low $R^2$ of $0.011$
-is irrelevant&#x2014;we are concerned primarily with the correlation between the
-instrumental and endogenous variables, not with goodness-of-fit.)
+where the $F$-statistic of $21.350$ is far above the threshold of $10$ for
+viable instruments. (Our standard errors here are adjusted by the Huber&#x2013;White sandwich estimator to account for heteroscedasticity, as samples of higher-income municipalities may tend to
+exhibit greater variance due to factors like a wider range of income levels,
+property values, industry types, etc. Either way, this does not affect our stage
+2 regression, as the coefficients themselves remain unchanged.) Therefore, we can
+safely integrate these results into the second-stage fixed-effects regression,
+using the (demeaned) fitted values of $\widehat{TaxBaseCapita}$ from this stage.
+(Note that the low $R^2$ of $0.0114$ is irrelevant&#x2014;we are concerned,
+first and foremost, with the strength of the correlation between the instrument
+and the endogenous variable, not the overall fit of the model.)
+
+### Stage 2
 
 Running a fixed-effects regression on the demeaned data and clustering by
 municipality, we obtain the following results (with full computer output once
 again available in the **Appendix**):
 $$\begin{aligned}
 \ddot{AvgTaxRate}_{it} & = \underset{(0.1371)}{0.5188\ddot{PolExpCapita}_{it}} + \underset{(0.0255)}{0.0301\ddot{OtherExpCapita}} + \underset{(0.0644)}{0.1025\ddot{OtherRevCapita}} \\
-& + \underset{(0.0068)}{0.0225\ddot{\widehat{TaxBaseCapita}}_{it}} + \underset{(0.1941)}{0.0955\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
-& - \underset{(0.1821)}{0.2542\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad\quad R^2 = 0.4290, \, F_{6,1708} = 27.629.
+& \phantom{+} + \underset{(0.0068)}{0.0225\ddot{\widehat{TaxBaseCapita}}_{it}} + \underset{(0.1941)}{0.0955\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it}} \\
+& \phantom{+} - \underset{(0.1821)}{0.2542\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad R^2 = 0.4290, \, F_{6,1708} = 27.629.
 \end{aligned}$$
 
 (Again, the $F$-statistic here is robust to clustering.) [TODO: Elaborate on the
@@ -546,12 +571,36 @@ models. (The original `.tex` output files are available in the
 
 ## Correlated Random-Effects (CRE)
 
-*[The correlated random effects results will appear here in the PDF.]*
+*[The correlated random-effects results will appear here in the PDF.]*
 
 <!-- ```{=latex}
 \begingroup
-\footnotesize
-\input{../data_analysis/cre/summary_unrstd.tex}
+\scriptsize
+\input{../data_analysis/cre/summary.tex}
+\endgroup
+``` -->
+
+## Correlated Random-Effects Two-Stage Least Squares (CRE-2SLS)
+
+### Stage 1
+
+*[The stage 1 CRE-2SLS regression results will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\begingroup
+\small
+\input{../data_analysis/cre_2sls/stage1_summary.tex}
+\endgroup
+``` -->
+
+### Stage 2
+
+*[The stage 2 CRE-2SLS regression results will appear here in the PDF.]*
+
+<!-- ```{=latex}
+\begingroup
+\scriptsize
+\input{../data_analysis/cre_2sls/stage2_summary.tex}
 \endgroup
 ``` -->
 
@@ -570,14 +619,10 @@ models. (The original `.tex` output files are available in the
 
 ### Stage 1
 
-*[The stage 1 FE-2SLS regression results will appear here in the PDF.]*
-
-<!-- ```{=latex}
-\begingroup
-\footnotesize
-\input{../data_analysis/fe_2sls/stage1_summary.tex}
-\endgroup
-``` -->
+The stage 1 FE-2SLS regression results are identical to those of the CRE-2SLS
+model, as the first stage is the same in both cases. As such, we refrain from
+repeating them here. [TODO: Kind of just a placeholder until we sort out
+whether we use CRE-2SLS, FE-2SLS, or both.]
 
 ### Stage 2
 

@@ -25,10 +25,10 @@ dependencies = [
     "fastexcel", # Used by polars' `read_excel` function
     "linearmodels",
     "matplotlib",
+    "numpy",
     "pandas",
     "polars",
     "seaborn",
-    "statsmodels",
     "unidecode",
     "xlsxwriter",
 ]

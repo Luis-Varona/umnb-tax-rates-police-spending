@@ -63,20 +63,20 @@ YLABEL = "Mean of Municipal Average Tax Rates  (%)"
 
 # %%
 def main():
-    source_2sls = os.path.join(SOURCE_DIR, 'data_2sls.xlsx')
+    source_fe2sls = os.path.join(SOURCE_DIR, 'data_fe_2sls.xlsx')
     source_result = os.path.join(SOURCE_DIR, 'stage2_results.pkl')
     dest = os.path.join(WD, '..', 'alt_tax_rates.png')
     
     result = pickle.load(open(source_result, 'rb'))
     params = result.params * SCALE1 / SCALE2
-    df = pred_rates(source_2sls, params)
+    df = pred_rates(source_fe2sls, params)
     
     plot_rates(df, dest)
 
 
 # %%
-def pred_rates(source_2sls: str, params: pd.Series) -> pl.DataFrame:
-    df = (pl.read_excel(source_2sls, columns=COLUMNS)
+def pred_rates(source_fe2sls: str, params: pd.Series) -> pl.DataFrame:
+    df = (pl.read_excel(source_fe2sls, columns=COLUMNS)
           .with_columns(pl.col(COLS_SCALE1) * SCALE1,
                         pl.col(COLS_SCALE2) * SCALE2)
           .with_columns((pl.col(INDEP_VAR).mean().over(pl.col(GROUP_COL))

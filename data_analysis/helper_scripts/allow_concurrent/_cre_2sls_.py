@@ -17,16 +17,24 @@ from utils import LMResultsWrapper
 # %%
 WD = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(WD, '..', '..', '..', 'data_pipeline', 'data_final')
-DEST_DIR = os.path.join(WD, '..', '..', 'fe_2sls')
+DEST_DIR = os.path.join(WD, '..', '..', 'cre_2sls')
 INSTRUMENT_DIR = os.path.join(WD, '..', '..', '..', 'data_iv', 'results')
 
 
 # %%
 DEP_VAR = "AvgTaxRate"
-EXOG = ["PolExpCapita", "OtherExpCapita", "OtherRevCapita",
-        "PolExpCapita:Provider_MPSA", "PolExpCapita:Provider_Muni"]
+INTER_VAR = "PolExpCapita"
+NON_INTER_VARS = ["OtherExpCapita", "OtherRevCapita", "TaxBaseCapita"]
+INDIC_VARS = ["Provider_MPSA", "Provider_Muni"]
+INDEP_VARS = [INTER_VAR] + NON_INTER_VARS
+
+INTER_TERMS = [f"{INTER_VAR}*{var}" for var in INDIC_VARS]
+INTER_TERM_MEANS = [f"{INTER_VAR}_mean*{var}" for var in INDIC_VARS]
+NON_INTER_VAR_MEANS = [f"{var}_mean" for var in NON_INTER_VARS]
+
 ENDOG = "TaxBaseCapita"
-FORMULA = f"{DEP_VAR} ~ {' + '.join(EXOG)} + {ENDOG} + EntityEffects"
+FORMULA = f"{DEP_VAR} ~ {' + '.join
+    (INTER_TERMS + NON_INTER_VARS + INTER_TERM_MEANS + NON_INTER_VAR_MEANS)}"
 
 
 # %%
@@ -43,7 +51,7 @@ def main():
     source = os.path.join(SOURCE_DIR, 'data_final.xlsx')
     source_instr = os.path.join(INSTRUMENT_DIR, 'muni_map.pkl')
     
-    dest_df = os.path.join(DEST_DIR, 'data_fe_2sls.xlsx')
+    dest_df = os.path.join(DEST_DIR, 'data_cre_2sls.xlsx')
     dest_results1 = os.path.join(DEST_DIR, 'stage1_results.pkl')
     dest_summary1 = os.path.join(DEST_DIR, 'stage1_summary')
     dest_results2 = os.path.join(DEST_DIR, 'stage2_results.pkl')
@@ -54,6 +62,17 @@ def main():
     save_all_output(df, results1, results2,
                     dest_df, dest_results1, dest_summary1,
                     dest_results2, dest_summary2)
+
+
+# %%
+def add_mundlak_means(df: pl.DataFrame) -> pl.DataFrame:
+    for var in [DEP_VAR] + INDEP_VARS:
+        df = df.with_columns(pl.col(var)
+                             .mean()
+                             .over(GROUP_COL)
+                             .alias(f"{var}_mean"))
+    
+    return df
 
 
 # %%
@@ -111,7 +130,7 @@ def get_instrument_data(source_instr: str) -> pl.DataFrame:
 def stage1_results_and_data(source: str, source_instr: str
                             ) -> tuple[LMResultsWrapper, pl.DataFrame]:
     df_instr = get_instrument_data(source_instr)
-    df = (pl.read_excel(source)
+    df = (add_mundlak_means(pl.read_excel(source))
           .join(df_instr, on=[GROUP_COL, TIME_COL], how="left"))
     
     model = OLS.from_formula(f"{ENDOG} ~ {INSTRUMENT}", df.to_pandas()) # New

@@ -59,12 +59,12 @@ YLABEL = f"${DEP_VAR}_{{it}} - \overline{{{DEP_VAR}}}_i$  (%)\n" \
 
 # %%
 def main():
-    source_2sls = os.path.join(SOURCE_DIR, 'data_2sls.xlsx')
+    source_fe_2sls = os.path.join(SOURCE_DIR, 'data_fe_2sls.xlsx')
     source_result = os.path.join(SOURCE_DIR, 'stage2_results.pkl')
     dest = os.path.join(WD, '..', 'fe_2sls.png')
     
     params, params_indic = read_and_process_result(source_result)
-    df = read_and_adjust_2sls_data(source_2sls, params)
+    df = read_and_adjust_2sls_data(source_fe_2sls, params)
     x, ys = generate_lobfs(df, params_indic)
     save_regress_plot(df, x, ys, dest)
 
@@ -93,10 +93,9 @@ def read_and_process_result(source_result: str) -> tuple[pd.Series, pd.Series]:
 
 
 # %%
-def read_and_adjust_2sls_data(
-    source_2sls: str, params: pd.Series
-) -> pl.DataFrame:
-    df = (pl.read_excel(source_2sls, columns=COLUMNS)
+def read_and_adjust_2sls_data(source_fe_2sls: str,
+                              params: pd.Series) -> pl.DataFrame:
+    df = (pl.read_excel(source_fe_2sls, columns=COLUMNS)
           .with_columns(pl.col(COLS_SCALE1) * SCALE1,
                         pl.col(COLS_SCALE2) * SCALE2)
           .with_columns(cs.by_dtype(pl.Float64) - cs.by_dtype(pl.Float64)
@@ -127,9 +126,8 @@ def read_and_adjust_2sls_data(
 
 
 # %%
-def generate_lobfs(
-    df: pl.DataFrame, params_indic: pd.Series
-) -> tuple[np.ndarray, list]:
+def generate_lobfs(df: pl.DataFrame,
+                   params_indic: pd.Series) -> tuple[np.ndarray, list]:
     start = df.select(INDEP_VAR).min().item()
     stop = df.select(INDEP_VAR).max().item()
     
@@ -139,9 +137,9 @@ def generate_lobfs(
 
 
 # %%
-def save_regress_plot(
-    df: pl.DataFrame, x: np.ndarray, ys: list, dest: str
-) -> None:
+def save_regress_plot(df: pl.DataFrame,
+                      x: np.ndarray, ys: list,
+                      dest: str) -> None:
     hue_order = [get_indic(col) for col in INDICS_ALL]
     
     with config_and_save_plot(dest):

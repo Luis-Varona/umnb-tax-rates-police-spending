@@ -11,18 +11,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-cdef class ModelResults:
+cdef class LMResultsWrapper:
     cdef object _results
-    cdef bint _linearmodels
     
-    def __init__(self, object results, str library):
-        if library == 'statsmodels':
-            self._linearmodels = False
-        elif library == 'linearmodels':
-            self._linearmodels = True
-        else:
-            raise ValueError(f"Unsupported library: {library}")
-        
+    def __init__(self, object results):
         self._results = results
     
     @property
@@ -30,19 +22,11 @@ cdef class ModelResults:
         return self._results
     
     def save_results(self, str dest) -> None:
-        if self._linearmodels:
-            with open(dest, 'wb') as f:
-                pickle.dump(self._results, f)
-        else:
-            self._results.save(dest)
+        with open(dest, 'wb') as f:
+            pickle.dump(self._results, f)
     
     def save_summary(self, str dest_text, str dest_latex) -> None:
-        cdef object summary
-        
-        if self._linearmodels:
-            summary = self._results.summary
-        else:
-            summary = self._results.summary()
+        cdef object summary = self._results.summary
         
         with open(dest_text, 'w') as f:
             f.write(summary.as_text())
@@ -50,6 +34,11 @@ cdef class ModelResults:
         with open(dest_latex, 'w') as f:
             f.write(summary.as_latex()
                     .replace("\\begin{table}", "\\begin{table}[H]", 1))
+    
+    def save_all_data(self,
+                      str dest_results, str dest_text, str dest_latex) -> None:
+        self.save_results(dest_results)
+        self.save_summary(dest_text, dest_latex)
 
 
 cdef void run_script(str script):
