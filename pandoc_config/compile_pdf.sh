@@ -99,4 +99,4 @@ if ! mv -f "$TEMP_OUT" "$DEST"; then
 fi
 
 DEST_PATH="$(cd "$(dirname "$DEST")" && pwd)/$(basename "$DEST")"
-echo "PDF compiled successfully: $DEST_PATH"
+echo "PDF compiled successfully: \"$DEST_PATH\""

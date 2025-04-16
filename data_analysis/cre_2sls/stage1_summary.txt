@@ -3,8 +3,8 @@
 Dep. Variable:          TaxBaseCapita   R-squared:                      0.0114
 Estimator:                        OLS   Adj. R-squared:                 0.0109
 No. Observations:                1818   F-statistic:                    21.350
-Date:                Thu, Apr 10 2025   P-value (F-stat)                0.0000
-Time:                        02:32:35   Distribution:                  chi2(1)
+Date:                Sun, Apr 13 2025   P-value (F-stat)                0.0000
+Time:                        06:22:20   Distribution:                  chi2(1)
 Cov. Estimator:                robust                                         
                                                                               
                               Parameter Estimates                              

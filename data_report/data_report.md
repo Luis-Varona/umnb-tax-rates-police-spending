@@ -3,7 +3,7 @@ title: "Data Report"
 author:
   - "Luis M. B. Varona[^1][^2]"
   - "Otoha Hanatani[^3]"
-date: April 8, 2025
+date: April 16, 2025
 output: github_document
 bibliography: references.bib
 ---
@@ -152,9 +152,9 @@ We now delineate our data collection process, data organization methods, and
 statistical models. We use Python&#x2014;namely the polars and linearmodels
 ecosystems&#x2014;to parse and clean data from Statistics Canada and the GNB.
 (We also use matplotlib and seaborn to visualize our results later on.)
-Subsequently, we run several fixed-effects and correlated random-effects
-regressions on the resulting data in combination with median household income as
-an instrumental variable to account for simultaneity bias.
+Subsequently, we run several fixed-effects regressions on the resulting data in
+combination with median household income as an instrumental variable to account
+for simultaneity bias.
 
 ## Data Collection and Sources
 
@@ -283,10 +283,7 @@ as an instrumental variable.
 Each of these variables is used throughout our FE-2SLS regression model, carried
 out by the
 [`helper_scripts/allow_concurrent/_fe_2sls_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_2sls_.py)
-script. We have also included "vanilla" correlated random-effects (CRE) and
-fixed-effects (FE) models, run by
-[`helper_scripts/allow_concurrent/_cre_.py`](../data_analysis/helper_scripts/allow_concurrent/_cre_.py)
-and
+script. We have also included our "vanilla" fixed-effects (FE) model, run by
 [`helper_scripts/allow_concurrent/_fe_.py`](../data_analysis/helper_scripts/allow_concurrent/_fe_.py),
 to determine which variables are relevant and to demonstrate the need for an
 instrumental variable. In each model, we opt to cluster our covariance estimator
@@ -296,15 +293,10 @@ the associated directory, [`main.py`](../data_analysis/main.py).
 
 Our decision to integrate a panel data model with 2SLS, clearly, arose from the
 factors described above in our **Literature Review**, as the inclusion of
-*TaxBaseCapita* in the model creates simultaneity bias if unaddressed. Our
-ultimate choice of FE over CRE for the base panel OLS was motivated by the fact
-that, although statistically significant, the coefficients on the raw provider
-indicator variables were so low that they barely explained any variance in the
-response variable (more on this in the **Results** section). [TODO: Or maybe we
-do just use CRE-2SLS?] Meanwhile, it is clear that *TaxBaseCapita* casues
-simultaneity bias; the construction of a vanilla FE model was never intended as
-a viable alternative to our main FE-2SLS model, but rather to act as a baseline
-for comparison.
+*TaxBaseCapita* in the model creates simultaneity bias if unaddressed. The
+construction of a vanilla FE model was never intended as a viable alternative to
+our main FE-2SLS model, but rather to act as a baseline for comparison, examing
+how the integration of an instrument affects our results.
 
 It is also worth noting that we chose not to use non-linear functional
 forms&#x2014;with the most obvious candidate for a study in this particular
@@ -322,12 +314,10 @@ obtain a rough estimate of how sensitive taxable income and property in a
 municipality is to tax hikes given increases in PPSA bils, providing key insight
 into potential policy changes to the current New Brunswick policing system.
 
-We now turn to describing our instrument-free CRE and FE analyses, then proceed
-to more thoroughly delineate our final FE-2SLS regression model.
+We now turn to describing our instrument-free FE analysis, then proceed to more
+thoroughly delineate our final FE-2SLS regression model.
 
-### Correlated Random-Effects (CRE)
-
-[TODO: Elaborate, also on how we may include instrumentation here in the future]
+<!-- ### Correlated Random-Effects (CRE)
 
 $$\begin{aligned}
 AvgTaxRate_{it} & = \beta_0 + \beta_1PolExpCapita_{it} + \beta_2OtherExpCapita_{it} + \beta_3OtherRevCapita_{it} \\
@@ -339,7 +329,14 @@ AvgTaxRate_{it} & = \beta_0 + \beta_1PolExpCapita_{it} + \beta_2OtherExpCapita_{
 & \phantom{+} + \delta_6\overline{PolExpCapita}_i \mathord{*} Provider\_Muni_{it} + \underbrace{\ \ \varepsilon_{it}\ \ }_{\alpha_i + u_{it}}.
 \end{aligned}$$
 
-Here [TODO: Elaborate on each bit]
+Here the $\beta$ coefficients's are associated with our time-variant variables,
+the $\gamma$'s are associated with our time-invariant variables, and the
+$\delta$'s are associated with the means (taken for each municipality over time)
+of our time-variant variables. The $\alpha_i$'s are the unobserved individual
+effects associated with each municipality (independent of time), and the
+$u_{it}$'s are the usual error terms; we sum these to create the combined
+$\varepsilon_{it}$ terms, which include both unobserved heterogeneity and
+idiosyncratic errors. -->
 
 ### Fixed-Effects (FE)
 
@@ -432,7 +429,7 @@ where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$ over
 the period 2000&#x2013;2018. Once finally calculated, this estimate serves as a
 decent (if rough) approximation of how sensitive the tax base is to changes in
 tax rate, given the exogenous nature of police expenditure in NB municipalities
-covered by the PPSA.
+covered by the PPSA. [TODO: Or do we take the mean after this manipulation?]
 
 # Results
 
@@ -441,11 +438,9 @@ thorough discussion of the real-world implications of these findings is provided
 in the **Discussion** section, and raw computer output from Python's
 linearmodels library is available in the **Appendix**.
 
-## Correlated Random-Effects (CRE)
+<!-- ## Correlated Random-Effects (CRE)
 
-Our CRE model yielded the following results:
-
-[TODO: Elaborate]
+Our CRE model yielded the following results: -->
 
 ## Fixed-Effects (FE)
 
@@ -485,7 +480,7 @@ safely integrate these results into the second-stage fixed-effects regression,
 using the (demeaned) fitted values of $\widehat{TaxBaseCapita}$ from this stage.
 (Note that the low $R^2$ of $0.0114$ is irrelevant&#x2014;we are concerned,
 first and foremost, with the strength of the correlation between the instrument
-and the endogenous variable, not the overall fit of the model.)
+and the endogenous variable, not with the overall fit of the model.)
 
 ### Stage 2
 
@@ -506,11 +501,16 @@ and their real-world implications.
 
 ## Tax Base Elasticity Estimates
 
-[TODO: Elaborate]
+Using our coefficient on *PolExpCapita* from our FE-2SLS model,
+[TODO: Elaboeate]
 
 # Discussion
 
-[TODO: Section intro]
+We now tackle the real-world implications of our findings, beginning with the
+results of our primary FE-2SLS regression model. Disaggregating by policing
+provider (PPSA, MPSA, or municipal force), we adjust the data for our control
+variables (i.e., subtract the predicted effect of our control variables from
+each data point) to obtain the following figure:
 
 *[Figure 1 will appear here in the PDF.]*
 
@@ -524,7 +524,7 @@ and their real-world implications.
 \end{figure}
 ``` -->
 
-[TODO: Add explanation of the above figure]
+We see here that [TODO: Elaborate]
 
 *[Figure 2 will appear here in the PDF.]*
 
@@ -565,9 +565,14 @@ policing provider?]
 
 # Appendix
 
-We herein present raw computer output from our CRE, FE, and FE-2SLS regression
-models. (The original `.tex` output files are available in the
-[`data_analysis/`](../data_analysis/) directory of our GitHub repository.)
+We herein present raw computer output from our CRE, CRE-2SLS, FE, and FE-2SLS
+regression models. (The original `.tex` output files are available in the
+[`data_analysis/`](../data_analysis/) directory of our GitHub repository.) Do
+note that the CRE and CRE-2SLS models are not mentioned in the current report,
+as we have decided to focus on the FE-2SLS model for the time being. However,
+we ultimately plan to switch to a CRE-3SLS (correlated random-effects in
+combination with three-stage least squares) model in the future, with the CRE
+and CRE-2SLS results presented below serving as a stepping stone to that goal.
 
 ## Correlated Random-Effects (CRE)
 
@@ -621,8 +626,7 @@ models. (The original `.tex` output files are available in the
 
 The stage 1 FE-2SLS regression results are identical to those of the CRE-2SLS
 model, as the first stage is the same in both cases. As such, we refrain from
-repeating them here. [TODO: Kind of just a placeholder until we sort out
-whether we use CRE-2SLS, FE-2SLS, or both.]
+repeating them here.
 
 ### Stage 2
 

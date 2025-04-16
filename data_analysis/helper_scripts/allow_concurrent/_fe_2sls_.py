@@ -136,7 +136,7 @@ def save_all_output(df: pl.DataFrame,
                     dest_df: str,
                     dest_results1: str, dest_summary1: str,
                     dest_results2: str, dest_summary2: str) -> None:
-    df.write_excel(dest_df)
+    df.write_excel(dest_df, header_format={'bold': True}, autofit=True)
     results1.save_all_data(dest_results1,
                            f"{dest_summary1}.txt",
                            f"{dest_summary1}.tex")

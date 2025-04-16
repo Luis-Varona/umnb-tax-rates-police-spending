@@ -30,6 +30,7 @@ dependencies = [
     "polars",
     "seaborn",
     "unidecode",
+    "xlrd",
     "xlsxwriter",
 ]
 dynamic = ["version"]
@@ -38,8 +39,7 @@ dynamic = ["version"]
 Repository = "https://github.com/Luis-Varona/umnb-tax-rates-police-spending"
 
 [project.optional-dependencies]
-linting = ["mypy", "ruff"] # For linting and type checking
-xlsx_conversion = ["xlrd"] # For `data_pipeline/raw_to_xlsx.py`
+linting = ["black", "mypy", "ruff"] # For linting and type checking
 
 [tool.mypy]
 disable_error_code = ["import-untyped"]
