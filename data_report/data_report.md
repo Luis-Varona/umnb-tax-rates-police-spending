@@ -340,13 +340,21 @@ idiosyncratic errors. -->
 
 ### Fixed-Effects (FE)
 
-After deeming the potential benefits of including the policing provider on
-indicators directly (not in interaction terms) insufficient to warrant [TODO:
-Elaborate]
+Our fixed-effects model is given by
+
+$$\begin{aligned}
+\ddot{AvgTaxRate}_{it} & = \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} \\
+& \phantom{+} + \beta_4\ddot{TaxBaseCapita}_{it} + \beta_5\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it} \\
+& \phantom{+} + \beta_6\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it} + \ddot{u}_{it}.
+\end{aligned}$$
+
+This is not meant to be a viable alternative to our FE-2SLS model, but rather
+serves to demonstrate the need for an instrumental variable and determine how it
+affects our coefficients.
 
 ### Fixed-Effects Two-Stage Least Squares (FE-2SLS)
 
-Finally, we decided on [TODO: Elaborate]
+Here we present the setup of our main FE-2SLS model.
 
 #### Stage 1
 
@@ -370,6 +378,7 @@ second-stage regression, where we demean all variables over municipality.
 #### Stage 2
 
 Our primary fixed-effects regression model is now given by
+
 $$\begin{aligned}
 \ddot{AvgTaxRate}_{it} & = \beta_1\ddot{PolExpCapita}_{it} + \beta_2\ddot{OtherExpCapita} + \beta_3\ddot{OtherRevCapita} \\
 & \phantom{+} + \beta_4\ddot{\widehat{TaxBaseCapita}}_{it} + \beta_5\ddot{PolExpCapita}_{it} \mathord{*} Provider\_MPSA_{it} \\
@@ -429,7 +438,16 @@ where $\hat{\eta}_i$ the estimated tax base elasticity for municipality $i$ over
 the period 2000&#x2013;2018. Once finally calculated, this estimate serves as a
 decent (if rough) approximation of how sensitive the tax base is to changes in
 tax rate, given the exogenous nature of police expenditure in NB municipalities
-covered by the PPSA. [TODO: Or do we take the mean after this manipulation?]
+covered by the PPSA. In the future, we may also experiment with estimating the
+tax base elasticity by
+
+$$\begin{aligned}
+\tilde{\eta}_i \coloneqq \widehat{\frac{1}{TBC_{i} \cdot \hat{\beta}}} - 1
+\end{aligned}$$
+
+(taking the mean after the algebraic manipulation), but for now, the data
+visualization in the **Discussion** section is derived solely from our
+$\hat{\eta}$ estimator.
 
 # Results
 
@@ -493,16 +511,27 @@ $$\begin{aligned}
 & \phantom{+} - \underset{(0.1821)}{0.2542\ddot{PolExpCapita}_{it} \mathord{*} Provider\_Muni_{it}} + \ddot{u}_{it}, \quad R^2 = 0.4290, \, F_{6,1708} = 27.629.
 \end{aligned}$$
 
-(Again, the $F$-statistic here is robust to clustering.) [TODO: Elaborate on the
-changes in coefficients post-instrumentation, citing again @CT08]
+(Again, the $F$-statistic here is robust to clustering.) As expected, our
+coefficient on *PolExpCapita* goes down&#x2014;considering our first-stage
+regression, as the error term predicting *TaxBaseCapita* experiences unexpected
+increases, police spending rises, and so does tax rate. Controlling for these
+short-term fluctuations in tax base washes out this effect, reducing our
+coefficient on *PolExpCapita* (but still leaving it significant). We also note
+that other types of expenditure and revenue no longer appear significant in
+this model.
+
+Another thing to note is that the coefficient on *TaxBaseCapita*is now positive,
+which is unexpected in a general context even with instrumentation, given that
+more taxable property typically implies lower tax rates. As we found in our
+**Literature Review**, however, there is precedent for this finding in @CT08,
+who conclude that it is likely just a quirk of the New Brunswick economy.
 
 In the following section, we proffer a more thorough discussion of our results
 and their real-world implications.
 
 ## Tax Base Elasticity Estimates
 
-Using our coefficient on *PolExpCapita* from our FE-2SLS model,
-[TODO: Elaboeate]
+We visualize our results on tax base elasticity in the following **Discussion**.
 
 # Discussion
 
@@ -524,7 +553,11 @@ each data point) to obtain the following figure:
 \end{figure}
 ``` -->
 
-We see here that [TODO: Elaborate]
+We see here that municipalities with a municipal police force (green line) tend
+to have a much lower *PolExpCapita* coefficient than those with PPSA/MPSA
+contracts, as is expected given the lower levels of exogeneity (of police
+expenditure) associated with these government units. We now consider what
+holding *PolExpCapita* constant at levels from the year 2000 would look like:
 
 *[Figure 2 will appear here in the PDF.]*
 
@@ -538,7 +571,17 @@ We see here that [TODO: Elaborate]
 \end{figure}
 ``` -->
 
-[TODO: Add explanation of the above figure]
+Using our FE-2SLS model, we can see that if police spending were held constant
+at 2000 levels, the average tax rate would be approximately $0.075$% lower than
+it is in actuality, leading homeowners of $200,000$ houses to pay CAD150 less
+each year. This is quite a bit more than the approximate CAD105 increase in
+police expenditure per capita over the years, indicating that the burden has
+shifted from the government to the taxpayer. Certainly, rising police
+expenditure in recent years was unavoidable&#x2014;especially given certain
+strikes and instability in the RCMP as of late&#x2014;but provincial bailouts
+and other equalization measures could have been used to offset this
+disproportionate burden. Now, we consider some implications of higher asset
+mobility in smaller municipalities:
 
 *[Figure 3 will appear here in the PDF.]*
 
@@ -552,12 +595,49 @@ We see here that [TODO: Elaborate]
 \end{figure}
 ``` -->
 
-[TODO: Add explanation of the above figure. Potentially, also add hue by
-policing provider?]
+It is clear here that smaller municipalities tend to exhibit higher tax base
+elasticity with respect to rate, due to a number of factors (most prominently
+higher asset mobility and less need for further infrastructure and development).
+This indicates that smaller municipalities&#x2014;also more likely to be covered
+by the PPSA rather than form direct contracts with the RCMP (through the MPSA)
+or maintain their own municipal forces&#x2014;have less revenue-raising power.
+As tax rates inevitably rise in response to increasing police expenditure, tax
+base will fall, resulting in a catch-22. This is one of the key findings of our
+report, giving rise to several potential policy proposals and changes.
 
 # Conclusion
 
-[TODO: Elaborate]
+In this report, we have demonstrated that police spending under the PPSA
+significantly affects municipal tax rates in New Brunswick in such a way that
+limits municipalities' revenue-raising power and places an undue burden on
+taxpayers. By exploiting the exogeneity of PPSA bills and employing a FE-2SLS
+framework, we isolated the causal impact of *PolExpCapita* on *AvgTaxRate*, also
+accounting for simultaneity bias through median household income as an
+instrument variable. Our estimates reveal that a CAD100 increase in police
+expenditure per capita raises the average tax rate by approximately 0.53%.
+
+Our tax base elasticity estimates indicate that smaller
+municipalities&#x2014;which are typically those relying on PPSA
+coverage&#x2014;are subject to higher elasticity, implying greater sensitivity
+of their tax base to rate adjustments. This dynamic generates a public policy
+conundrum&#x2014;as smaller jurisdictions bear are subject to rising PPSA bills
+(especially in recent years) they are also more prone to base erosion,
+undermining fiscal independence. This is, of course, a clear indication that
+provincial funding formulas and policing governance structures need to be
+reassessed&#x2014;one alternative is a flat surtax decided on by Fredericton on
+all municipalities covered by the PPSA, which would give rise to less asset
+mobility between municipalities as rates rise.
+
+Looking forward, several avenues warrant further exploration. We plan to replace
+our fixed-effects models with correlated random-effects (CRE) instead, allowing
+us to account for time-invariant unobserved heterogeneity (that is, the policing
+provider themselves isolated from interaction with expenditure). (Indeed, we
+have already included some preliminary results from such models in the
+**Appendix**.) Alternative elasticity estimation methods, such as a different
+order of demeaning and a direct regression, also merit consideration. Finally,
+we intend to refine our instrumentation approach from a two-stage system to a
+three-stage one, resulting in a CRE-3SLS model more sophisticated than our
+current analysis.
 
 <!-- ```{=latex}
 \newpage
